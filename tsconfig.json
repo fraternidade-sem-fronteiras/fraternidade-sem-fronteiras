@@ -8,7 +8,8 @@
     "jsx": "preserve",
 
     "paths": {
-      "#resources/*": ["./resources/*.jsx", "./resources/*.ts"],
+      "@/*": ["./src/*"],
+      "#resources/*": ["./resources/*"],
       "#controllers/*": ["./app/controllers/*.js"],
       "#exceptions/*": ["./app/exceptions/*.js"],
       "#models/*": ["./app/models/*.js"],

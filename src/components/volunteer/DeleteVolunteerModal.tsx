@@ -1,4 +1,4 @@
-import Volunteer from '../../entities/volunteer.entity.ts'
+import Volunteer from '../../entities/volunteer.entity.js'
 
 interface DeleteModalProps {
   volunteer: Volunteer

@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import useUser from '../hooks/useUser.ts'
+import useUser from '../hooks/useUser.js'
 import LoginPage from '../pages/LoginPage.jsx'
 
 export default function PrivateRoute() {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StoreableVolunteer } from '../entities/volunteer.entity.ts'
+import { StoreableVolunteer } from '../entities/volunteer.entity.js'
 
 export interface UserContextProps {
   theme: 'light' | 'dark'
