@@ -1,4 +1,4 @@
-import LogoutModal from '../LogoutModal.tsx'
+import LogoutModal from '../LogoutModal.jsx'
 import { useDisclosure } from '@chakra-ui/react'
 
 export default function NavBar() {

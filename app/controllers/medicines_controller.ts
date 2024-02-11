@@ -1,7 +1,9 @@
 import MedicineService from '#services/medicine_service'
 import { createMedicineValidator } from '#validators/medicine'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class MedicinesController {
   constructor(readonly medicineService: MedicineService) {}
 

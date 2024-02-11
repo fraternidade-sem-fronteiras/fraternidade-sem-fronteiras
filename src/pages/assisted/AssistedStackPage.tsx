@@ -1,4 +1,4 @@
-import NavBar from "../../components/navbar/NavBar.tsx";
+import NavBar from "../../components/navbar/NavBar.jsx";
 
 export default function AssistedStackPage() {
   return (

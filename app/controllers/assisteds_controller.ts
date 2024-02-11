@@ -1,7 +1,9 @@
 import AssistedService from '#services/assisted_service'
 import { createAssistedValidator } from '#validators/assisted'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class AssistedsController {
   constructor(readonly assistedService: AssistedService) {}
 

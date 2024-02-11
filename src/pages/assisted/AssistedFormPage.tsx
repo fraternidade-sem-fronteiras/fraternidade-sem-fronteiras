@@ -1,6 +1,6 @@
 import React from 'react'
 import './styles/Form.scss'
-import NavBar from '../../components/navbar/NavBar.tsx'
+import NavBar from '../../components/navbar/NavBar.jsx'
 
 export default function AssistedFormPage() {
   //   const [countries, setCountries] = React.useState([])
@@ -21,21 +21,21 @@ export default function AssistedFormPage() {
   //     'Pós-Doutorado',
   //   ]
 
-  React.useEffect(() => {
+  // React.useEffect(() => {
     // api.get('https://servicodados.ibge.gov.br/api/v1/localidades/paises')
     //     .then(response => this.setState({ countries: response.data.map(pais => pais.nome) }));
     // api.get('genero')
     //     .then(response => this.setState({ genders: response.data.map(gender => gender.name) }));
     // api.get('estado_civil')
     //     .then(response => this.setState({ maritalStatuses: response.data.map(maritalStatus => maritalStatus.name) }));
-  }, [])
+  // }, [])
 
-  const handleShowModal = () => {
+  // const handleShowModal = () => {
     // mostrar o modal
     // document.getElementById('leave_modal').showModal();
-  }
+  // }
 
-  const handleSubmitLogout = () => {
+  // const handleSubmitLogout = () => {
     // acho uma boa ideia faz uma caixa de confirmação aqui
     // api
     //   .get('voluntario/logout')
@@ -43,7 +43,7 @@ export default function AssistedFormPage() {
     //     window.location.href = '/?redirectTo=' + window.location.pathname
     //   })
     //   .catch((error) => console.log('Nao foi possivel se deslogar', error))
-  }
+  // }
 
   const handleChangeCountry = (event: React.ChangeEvent<HTMLSelectElement>) => {
     // fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
@@ -89,7 +89,7 @@ export default function AssistedFormPage() {
     event.preventDefault()
   }
 
-  const handleChangeCpf = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // const handleChangeCpf = (event: React.ChangeEvent<HTMLInputElement>) => {
     // @link https://medium.com/reactbrasil/mascara-de-cpf-com-react-javascript-a07719345c93
     // Mascara de CPF com JavaScript
 
@@ -102,8 +102,8 @@ export default function AssistedFormPage() {
     //     .replace(/(-\d{2})\d+?$/, '$1'),
     // })
 
-    event.preventDefault()
-  }
+  //   event.preventDefault()
+  // }
 
   return (
     <body>

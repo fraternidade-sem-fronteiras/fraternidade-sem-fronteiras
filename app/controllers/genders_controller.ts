@@ -1,12 +1,16 @@
+import GenderService from '#services/gender_service'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class GendersController {
+  constructor(readonly genderService: GenderService) {}
   /**
    * Lista de exibição de todos os Genders
    */
   public async index({ response }: HttpContext) {
     // busca todos os genêros
-    const genders = await GenderService.getGenders()
+    const genders = await this.genderService.getGenders()
 
     // retorna os gêneros em formato json
     return response.json(genders)
@@ -24,20 +28,20 @@ export default class GendersController {
   /**
    * Criar novo Gender no servidor
    */
-  public async create({ request, response }: HttpContext) {
-    try {
-      // valida as informações pelo Validator
-      let payload = await request.validate(GenderValidator)
+  public async store({ }: HttpContext) {
+    // try {
+    //   // valida as informações pelo Validator
+    //   let payload = await request.validate(GenderValidator)
 
-      // cria um Gender pelo Service
-      let gender = await GenderService.createGender(payload.name)
+    //   // cria um Gender pelo Service
+    //   let gender = await this.genderService.createGender(payload.name)
 
-      // retorna o Gender
-      return response.status(201).json(gender)
-    } catch (error) {
-      // retorna a mensagem de erro, caso alguma instrução do try dê problema
-      return response.status(409).json({ ...error })
-    }
+    //   // retorna o Gender
+    //   return response.status(201).json(gender)
+    // } catch (error) {
+    //   // retorna a mensagem de erro, caso alguma instrução do try dê problema
+    //   return response.status(409).json({ ...error })
+    // }
   }
 
   /**
@@ -48,7 +52,7 @@ export default class GendersController {
     const { id } = params
 
     // busca o Gender pelo Service
-    const gender = await GenderService.getGenderById(id)
+    const gender = await this.genderService.getGenderById(id)
 
     // retorna a mensagem de erro caso o Gender não exista
     if (!gender) {
@@ -67,7 +71,7 @@ export default class GendersController {
     const { id } = params
 
     // busca o Gender pelo Service
-    const gender = await GenderService.getGenderById(id)
+    const gender = await this.genderService.getGenderById(id)
 
     // retorna a mensagem de erro caso o Gender não exista
     if (!gender) {
@@ -81,23 +85,23 @@ export default class GendersController {
   /**
    * Atualiza Gender específico no servidor
    */
-  public async update({ request, response, params }: HttpContext) {
-    // desestrutura o id do Gender da requisição
-    const { id } = params
+  public async update({ }: HttpContext) {
+    // // desestrutura o id do Gender da requisição
+    // const { id } = params
 
-    try {
-      // valida as informações pelo Validator
-      let payload = await request.validate(GenderValidator)
+    // try {
+    //   // valida as informações pelo Validator
+    //   let payload = await request.validate(GenderValidator)
 
-      // atualiza as informações pelo Service
-      let data = await GenderService.updateGender(id, payload.name)
+    //   // atualiza as informações pelo Service
+    //   let data = await this.genderService.updateGender(id, payload.name)
 
-      // retorna as atualizações realizadas
-      return response.json({ ...data })
-    } catch (error) {
-      // retorna erro, caso alguma instrução do try dê problema
-      return response.status(404).json({ ...error })
-    }
+    //   // retorna as atualizações realizadas
+    //   return response.json({ ...data })
+    // } catch (error) {
+    //   // retorna erro, caso alguma instrução do try dê problema
+    //   return response.status(404).json({ ...error })
+    // }
   }
 
   /**
@@ -109,13 +113,17 @@ export default class GendersController {
 
     try {
       // deleta o Gender pelo Service
-      await GenderService.deleteGender(id)
+      await this.genderService.deleteGender(id)
 
       // retorna status de sucesso: deletado
       return response.status(204)
     } catch (error) {
       // retorna erro, caso alguma instrução do try dê problema
-      return response.status(404).json({ error: error.message })
+      if (error instanceof Error) {
+        return response.status(404).json({ message: error.message })
+      }
+      
+      throw error
     }
   }
 }

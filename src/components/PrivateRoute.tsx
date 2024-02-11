@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import useUser from '../hooks/useUser.ts'
-import LoginPage from '../pages/LoginPage.tsx'
+import LoginPage from '../pages/LoginPage.jsx'
 
 export default function PrivateRoute() {
   const { theme, isLoggedIn } = useUser()

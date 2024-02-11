@@ -24,3 +24,12 @@ export const createVolunteerValidator = vine.compile(
     levelId: vine.number(),
   })
 )
+
+export const filtersVolunteerValidator = vine.compile(
+  vine.object({
+    page: vine.number(),
+    limit: vine.number(),
+    orderBy: vine.enum(['id', 'name', 'email', 'level_id']),
+    order: vine.enum(['asc', 'desc']),
+  })
+)

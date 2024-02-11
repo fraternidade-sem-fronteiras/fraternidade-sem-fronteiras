@@ -3,8 +3,10 @@ import {
   createMaritalStatusValidator,
   updateMaritalStatusValidator,
 } from '#validators/marital_status'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class MaritalStatusesController {
   constructor(readonly maritalStatusService: MaritalStatusService) {}
 

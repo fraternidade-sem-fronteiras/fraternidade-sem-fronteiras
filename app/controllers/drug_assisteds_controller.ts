@@ -1,7 +1,9 @@
 import DrugAssistedService from '#services/drug_assisted_service'
 import { createDrugAssistedValidator } from '#validators/drug_assisted'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class DrugAssistedsController {
   constructor(readonly drugAssistedService: DrugAssistedService) {}
   public async index({ request, response }: HttpContext) {

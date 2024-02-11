@@ -1,7 +1,9 @@
 import ActivityService from '#services/activity_service'
 import { activityValidator } from '#validators/activity'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class ActivitiesController {
   constructor(readonly activityService: ActivityService) {}
   /**

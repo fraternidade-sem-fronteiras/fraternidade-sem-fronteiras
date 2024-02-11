@@ -1,7 +1,11 @@
 // import type { HttpContext } from '@adonisjs/core/http'
 
 import VolunteerService from '#services/volunteer_service'
-import { createVolunteerValidator, updateVolunteerValidator } from '#validators/volunteer'
+import {
+  createVolunteerValidator,
+  filtersVolunteerValidator,
+  updateVolunteerValidator,
+} from '#validators/volunteer'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 
@@ -10,42 +14,26 @@ export default class VolunteersController {
   constructor(readonly volunteersService: VolunteerService) {}
 
   async index({ request, response }: HttpContext) {
-    /**
-     * Desestrutura os parâmetros da requisição
-     *
-     * Caso não seja passado nenhum parâmetro, os valores padrões são:
-     *  - page: 1
-     *  - limit: 10
-     *  - orderBy: id
-     *  - order: asc
-     */
+    const filters = await filtersVolunteerValidator.validate({
+      page: request.input('page', 1),
+      limit: request.input('limit', 10),
+      orderBy: request.input('orderBy', 'id'),
+      order: request.input('order', 'asc'),
+    })
 
-    const page = request.input('page', 1),
-      limit = request.input('limit', 10),
-      orderBy = request.input('orderBy', 'id'),
-      order = request.input('order', 'asc')
+    console.log(filters)
 
-    /**
-     * Valida se o parâmetro order é válido (asc ou desc)
-     */
-
-    if (order !== 'asc' && order !== 'desc') {
-      return response.status(400).json({ message: 'O parâmetro order deve ser "asc" ou "desc"' })
-    }
-
-    /**
-     * Verifica se existe a propriedade passada para ordenar os voluntários
-     */
-
-    if (!this.volunteersService.hasProperty(orderBy)) {
-      return response.status(400).json({ message: `O parâmetro orderBy é inválido ${orderBy}` })
-    }
+    const { page, limit, orderBy, order } = filters
 
     /**
      * Busca os voluntários no banco de dados
      */
 
     const volunteers = await this.volunteersService.getVolunteers(page, limit, orderBy, order)
+
+    if (volunteers.length === 0) {
+      return response.status(404).json({ message: 'Nenhum voluntário encontrado.' })
+    }
 
     /**
      * Retorna os voluntários

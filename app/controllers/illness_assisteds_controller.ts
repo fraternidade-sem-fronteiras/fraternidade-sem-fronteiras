@@ -1,7 +1,9 @@
 import IllnessAssistedService from '#services/illness_assisted_service'
 import { createIllnessAssistedValidator } from '#validators/illness_assisted'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class IllnessAssistedsController {
   constructor(readonly illnessAssistedService: IllnessAssistedService) {}
   async index({ request, response }: HttpContext) {

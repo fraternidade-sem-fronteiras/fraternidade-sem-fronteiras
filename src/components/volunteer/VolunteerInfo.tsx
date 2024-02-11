@@ -1,5 +1,5 @@
 import Volunteer from '../../entities/volunteer.entity.ts'
-import DeleteVolunteerModal from './DeleteVolunteerModal.tsx'
+import DeleteVolunteerModal from './DeleteVolunteerModal.jsx'
 
 interface VolunteerInfoProps {
   handleShowModal: (volunteer: Volunteer) => void

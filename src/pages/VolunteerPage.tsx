@@ -1,62 +1,25 @@
 import React from 'react'
-import FiltroSvg from '../assets/svg/FiltroSvg.tsx'
-import VolunteerInfo from '../components/volunteer/VolunteerInfo.tsx'
-import NavBar from '../components/navbar/NavBar.tsx'
-import Volunteer from '../entities/volunteer.entity.ts'
-import { useToast } from '@chakra-ui/react'
+import FiltroSvg from '../assets/svg/FiltroSvg.jsx'
+import NavBar from '../components/navbar/NavBar.jsx'
 
 import './styles/Volunteer.scss'
 
 export default function VolunteerPage() {
-  const [volunteers, setVolunteers] = React.useState<Volunteer[]>([])
-  const [search, setSearch] = React.useState('')
-  const [searchTimeout, setSearchTimeout] = React.useState(null)
-
-  const toast = useToast()
-
   React.useEffect(() => {
     retrieveVolunteers()
   }, [])
 
-  const handleShowModal = (volunteer: Volunteer) => {
-    toast({
-      title: 'Ainda não implementado',
-      description: 'Essa funcionalidade ainda não foi implementada.',
-      status: 'error',
-      duration: 5000,
-      isClosable: true,
-    })
+  // const handleShowModal = (volunteer: Volunteer) => {
+  //   toast({
+  //     title: 'Ainda não implementado',
+  //     description: 'Essa funcionalidade ainda não foi implementada ' + volunteer.email,
+  //     status: 'error',
+  //     duration: 5000,
+  //     isClosable: true,
+  //   })
     // mostrar o modal
     // document.getElementById('modal-excluir-' + volunteer.id).showModal()
-  }
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    /*
-     * Essa função é responsável por fazer a busca dos voluntários com base no filtro
-     * que o usuário está digitando.
-     *
-     * Para evitar que a requisição seja feita a cada
-     * letra digitada, foi adicionado um timeout de 750ms para que a requisição seja
-     * feita apenas quando o usuário parar de digitar.
-     *
-     * A ideia é, se já existir um timeout, ele é cancelado e um novo timeout é criado.
-     * O novo timeout é responsável por fazer a requisição, se o usuário não digitar
-     * durante 750ms (0.75 segundos).
-     */
-
-    if (searchTimeout) {
-      clearTimeout(searchTimeout)
-    }
-
-    setSearch(event.target.value)
-
-    // const timeout = setTimeout(() => {
-    //   retrieveVolunteers()
-    // }, 750)
-    // setSearchTimeout(timeout)
-
-    event.preventDefault()
-  }
+  // }
 
   const retrieveVolunteers = () => {
     // tem que adicionar os filtros de pesquisa aqui!
@@ -76,8 +39,8 @@ export default function VolunteerPage() {
               type="text"
               placeholder="Digite o nome"
               className="input input-bordered w-24 md:w-auto"
-              value={search}
-              onChange={handleSearch}
+              // value={search}
+              // onChange={handleSearch}
             />
             <div className="dropdown dropdown-end">
               <button className="btn btn-outline">
@@ -136,13 +99,13 @@ export default function VolunteerPage() {
           </thead>
 
           <tbody>
-            {volunteers.map((volunteer) => (
+            {/* {volunteers.map((volunteer) => (
               <VolunteerInfo
                 key={volunteer.id}
                 volunteer={volunteer}
                 handleShowModal={handleShowModal}
               />
-            ))}
+            ))} */}
           </tbody>
         </table>
       </div>

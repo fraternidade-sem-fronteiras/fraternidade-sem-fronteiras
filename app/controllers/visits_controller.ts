@@ -1,7 +1,9 @@
 import VisitService from '#services/visit_service'
 import { createVisitValidator, visitValidator } from '#validators/visit'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class VisitsController {
   constructor(readonly visitService: VisitService) {}
   /**

@@ -1,7 +1,9 @@
 import ChildService from '#services/child_service'
 import { createChildValidator } from '#validators/child'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class ChildrenController {
   constructor(readonly childService: ChildService) {}
   /**

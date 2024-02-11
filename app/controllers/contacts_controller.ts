@@ -1,7 +1,9 @@
 import ContactService from '#services/contact_service'
 import { createContactValidator, updateContactValidator } from '#validators/contact'
+import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
+@inject()
 export default class ContactsController {
   constructor(readonly contactService: ContactService) {}
   /**

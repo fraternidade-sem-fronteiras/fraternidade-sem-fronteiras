@@ -1,7 +1,7 @@
 import React from 'react'
 
 import './styles/Login.scss'
-import useUser from '../hooks/useUser.ts'
+import useUser from '../hooks/useUser.js'
 import { useToast } from '@chakra-ui/react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
@@ -44,6 +44,7 @@ export default function LoginPage() {
 
   const handleSubmit = (event: React.FormEvent<HTMLButtonElement>) => {
     setTryingLogin(true)
+    console.log(rememberMe)
 
     toast.promise(
       createSession(email, password)

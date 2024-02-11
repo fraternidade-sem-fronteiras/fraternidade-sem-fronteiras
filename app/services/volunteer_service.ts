@@ -1,5 +1,4 @@
 import Volunteer from '#models/volunteer'
-import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class VolunteerService {
   /**
@@ -57,8 +56,10 @@ export default class VolunteerService {
     orderBy: string,
     order: 'asc' | 'desc'
   ): Promise<Volunteer[]> {
-    const volunteers = await Volunteer.query().orderBy(orderBy, order).paginate(page, limit)
-
+    const volunteers = await Volunteer.query()
+      .select(['id', 'name', 'email', 'levelId'])
+      .orderBy(orderBy, order)
+      .paginate(page, limit)
     return volunteers.all()
   }
 
@@ -71,7 +72,10 @@ export default class VolunteerService {
    */
 
   async getVolunteerById(id: number): Promise<Volunteer | null> {
-    const volunteer = await Volunteer.findBy('id', id)
+    const volunteer = await Volunteer.query()
+      .select(['id', 'name', 'email', 'levelId'])
+      .where({ id })
+      .first()
 
     return volunteer
   }
@@ -85,7 +89,10 @@ export default class VolunteerService {
    */
 
   async getVolunteerByEmail(email: string): Promise<Volunteer | null> {
-    const volunteer = await Volunteer.findBy('email', email)
+    const volunteer = await Volunteer.query()
+      .select(['id', 'name', 'email', 'levelId'])
+      .where({ email })
+      .first()
 
     return volunteer
   }
@@ -101,12 +108,13 @@ export default class VolunteerService {
   async hasPermission(volunteer: number | Volunteer, permission: string): Promise<boolean> {
     if (typeof volunteer === 'number') {
       const user = await Volunteer.query()
+        .select(['id', 'name', 'email', 'levelId'])
+        .where({ id: volunteer })
         .whereHas('level', (query) => {
           query.whereHas('levelsPermission', (query) => {
             query.where('name', permission)
           })
         })
-        .where('id', volunteer)
         .first()
 
       return !!user

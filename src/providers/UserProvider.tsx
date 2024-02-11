@@ -1,6 +1,6 @@
 import React from 'react'
-import UserContext from '../context/user.context.ts'
-import { StoreableVolunteer } from '../entities/volunteer.entity.ts'
+import UserContext from '../context/user.context.js'
+import { StoreableVolunteer } from '../entities/volunteer.entity.js'
 
 interface UserProviderProps {
   children?: React.ReactNode
@@ -20,6 +20,10 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
 
   const createSession = React.useCallback(
     async (email: string, passWord: string): Promise<StoreableVolunteer> => {
+      if (email !== 'admin@fsf.com' || passWord !== 'admin@fsf.com') {
+        return Promise.reject(new Error('Usuário ou senha inválidos'))
+      }
+
       return new Promise((resolve) => {
         setTimeout(() => {
           const volunteer: StoreableVolunteer = {
