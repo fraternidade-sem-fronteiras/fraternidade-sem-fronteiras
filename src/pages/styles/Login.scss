@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Open+Sans:wght@300;400;500;600&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color:rgb(0, 0, 0);
+    font-size:2rem;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .hero div{
+    display: flex;
+    flex-direction: column;
+   /* display: block;*/
+}
+
+/*.card{
+
+  width: 90rem;
+  display: flex;
+  justify-content: center;
+  
+}*/
+
+label{
+  align-self: flex-start;
+}
+
+.card-body{
+  
+  display: flex;
+  align-items: center;
+  height: 38rem;
+  gap:0rem;
+  /*justify-content: center;*/
+}
+
+.input{
+  width: 20rem;
+
+}
+
+/*.hero-content, .form-control{
+  display: flex;
+  justify-content: center;
+}*/
+
+/*input:disabled {
+  border-color: #912323;
+}*/
+
+
+
+/*input[type="text"]:invalid {
+  border-color: #763434; 
+}*/
+
+.text-center{
+ text-align: center;
+  picture{
+    display: flex;
+    justify-content: center;
+    }
+}
+
+.fsf-logo {
+  width: 10rem;
+  height: 10rem;
+}
+
+.form-control, .dropdown {
+  display: contents;
+  justify-content: center;
+  margin: 0px;
+}
+
+input[type=":checkbox"] {
+  //background-color: #763434; /* Substitua pelo código da cor desejada */
+  margin-top: 2px;
+}
+
+.toggle{
+  margin-left: 0.5rem;
+}
+
+.min-h-screen {
+  min-height: 80vh;
+}
+
+.btn:hover{
+  background-color: #832472;
+}
+
+//teste
+
+.form-control input[type="text"]{
+  background-color: #ebebebad;
+  margin: 0.6rem 0;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 1px 1px 6px #0000001c;
+  font-size: 0.8rem;
+}
+
+.form-control input[type="text"]:hover{
+  background-color: #eeeeee75;
+}
+
+.toggle{
+  margin-top: 2rem;
+}
+
+.cursor-pointer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

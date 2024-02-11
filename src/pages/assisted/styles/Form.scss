@@ -1,0 +1,222 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Open+Sans:wght@300;400;500;600&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 1.25rem;
+    color:rgb(0, 0, 0);
+    font-family: 'Inter', sans-serif;
+  }
+
+  body{
+    background-color: #9D2D88;
+  }
+  
+  
+  .logoProjeto{
+    width: 5rem;
+    height: 5rem;
+  }
+  
+  /*.form-control, .dropdown{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }*/
+  
+  /*.perguntas{
+    display: flex;
+    flex-direction: column;
+    margin-left: 2rem;
+  
+  }
+  */
+ /* select{
+    margin-bottom: 2rem;
+  }*/
+  
+  
+ /* .navbar{
+    background-color: #4a7494;
+  }*/
+  
+  /*.filtro{
+    display: flex;
+    justify-content: center;
+  }*/
+  
+  
+  input:valid {
+    border-color: #9D2D88; /* Substitua pelo código da cor desejada */
+    margin-bottom: 2rem;
+  }
+  
+  input{
+    border-color: #ff0000; /* Substitua pelo código da cor desejada */
+    margin-bottom: 20rem;
+  }
+  
+  .compartilhaDados{
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    
+  }
+  
+  .booleanInput{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+    #butao1{
+      margin-right: 2rem;
+    }
+  }
+  
+  .NomeCompleto{
+    width: 50rem;
+  }
+  
+  .input-md {
+    height: 3rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    line-height: 2;
+}
+
+/*.max-w-xs {
+  // tamanho do input
+}*/
+
+.w-full {
+  width: 30rem;
+}
+
+
+
+//teste de estilo
+
+.form-header h1::after {
+  content: '';
+  display: block;
+  width: 10rem;
+  height: 0.4rem;
+  background-color: #9D2D88;
+  margin: 0 auto;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.form {
+ 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding: 3rem;
+}
+
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.input-box {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10rem;
+  width: 10%;
+  margin-bottom: 1.1rem;
+}
+
+.input-box input {
+  margin: 0.6rem 0;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 1px 1px 6px #0000001c;
+  font-size: 0.8rem;
+}
+
+.input-box input:hover {
+  background-color: #eeeeee75;
+}
+
+.input-box input:focus-visible {
+  outline: 1px solid #6c63ff;
+}
+
+.input-box label,
+.gender-title h6 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #000000c0;
+}
+
+.input-box input::placeholder {
+  color: #000000be;
+}
+
+.form-header, .title{
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+
+
+.input-box {
+  display: flex;
+  flex-direction: column;
+  width: 45%; /* Defina a largura para 45% para criar duas colunas */
+  margin-right: 2px; /* Adicione margem direita para separar as colunas */
+  margin-bottom: 1.1rem;
+}
+
+/*@media screen and (max-width: 1330px) {
+  .form-image {
+      display: none;
+  }
+  .container {
+      width: 50%;
+  }
+  .form {
+      width: 100%;
+  }
+}
+
+@media screen and (max-width: 1064px) {
+  .container {
+      width: 90%;
+      height: auto;
+  }
+  .input-group {
+      flex-direction: column;
+      z-index: 5;
+      padding-right: 5rem;
+      max-height: 10rem;
+      overflow-y: scroll;
+      flex-wrap: nowrap;
+  }
+  .gender-inputs {
+      margin-top: 2rem;
+  }
+  .gender-group {
+      flex-direction: column;
+  }
+  .gender-title h6 {
+      margin: 0;
+  }
+  .gender-input {
+      margin-top: 0.5rem;
+  }
+}*/
+
+body div div form div div input{
+  min-width: 10rem;
+}
