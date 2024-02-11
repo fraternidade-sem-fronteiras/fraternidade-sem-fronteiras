@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build",
+    "build:run": "npm run build && cp .env ./build/.env && node build/bin/server.js",
     "dev": "node ace serve --watch",
     "test": "node ace test",
     "lint": "eslint .",
@@ -68,6 +69,7 @@
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^20.1.0",
     "@adonisjs/session": "^7.1.1",
+    "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^2.0.2",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.3",

@@ -34,7 +34,8 @@ export default defineConfig({
     () => import('@adonisjs/session/session_provider'),
     () => import('@adonisjs/auth/auth_provider'),
     () => import('@adonisjs/core/providers/edge_provider'),
-    () => import('@adonisjs/vite/vite_provider')
+    () => import('@adonisjs/vite/vite_provider'),
+    () => import('@adonisjs/static/static_provider')
   ],
 
   /*
@@ -71,13 +72,14 @@ export default defineConfig({
     ],
     forceExit: false,
   },
-  metaFiles: [{
-    pattern: 'resources/views/**/*.edge',
-    reloadServer: false,
-  },
-  {
-    pattern: 'public/**',
-    reloadServer: false,
-  }
-  ]
+  metaFiles: [
+    {
+      pattern: 'resources/views/**/*.edge',
+      reloadServer: false,
+    },
+    {
+      pattern: 'public/**',
+      reloadServer: false,
+    },
+  ],
 })
