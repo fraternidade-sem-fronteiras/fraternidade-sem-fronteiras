@@ -34,8 +34,6 @@ export default class VolunteersController {
       order: request.input('order', 'asc'),
     })
 
-    const { user } = request.all()
-
     const { page, limit, orderBy, order } = filters
 
     /**

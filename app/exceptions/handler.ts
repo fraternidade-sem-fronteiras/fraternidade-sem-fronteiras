@@ -1,6 +1,5 @@
 import app from '@adonisjs/core/services/app'
 import { HttpContext, ExceptionHandler } from '@adonisjs/core/http'
-import TokenNotProvidedException from './token_not_provided_exception.js'
 import CustomErrorException from './custom_error_exception.js'
 
 export default class HttpExceptionHandler extends ExceptionHandler {

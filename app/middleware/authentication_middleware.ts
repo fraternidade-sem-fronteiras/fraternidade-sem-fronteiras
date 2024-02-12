@@ -1,7 +1,6 @@
 import InvalidTokenException from '#exceptions/invalid_token_exception'
 import TokenNotProvidedException from '#exceptions/token_not_provided_exception'
 import TokenService from '#services/token_service'
-import TokenExpiredException from '#exceptions/token_expired_exception'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import { inject } from '@adonisjs/core'
