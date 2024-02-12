@@ -1,17 +1,38 @@
+import InvalidTokenException from '#exceptions/invalid_token_exception'
+import TokenNotProvidedException from '#exceptions/token_not_provided_exception'
+import TokenService from '#services/token_service'
+import TokenExpiredException from '#exceptions/token_expired_exception'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
+import { inject } from '@adonisjs/core'
+import Session from '#validators/session'
+import Volunteer from '#models/volunteer'
+import VolunteerService from '#services/volunteer_service'
 
+@inject()
 export default class AuthenticationMiddleware {
-  async handle(ctx: HttpContext, next: NextFn) {
-    /**
-     * Middleware logic goes here (before the next call)
-     */
-    console.log(ctx)
+  constructor(
+    readonly tokenService: TokenService,
+    readonly volunteerService: VolunteerService
+  ) {}
+  async handle({ request }: HttpContext, next: NextFn) {
+    const { authorization } = request.headers()
 
-    /**
-     * Call next method in the pipeline and return its output
-     */
-    const output = await next()
-    return output
+    if (!authorization) throw new TokenNotProvidedException()
+
+    const currentToken = typeof authorization === 'string' ? authorization : authorization[0]
+
+    if (!currentToken.includes('Bearer')) throw new InvalidTokenException()
+
+    const token = currentToken.split(' ')[1]
+
+    const payload: Session = await this.tokenService.verify(token)
+
+    const volunteer: Volunteer | null = await this.volunteerService.getVolunteerById(payload.id)
+    if (!volunteer) throw new InvalidTokenException()
+
+    request.all().user = volunteer
+
+    return await next()
   }
 }

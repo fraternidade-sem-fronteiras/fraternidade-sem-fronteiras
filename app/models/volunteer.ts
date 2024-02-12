@@ -1,17 +1,10 @@
-import hash from '@adonisjs/core/services/hash'
 import Level from './level.js'
 import { DateTime } from 'luxon'
-import { withAuthFinder } from '@adonisjs/auth'
-import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeSave, column, hasOne } from '@adonisjs/lucid/orm'
 import type { HasOne } from '@adonisjs/lucid/types/relations'
+import hash from '@adonisjs/core/services/hash'
 
-const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
-  uids: ['email'],
-  passwordColumnName: 'password',
-})
-
-export default class Volunteer extends compose(BaseModel, AuthFinder) {
+export default class Volunteer extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
@@ -21,7 +14,7 @@ export default class Volunteer extends compose(BaseModel, AuthFinder) {
   @column()
   declare email: string
 
-  @column()
+  @column({ serializeAs: null })
   declare password: string
 
   @column()
@@ -35,4 +28,14 @@ export default class Volunteer extends compose(BaseModel, AuthFinder) {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+
+  @beforeSave()
+  public static async hashPassword(volunteer: Volunteer) {
+    if (volunteer.$dirty.password) {
+      console.log(volunteer.$dirty.password)
+      const newPassword = await hash.make(volunteer.password)
+      console.log(newPassword)
+      volunteer.password = newPassword
+    }
+  }
 }

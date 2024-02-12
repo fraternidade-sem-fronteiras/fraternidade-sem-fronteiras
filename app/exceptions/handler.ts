@@ -1,5 +1,7 @@
 import app from '@adonisjs/core/services/app'
 import { HttpContext, ExceptionHandler } from '@adonisjs/core/http'
+import TokenNotProvidedException from './token_not_provided_exception.js'
+import CustomErrorException from './custom_error_exception.js'
 
 export default class HttpExceptionHandler extends ExceptionHandler {
   /**
@@ -13,6 +15,13 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * response to the client
    */
   async handle(error: unknown, ctx: HttpContext) {
+    if (error instanceof CustomErrorException) {
+      return ctx.response.status(error.status).send({
+        message: error.message,
+        error: error.name.replace('Exception', ''),
+      })
+    }
+
     return super.handle(error, ctx)
   }
 
@@ -23,6 +32,9 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * @note You should not attempt to send a response from this method.
    */
   async report(error: unknown, ctx: HttpContext) {
+    if (error instanceof CustomErrorException) {
+      return
+    }
     return super.report(error, ctx)
   }
 }

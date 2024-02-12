@@ -1,5 +1,12 @@
 import vine from '@vinejs/vine'
 
+export const loginVolunteerValidator = vine.compile(
+  vine.object({
+    email: vine.string().trim().email().toLowerCase(),
+    password: vine.string(),
+  })
+)
+
 export const updateVolunteerValidator = vine.compile(
   vine.object({
     name: vine.string().trim().minLength(3).maxLength(255).alphaNumeric({ allowSpaces: true }),

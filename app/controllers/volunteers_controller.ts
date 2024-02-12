@@ -4,6 +4,7 @@ import VolunteerService from '#services/volunteer_service'
 import {
   createVolunteerValidator,
   filtersVolunteerValidator,
+  loginVolunteerValidator,
   updateVolunteerValidator,
 } from '#validators/volunteer'
 import { inject } from '@adonisjs/core'
@@ -13,6 +14,18 @@ import { HttpContext } from '@adonisjs/core/http'
 export default class VolunteersController {
   constructor(readonly volunteersService: VolunteerService) {}
 
+  async login({ request, response }: HttpContext) {
+    const { email, password } = await loginVolunteerValidator.validate(request.all())
+
+    const { token, volunteer } = await this.volunteersService.createSession(email, password)
+
+    return response.json({ token, volunteer })
+  }
+
+  async logout({ response }: HttpContext) {
+    return response.json({})
+  }
+
   async index({ request, response }: HttpContext) {
     const filters = await filtersVolunteerValidator.validate({
       page: request.input('page', 1),
@@ -21,7 +34,7 @@ export default class VolunteersController {
       order: request.input('order', 'asc'),
     })
 
-    console.log(filters)
+    const { user } = request.all()
 
     const { page, limit, orderBy, order } = filters
 

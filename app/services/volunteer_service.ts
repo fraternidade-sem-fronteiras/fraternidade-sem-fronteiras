@@ -1,6 +1,13 @@
+import WrongPasswordException from '#exceptions/wrong_password_exception'
 import Volunteer from '#models/volunteer'
+import { inject } from '@adonisjs/core'
+import hash from '@adonisjs/core/services/hash'
+import TokenService from '#services/token_service'
 
+@inject()
 export default class VolunteerService {
+  constructor(readonly tokenService: TokenService) {}
+
   /**
    *
    * Criar um novo voluntário no banco de dados
@@ -36,6 +43,25 @@ export default class VolunteerService {
     await volunteer.save()
 
     return volunteer
+  }
+
+  async createSession(
+    email: string,
+    password: string
+  ): Promise<{ token: string; volunteer: Volunteer }> {
+    const volunteer = await Volunteer.findBy('email', email)
+
+    if (!volunteer) {
+      throw new Error('Voluntário não encontrado')
+    }
+
+    const match = await hash.verify(volunteer.password, password)
+
+    if (!match) throw new WrongPasswordException()
+
+    const token = await this.tokenService.generate(volunteer)
+
+    return { token, volunteer }
   }
 
   /**
