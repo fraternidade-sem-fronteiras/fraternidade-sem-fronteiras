@@ -19,11 +19,17 @@ export default class VolunteersController {
 
     const { token, volunteer } = await this.volunteersService.createSession(email, password)
 
-    return response.json({ token, volunteer })
+    return response.json({ volunteer, token: token })
   }
 
   async logout({ response }: HttpContext) {
-    return response.json({})
+    return response.json({
+      hello: 'world',
+    })
+  }
+
+  async profile({ request, response }: HttpContext) {
+    return response.json(request.all().user)
   }
 
   async index({ request, response }: HttpContext) {

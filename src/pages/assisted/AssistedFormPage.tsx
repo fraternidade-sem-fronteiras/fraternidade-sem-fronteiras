@@ -57,8 +57,6 @@ interface FormProps {
   schooling: string
 }
 
-function LivingLocation() {}
-
 export default function AssistedFormPage() {
   const {
     getValues,

@@ -1,6 +1,6 @@
 import vine, { VineObject, errors as vineErrors } from '@vinejs/vine'
 
-export default function VineResolver<T>(
+export default function vineResolver<T>(
   validator: VineObject<any, any, any>
 ): (data: T) => Promise<{ values: T; errors: { [key: string]: string[] } }> {
   return async function (data: T) {

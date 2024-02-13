@@ -1,7 +1,7 @@
 import React from 'react'
 import UserContext from '../context/user.context.js'
-import { StoreableVolunteer } from '../entities/volunteer.entity.js'
 import getAxiosInstance from '../utils/axios.instance.js'
+import { StoreableVolunteer } from '../entities/volunteer.entity.js'
 import { useToast } from '@chakra-ui/react'
 
 interface UserProviderProps {
@@ -22,79 +22,66 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
 
   const toast = useToast()
 
-  const createSession = React.useCallback(
-    async (email: string, passWord: string): Promise<StoreableVolunteer> => {
-      if (email !== 'admin@fsf.com' || passWord !== 'admin@fsf.com') {
-        return Promise.reject(new Error('Usuário ou senha inválidos'))
-      }
-
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          const volunteer: StoreableVolunteer = {
-            id: 1,
-            name: 'John Doe',
-            email: email,
-            levelId: 1,
-            token: 'token',
-            createdAt: Date.now(),
-          }
-
-          localStorage.setItem('volunteer', JSON.stringify(volunteer))
-          setVolunteer(volunteer)
-          resolve(volunteer)
-        }, 2000)
-      })
-    },
-    []
-  )
-
-  const forceFinishSession = React.useCallback(async () => {
-    localStorage.removeItem('volunteer')
-    setVolunteer(null)
-  }, [])
-
-  const finishSession = React.useCallback(() => {
-    forceFinishSession()
-    return Promise.resolve()
-  }, [])
-
   React.useLayoutEffect(() => {
     if (volunteer) {
-      //TODO fazer verificação se o token é válido e pegar os dados atualizados do usuário
+      getAxiosInstance()
+        .get('volunteers/profile', { headers: { Authorization: `Bearer ${volunteer.token}` } })
+        .then(({ data }) => {
+          const { id, email, name } = data
+
+          const newVolunteer: StoreableVolunteer = { ...data, token: volunteer.token }
+
+          if (id === volunteer.id && email === volunteer.email && name === volunteer.name) return
+
+          localStorage.setItem('volunteer', JSON.stringify(newVolunteer))
+          setVolunteer(newVolunteer)
+        })
+        .catch((error) => {
+          toast({
+            title: 'Sessão com problemas.',
+            description:
+              'Não foi possível recuperar os dados da sua sessão, alguns recursos podem não funcionar.',
+            status: 'error',
+            position: 'top-right',
+            duration: 5000,
+            isClosable: true,
+          })
+          console.log('error', error)
+        })
     }
   }, [])
 
   React.useLayoutEffect(() => {
+    if (!volunteer) return
+
     const responseInterceptor = getAxiosInstance().interceptors.response.use(
       (response) => response,
       (error) => {
-        if (!!volunteer && error.response.status === 401 /* Unathorized */) {
-          if (!error.response.request.responseURL.endsWith('users/profile')) {
-            toast({
-              title: 'Sessão expirou.',
-              description: 'Sua sessão expirou, faça login novamente.',
-              status: 'error',
-              position: 'top-right',
-              duration: 5000,
-              isClosable: true,
-            })
-            finishSession()
-          }
+        if (error.response.status === 401) {
+          toast({
+            title: 'Sessão expirou.',
+            description: 'Sua sessão expirou, faça login novamente.',
+            status: 'error',
+            position: 'top-right',
+            duration: 5000,
+            isClosable: true,
+          })
+
+          finishSession()
         }
 
         return new Promise(error)
       }
     )
 
-    const requestInterceptor = getAxiosInstance().interceptors.request.use(
-      (config) => {
-        config.headers.Authorization = `Bearer ${!!volunteer ? volunteer.token : 'unknown'}`
-        return config
-      },
-      (error) => error
-    )
+    const requestInterceptor = getAxiosInstance().interceptors.request.use((config) => {
+      config.headers.Authorization = `Bearer ${volunteer.token ?? 'unknown'}`
+      return config
+    })
 
     return () => {
+      if (!volunteer) return
+
       getAxiosInstance().interceptors.response.eject(responseInterceptor)
       getAxiosInstance().interceptors.request.eject(requestInterceptor)
     }
@@ -116,6 +103,36 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
       document.removeEventListener('keydown', changeTheme)
     }
   }, [theme])
+
+  const createSession = React.useCallback(
+    async (email: string, password: string): Promise<StoreableVolunteer> => {
+      return new Promise<StoreableVolunteer>(async (resolve, reject) => {
+        try {
+          const { data } = await getAxiosInstance().post('volunteers/login', { email, password })
+
+          const storeableVolunteer: StoreableVolunteer = { ...data.volunteer, token: data.token }
+          console.log('resposta', storeableVolunteer)
+
+          localStorage.setItem('volunteer', JSON.stringify(storeableVolunteer))
+          setVolunteer(storeableVolunteer)
+          resolve(storeableVolunteer)
+        } catch (error) {
+          reject(error)
+        }
+      })
+    },
+    []
+  )
+
+  const forceFinishSession = React.useCallback(async () => {
+    localStorage.removeItem('volunteer')
+    setVolunteer(null)
+  }, [])
+
+  const finishSession = React.useCallback(() => {
+    forceFinishSession()
+    return Promise.resolve()
+  }, [])
 
   return (
     <UserContext.Provider

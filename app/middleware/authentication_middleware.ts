@@ -17,6 +17,7 @@ export default class AuthenticationMiddleware {
   async handle({ request }: HttpContext, next: NextFn) {
     const { authorization } = request.headers()
 
+
     if (!authorization) throw new TokenNotProvidedException()
 
     const currentToken = typeof authorization === 'string' ? authorization : authorization[0]

@@ -94,12 +94,17 @@ router
       .use('*', middleware.auth())
 
     router
+      .group(() => {
+        router.post('login', [VolunteersController, 'login'])
+        router.post('logout', [VolunteersController, 'logout']).use(middleware.auth())
+        router.get('profile', [VolunteersController, 'profile']).use(middleware.auth())
+      })
+      .prefix('volunteers')
+
+    router
       .resource('volunteers', VolunteersController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
       .use('*', middleware.auth())
-
-    router.post('volunteers/login', [VolunteersController, 'login'])
-    router.post('volunteers/logout', [VolunteersController, 'logout']).use(middleware.auth())
   })
   .prefix('/api/v1')
 
