@@ -7,7 +7,6 @@ import VolunteerService from '#services/volunteer_service'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import { inject } from '@adonisjs/core'
-import { JsonWebTokenError } from 'jsonwebtoken'
 
 @inject()
 export default class AuthenticationMiddleware {
@@ -36,9 +35,8 @@ export default class AuthenticationMiddleware {
 
       return await next()
     } catch (err) {
-      if (err instanceof JsonWebTokenError) {
-        throw new InvalidTokenException()
-      }
+      console.log(err, err.message, err.name, typeof err)
+      throw new InvalidTokenException()
     }
   }
 }

@@ -1,12 +1,12 @@
 import React from 'react'
 import vine from '@vinejs/vine'
 import NavBar from '../../components/navbar/NavBar.jsx'
+import vineResolver from '../../utils/vine.resolver.js'
 import { useForm } from 'react-hook-form'
 
 import './styles/Form.scss'
-import vineResolver from '../../utils/vine.resolver.js'
 
-const loginUserFormSchema = vine.object({
+const formSchema = vine.object({
   fullName: vine.string().minLength(3).maxLength(64),
   socialName: vine.string().minLength(3).maxLength(32),
 
@@ -65,7 +65,7 @@ export default function AssistedFormPage() {
     setValue,
     formState: { errors, isValid },
   } = useForm<FormProps>({
-    resolver: vineResolver(loginUserFormSchema),
+    resolver: vineResolver(formSchema),
   })
 
   const [countries, setCountries] = React.useState([])

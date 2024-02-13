@@ -1,6 +1,7 @@
 import app from '@adonisjs/core/services/app'
 import { HttpContext, ExceptionHandler } from '@adonisjs/core/http'
 import CustomErrorException from './custom_error_exception.js'
+import { JsonWebTokenError } from 'jsonwebtoken'
 
 export default class HttpExceptionHandler extends ExceptionHandler {
   /**
@@ -20,7 +21,6 @@ export default class HttpExceptionHandler extends ExceptionHandler {
         error: error.name.replace('Exception', ''),
       })
     }
-
     return super.handle(error, ctx)
   }
 

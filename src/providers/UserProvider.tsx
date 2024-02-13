@@ -1,6 +1,7 @@
 import React from 'react'
 import UserContext from '../context/user.context.js'
 import getAxiosInstance from '../utils/axios.instance.js'
+import useEnv from '../hooks/useEnv.js'
 import { StoreableVolunteer } from '../entities/volunteer.entity.js'
 import { useToast } from '@chakra-ui/react'
 
@@ -9,9 +10,9 @@ interface UserProviderProps {
 }
 
 const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderProps) => {
+  const { get } = useEnv()
   const [theme, setTheme] = React.useState<'light' | 'dark'>(() => {
     const localTheme = localStorage.getItem('theme')
-    console.log('localTheme', localTheme)
     return localTheme ? (localTheme as 'light' | 'dark') : 'light'
   })
   const [volunteer, setVolunteer] = React.useState<StoreableVolunteer | null>(() => {
@@ -23,6 +24,9 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
   const toast = useToast()
 
   React.useLayoutEffect(() => {
+    getAxiosInstance().defaults.baseURL = get('API_URL')
+    console.log(get('API_URL'))
+
     if (volunteer) {
       getAxiosInstance()
         .get('volunteers/profile', { headers: { Authorization: `Bearer ${volunteer.token}` } })
