@@ -1,66 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Open+Sans:wght@300;400;500;600&display=swap');
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    color:rgb(0, 0, 0);
-    font-size:2rem;
-    font-family: 'Inter', sans-serif;
-  }
-  
-  .hero div{
-    display: flex;
-    flex-direction: column;
-   /* display: block;*/
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: rgb(0, 0, 0);
+  font-size: 2rem;
+  font-family: 'Inter', sans-serif;
 }
 
-/*.card{
-
-  width: 90rem;
+.hero div {
   display: flex;
-  justify-content: center;
-  
-}*/
+  flex-direction: column;
+}
 
-label{
+label {
   align-self: flex-start;
 }
 
-.card-body{
-  
+.card-body {
   display: flex;
   align-items: center;
   height: 38rem;
-  gap:0rem;
-  /*justify-content: center;*/
+  gap: 0rem;
 }
 
-.input{
+.input {
   width: 20rem;
-
 }
 
-/*.hero-content, .form-control{
-  display: flex;
-  justify-content: center;
-}*/
-
-/*input:disabled {
-  border-color: #912323;
-}*/
-
-
-
-/*input[type="text"]:invalid {
-  border-color: #763434; 
-}*/
-
-.text-center{
- text-align: center;
-  picture{
+.text-center {
+  text-align: center;
+  picture {
     display: flex;
     justify-content: center;
-    }
+  }
 }
 
 .fsf-logo {
@@ -68,18 +41,19 @@ label{
   height: 10rem;
 }
 
-.form-control, .dropdown {
+.form-control,
+.dropdown {
   display: contents;
   justify-content: center;
   margin: 0px;
 }
 
-input[type=":checkbox"] {
+input[type=':checkbox'] {
   //background-color: #763434; /* Substitua pelo código da cor desejada */
   margin-top: 2px;
 }
 
-.toggle{
+.toggle {
   margin-left: 0.5rem;
 }
 
@@ -87,13 +61,13 @@ input[type=":checkbox"] {
   min-height: 80vh;
 }
 
-.btn:hover{
+.btn:hover {
   background-color: #832472;
 }
 
 //teste
 
-.form-control input[type="text"]{
+.form-control input[type='text'] {
   background-color: #ebebebad;
   margin: 0.6rem 0;
   padding: 0.8rem 1.2rem;
@@ -103,15 +77,15 @@ input[type=":checkbox"] {
   font-size: 0.8rem;
 }
 
-.form-control input[type="text"]:hover{
+.form-control input[type='text']:hover {
   background-color: #eeeeee75;
 }
 
-.toggle{
+.toggle {
   margin-top: 2rem;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   display: flex;
   justify-content: center;
   align-items: center;

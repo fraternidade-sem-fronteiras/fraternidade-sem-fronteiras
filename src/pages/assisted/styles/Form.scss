@@ -1,90 +1,58 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Open+Sans:wght@300;400;500;600&display=swap');
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-size: 1.25rem;
-    color:rgb(0, 0, 0);
-    font-family: 'Inter', sans-serif;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 1.25rem;
+  color: rgb(0, 0, 0);
+  font-family: 'Inter', sans-serif;
+}
 
-  body{
-    background-color: #9D2D88;
+body {
+  background-color: #9d2d88;
+}
+
+.logoProjeto {
+  width: 5rem;
+  height: 5rem;
+}
+
+input:valid {
+  border-color: #9d2d88;
+  margin-bottom: 2rem;
+}
+
+input {
+  border-color: #ff0000;
+  margin-bottom: 20rem;
+}
+
+.compartilhaDados {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.booleanInput {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  #butao1 {
+    margin-right: 2rem;
   }
-  
-  
-  .logoProjeto{
-    width: 5rem;
-    height: 5rem;
-  }
-  
-  /*.form-control, .dropdown{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-  }*/
-  
-  /*.perguntas{
-    display: flex;
-    flex-direction: column;
-    margin-left: 2rem;
-  
-  }
-  */
- /* select{
-    margin-bottom: 2rem;
-  }*/
-  
-  
- /* .navbar{
-    background-color: #4a7494;
-  }*/
-  
-  /*.filtro{
-    display: flex;
-    justify-content: center;
-  }*/
-  
-  
-  input:valid {
-    border-color: #9D2D88; /* Substitua pelo código da cor desejada */
-    margin-bottom: 2rem;
-  }
-  
-  input{
-    border-color: #ff0000; /* Substitua pelo código da cor desejada */
-    margin-bottom: 20rem;
-  }
-  
-  .compartilhaDados{
-    display: flex;
-    justify-content: center;
-    padding: 2rem;
-    
-  }
-  
-  .booleanInput{
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2.5rem;
-    #butao1{
-      margin-right: 2rem;
-    }
-  }
-  
-  .NomeCompleto{
-    width: 50rem;
-  }
-  
-  .input-md {
-    height: 3rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    line-height: 2;
+}
+
+.NomeCompleto {
+  width: 50rem;
+}
+
+.input-md {
+  height: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  line-height: 2;
 }
 
 /*.max-w-xs {
@@ -95,8 +63,6 @@
   width: 30rem;
 }
 
-
-
 //teste de estilo
 
 .form-header h1::after {
@@ -104,14 +70,13 @@
   display: block;
   width: 10rem;
   height: 0.4rem;
-  background-color: #9D2D88;
+  background-color: #9d2d88;
   margin: 0 auto;
   position: absolute;
   border-radius: 10px;
 }
 
 .form {
- 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -163,12 +128,11 @@
   color: #000000be;
 }
 
-.form-header, .title{
+.form-header,
+.title {
   font-size: 2rem;
   font-weight: 600;
 }
-
-
 
 .input-box {
   display: flex;
@@ -178,45 +142,6 @@
   margin-bottom: 1.1rem;
 }
 
-/*@media screen and (max-width: 1330px) {
-  .form-image {
-      display: none;
-  }
-  .container {
-      width: 50%;
-  }
-  .form {
-      width: 100%;
-  }
-}
-
-@media screen and (max-width: 1064px) {
-  .container {
-      width: 90%;
-      height: auto;
-  }
-  .input-group {
-      flex-direction: column;
-      z-index: 5;
-      padding-right: 5rem;
-      max-height: 10rem;
-      overflow-y: scroll;
-      flex-wrap: nowrap;
-  }
-  .gender-inputs {
-      margin-top: 2rem;
-  }
-  .gender-group {
-      flex-direction: column;
-  }
-  .gender-title h6 {
-      margin: 0;
-  }
-  .gender-input {
-      margin-top: 0.5rem;
-  }
-}*/
-
-body div div form div div input{
+body div div form div div input {
   min-width: 10rem;
 }

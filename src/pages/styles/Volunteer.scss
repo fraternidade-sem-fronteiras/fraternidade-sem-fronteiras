@@ -1,82 +1,76 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-size: 1.2rem;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 1.2rem;
 }
 
-
-.form-control, .dropdown{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
+.form-control,
+.dropdown {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
 }
 
-
-
-.body{
-    background-color: rgb(255, 0, 85);
-}
- 
-.navbar{
-    background-color: #4a7494;
+.body {
+  background-color: rgb(255, 0, 85);
 }
 
-.filtro{
-    display: flex;
-    justify-content: center;
+.navbar {
+  background-color: #4a7494;
 }
 
-
-input[type="text"]:valid {
-    border-color: #9D2D88; /* Substitua pelo código da cor desejada */
-  }
-
-div div ul li details summary{
-    color: aliceblue;
+.filtro {
+  display: flex;
+  justify-content: center;
 }
 
-div div ul li a{
-    color: aliceblue;
+input[type='text']:valid {
+  border-color: #9d2d88; /* Substitua pelo código da cor desejada */
 }
 
-#btnModal{
-    display: flex;
-    justify-content: center;
+div div ul li details summary {
+  color: aliceblue;
 }
 
-.filtro{
-    color:#707681
+div div ul li a {
+  color: aliceblue;
 }
 
-tbody{
-    tr{
-        td{
-            .niveis{
-                display: flex;
-                flex-direction: column;
-            }
-        }
+#btnModal {
+  display: flex;
+  justify-content: center;
+}
+
+.filtro {
+  color: #707681;
+}
+
+tbody {
+  tr {
+    td {
+      .niveis {
+        display: flex;
+        flex-direction: column;
+      }
     }
+  }
 }
-.badge{
-    display: flex;
-    flex-direction: column;
-    margin: 0.5rem;
+.badge {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
 }
-
 
 div button #sair {
-    background-color: #4a7494;
-    margin: 0.5rem;
-    width: 10rem; 
-    padding: 0px 5px ;
-
+  background-color: #4a7494;
+  margin: 0.5rem;
+  width: 10rem;
+  padding: 0px 5px;
 }
 
 .btn {
-    margin: 0.5rem;
-    /* width: 18rem; */
+  margin: 0.5rem;
 }
