@@ -1,12 +1,13 @@
 import InvalidTokenException from '#exceptions/invalid_token_exception'
 import TokenNotProvidedException from '#exceptions/token_not_provided_exception'
 import TokenService from '#services/token_service'
-import type { HttpContext } from '@adonisjs/core/http'
-import type { NextFn } from '@adonisjs/core/types/http'
-import { inject } from '@adonisjs/core'
 import Session from '#validators/session'
 import Volunteer from '#models/volunteer'
 import VolunteerService from '#services/volunteer_service'
+import type { HttpContext } from '@adonisjs/core/http'
+import type { NextFn } from '@adonisjs/core/types/http'
+import { inject } from '@adonisjs/core'
+import { JsonWebTokenError } from 'jsonwebtoken'
 
 @inject()
 export default class AuthenticationMiddleware {
@@ -17,7 +18,6 @@ export default class AuthenticationMiddleware {
   async handle({ request }: HttpContext, next: NextFn) {
     const { authorization } = request.headers()
 
-
     if (!authorization) throw new TokenNotProvidedException()
 
     const currentToken = typeof authorization === 'string' ? authorization : authorization[0]
@@ -26,13 +26,19 @@ export default class AuthenticationMiddleware {
 
     const token = currentToken.split(' ')[1]
 
-    const payload: Session = await this.tokenService.verify(token)
+    try {
+      const payload: Session = await this.tokenService.verify(token)
 
-    const volunteer: Volunteer | null = await this.volunteerService.getVolunteerById(payload.id)
-    if (!volunteer) throw new InvalidTokenException()
+      const volunteer: Volunteer | null = await this.volunteerService.getVolunteerById(payload.id)
+      if (!volunteer) throw new InvalidTokenException()
 
-    request.all().user = volunteer
+      request.all().user = volunteer
 
-    return await next()
+      return await next()
+    } catch (err) {
+      if (err instanceof JsonWebTokenError) {
+        throw new InvalidTokenException()
+      }
+    }
   }
 }
