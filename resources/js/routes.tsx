@@ -6,7 +6,6 @@ import SelectPage from '../../src/pages/SelectPage.jsx'
 import VolunteerPage from '../../src/pages/VolunteerPage.jsx'
 import AssistedProfilePage from '../../src/pages/assisted/AssistedProfilePage.jsx'
 import AssistedStackPage from '../../src/pages/assisted/AssistedStackPage.jsx'
-import RegisterAssistedPage from '../../src/pages/assisted/RegisterAssistedPage.jsx'
 import SearchAssistedPage from '../../src/pages/assisted/SearchAssistedPage.jsx'
 
 import { ChakraProvider } from '@chakra-ui/react'
@@ -48,15 +47,11 @@ const router = createBrowserRouter([
                 element: <AssistedStackPage />,
               },
               {
-                path: 'registrar',
-                element: <RegisterAssistedPage />,
-              },
-              {
                 path: 'procurar',
                 element: <SearchAssistedPage />,
               },
               {
-                path: 'formulario',
+                path: 'registrar',
                 element: <AssistedFormPage />,
               },
             ],

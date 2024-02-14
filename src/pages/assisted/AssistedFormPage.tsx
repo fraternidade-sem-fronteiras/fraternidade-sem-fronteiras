@@ -1,7 +1,11 @@
 import React from 'react'
 import vine from '@vinejs/vine'
 import NavBar from '../../components/navbar/NavBar.jsx'
+import Checkbox from '../../components/form/Checkbox.jsx'
+import Input from '../../components/form/Input.jsx'
 import vineResolver from '../../utils/vine.resolver.js'
+import InputGroup from '../../components/form/InputGroup.jsx'
+import Select from '../../components/form/Select.jsx'
 import { useForm } from 'react-hook-form'
 
 import './styles/Form.scss'
@@ -30,6 +34,8 @@ const formSchema = vine.object({
   ctps: vine.string().minLength(7).maxLength(7),
 
   schooling: vine.string().minLength(3).maxLength(32),
+
+  shareData: vine.boolean(),
 })
 
 interface FormProps {
@@ -55,6 +61,8 @@ interface FormProps {
 
   ctps: string
   schooling: string
+
+  shareData: boolean
 }
 
 export default function AssistedFormPage() {
@@ -68,29 +76,33 @@ export default function AssistedFormPage() {
     resolver: vineResolver(formSchema),
   })
 
-  const [countries, setCountries] = React.useState([])
-  const [states, setStates] = React.useState([])
-  const [cities, setCities] = React.useState([])
+  const [countries, setCountries] = React.useState<string[]>([])
+  const [states, setStates] = React.useState<string[]>([])
+  const [cities, setCities] = React.useState<string[]>([])
 
-  const races = ['Branco', 'Preto/Negro', 'Amarelo', 'Vermelho/Índigena', 'Outro']
-  const genders = ['Homem Cisgênero', 'Mulher Cisgênero']
-  const degrees = [
-    'Sem nenhuma escolaridade',
-    'Ensino Fundamental Incompleto',
-    'Ensino Fundamental Completo',
-    'Ensino Médio Incompleto',
-    'Ensino Médio Completo',
-    'Ensino Superior Completo',
-    'Pós-Graduação',
-    'Mestrado',
-    'Doutorado',
-    'Pós-Doutorado',
-  ]
+  const [races, setRaces] = React.useState<string[]>([])
+  const [genders, setGenders] = React.useState<string[]>([])
+  const [degrees, setDegrees] = React.useState<string[]>([])
 
   React.useEffect(() => {
     fetch('https://servicodados.ibge.gov.br/api/v1/localidades/paises')
       .then((response) => response.json())
       .then((response) => setCountries(response.map((pais: Record<string, any>) => pais.nome)))
+
+    setRaces(['Branco', 'Preto/Negro', 'Amarelo', 'Vermelho/Índigena', 'Outro'])
+    setGenders(['Homem Cisgênero', 'Mulher Cisgênero'])
+    setDegrees([
+      'Sem nenhuma escolaridade',
+      'Ensino Fundamental Incompleto',
+      'Ensino Fundamental Completo',
+      'Ensino Médio Incompleto',
+      'Ensino Médio Completo',
+      'Ensino Superior Completo',
+      'Pós-Graduação',
+      'Mestrado',
+      'Doutorado',
+      'Pós-Doutorado',
+    ])
   }, [])
 
   const handleChangeCountry = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -129,347 +141,173 @@ export default function AssistedFormPage() {
         .replace(/(\d{3})(\d)/, '$1.$2')
         .replace(/(\d{3})(\d)/, '$1.$2')
         .replace(/(\d{3})(\d{1,2})/, '$1-$2')
-        .replace(/(-\d{2})\d+?$/, '$1')
+        .replace(/(-\d{2})\d+$/, '$1')
     )
   }
 
-  async function onSubmit() {
-    console.log(errors, isValid)
-    console.log(getValues())
+  async function onValidSubmit() {
+    console.log('valid', errors, isValid, getValues())
+  }
+
+  async function onInvalidSubmit() {
+    console.log('invalid')
   }
 
   return (
     <>
       <NavBar />
-      <div className="pagina">
-        <div className="form">
-          <button onClick={handleSubmit(onSubmit)}>ASDASDA</button>
-          <form action="#">
-            <div className="form-header">
-              <div className="title">
-                <h1>Cadastro do Assistido</h1>
-              </div>
-            </div>
-            <div className="compartilhaDados">
-              <h1>O assistido concorda em compartilhar seus dados com a organização ?</h1>
-            </div>
-            <div className="booleanInput">
-              <button
-                id="butao1"
-                className="btn btn-outline btn-secondary"
-                // onClick={setState({ shareData: true })}
-              >
-                Sim
-              </button>
-              <button
-                className="btn btn-outline btn-secondary"
-                // onClick={setState({ shareData: true })}
-              >
-                Não
-              </button>
-            </div>
-            <div className="input-group">
-              <div className="input-box">
-                <label>Nome Completo</label>
-                <input
-                  type="text"
-                  className="input input-bordered input-md w-full max-w-xs"
-                  placeholder="Digite o seu nome"
-                  {...register('fullName', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                />
-              </div>
-              <div className="input-box">
-                <label>Nome Social/Apelido</label>
-                <input
-                  type="text"
-                  className="input input-bordered input-md w-full max-w-xs"
-                  placeholder="Digite o seu nome social"
-                  {...register('socialName', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                />
-              </div>
-              <div className="input-box">
-                <label>Data de nascimento</label>
-                <input
-                  type="date"
-                  placeholder="Digite o seu nome social"
-                  className="input input-bordered input-md w-full max-w-xs"
-                  {...register('birthDate', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                />
-              </div>
-              <div className="input-box">
-                <label>Etnia</label>
-                <select
-                  className="select select-secondary w-full max-w-xs"
-                  {...register('race', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                >
-                  <option key={''}>Qual a sua etnia?</option>
-                  {races.map((race, index) => (
-                    <option key={index}>{race}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="input-box">
-                <label>Identidade de gênero</label>
-                <select
-                  className="select select-secondary w-full max-w-xs"
-                  {...register('gender', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                >
-                  <option key="">Qual a sua identidade de gênero?</option>
-                  {genders.map((gender, index) => (
-                    <option key={index}>{gender}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="input-box">
-                <label>Nome do pai</label>
-                <input
-                  type="text"
-                  placeholder="Digite o nome do pai do assistido"
-                  className="input input-bordered input-md w-full max-w-xs"
-                  {...register('fatherName', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                />
-              </div>
-              <div className="input-box">
-                <label>Nome da mãe</label>
-                <input
-                  type="text"
-                  placeholder="Digite o nome da mãe do assistido"
-                  className="input input-bordered input-md w-full max-w-xs"
-                  {...register('motherName', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                />
-              </div>
-              <div className="input-box">
-                <label>País</label>
-                <select
-                  className="select select-secondary w-full max-w-xs"
-                  {...register('country', {
-                    required: 'Este campo é obrigatório',
-                    onChange: handleChangeCountry,
-                  })}
-                >
-                  <option key="">Qual país você nasceu?</option>
-                  {countries.map((country, index) => (
-                    <option key={index}>{country}</option>
-                  ))}
-                </select>
-              </div>
-              {getValues('country') === 'Brasil' && (
-                <>
-                  <div className="input-box">
-                    <label>Estado</label>
-                    <select
-                      className="select select-secondary w-full max-w-xs"
-                      {...register('state', {
-                        required: 'Este campo é obrigatório',
-                        onChange: handleChangeState,
-                      })}
-                    >
-                      <option key="">Qual estado você nasceu?</option>
-                      {states.map((state, index) => (
-                        <option key={index}>{state}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="input-box">
-                    <label>Cidade</label>
-                    <select
-                      className="select select-secondary w-full max-w-xs"
-                      {...register('city', {
-                        required: 'Este campo é obrigatório',
-                      })}
-                    >
-                      <option key="">Qual cidade você nasceu?</option>
-                      {cities.map((city, index) => (
-                        <option key={index}>{city}</option>
-                      ))}
-                    </select>
-                  </div>
-                </>
-              )}
+      <div className="flex flex-col justify-center items-center p-12 bg-white">
+        <form action="#" onSubmit={handleSubmit(onValidSubmit, onInvalidSubmit)}>
+          <h1 className="form-header">Cadastro do Assistido</h1>
+          <div className="flex justify-center items-center flex-col py-5">
+            <h1>O assistido concorda em compartilhar seus dados com a organização ?</h1>
+            <Checkbox {...register('shareData')} />
+          </div>
+          <InputGroup>
+            <Input
+              label="Nome Social/Apelido"
+              placeholder="Digite o seu nome social"
+              {...register('socialName')}
+            />
 
-              <div className="input-box">
-                <label>CPF</label>
-                <input
-                  type="text"
-                  className="input input-bordered input-md w-full max-w-xs"
-                  placeholder="Digite o CPF"
-                  pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-                  {...register('cpf', {
-                    required: 'Este campo é obrigatório',
-                    onChange: handleChangeCpf,
+            <Input label="Data de nascimento" type="date" {...register('birthDate')} />
+
+            <Select
+              label="Etnia"
+              defaultValue="Qual a sua etnia?"
+              options={races.map((race) => ({
+                key: race.toLowerCase(),
+                label: race,
+                value: race,
+              }))}
+              {...register('race')}
+            />
+
+            <Select
+              label="Identidade de gênero"
+              defaultValue="Qual a sua identidade de gênero?"
+              options={genders.map((gender) => ({
+                key: gender.toLowerCase(),
+                label: gender,
+                value: gender,
+              }))}
+              {...register('gender')}
+            />
+
+            <Input
+              label="Nome do pai"
+              placeholder="Digite o nome do pai do assistido"
+              {...register('fatherName')}
+            />
+
+            <Input
+              label="Nome do pai"
+              placeholder="Digite o nome do pai do assistido"
+              {...register('fatherName')}
+            />
+
+            <Input
+              label="Nome da mãe"
+              placeholder="Digite o nome da mãe do assistido"
+              {...register('motherName')}
+            />
+
+            <Select
+              label="País"
+              defaultValue="Qual país você nasceu?"
+              options={countries.map((country) => ({
+                key: country.toLowerCase(),
+                label: country,
+                value: country,
+              }))}
+              {...register('country', {
+                onChange: handleChangeCountry,
+              })}
+            />
+
+            {getValues('country') === 'Brasil' && (
+              <>
+                <Select
+                  label="Estado"
+                  defaultValue="Qual estado você nasceu?"
+                  options={states.map((state) => ({
+                    key: state.toLowerCase(),
+                    label: state,
+                    value: state,
+                  }))}
+                  {...register('state', {
+                    onChange: handleChangeState,
                   })}
                 />
-              </div>
 
-              <div className="input-box">
-                <label>RG</label>
-                <input
-                  type="text"
-                  className="input input-bordered input-md w-full max-w-xs"
-                  placeholder="Digite o RG"
-                  {...register('rg', {
-                    required: 'Este campo é obrigatório',
-                  })}
+                <Select
+                  label="Cidade"
+                  defaultValue="Qual cidade você nasceu?"
+                  options={cities.map((city) => ({
+                    key: city.toLowerCase(),
+                    label: city,
+                    value: city,
+                  }))}
+                  {...register('city')}
                 />
-              </div>
+              </>
+            )}
 
-              <div className="input-box">
-                <label>Data de emissão</label>
-                <input
-                  type="date"
-                  placeholder="Digite a data de emissão"
-                  className="input input-bordered input-md w-full max-w-xs"
-                  {...register('emission', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                />
-              </div>
+            <Input
+              label="CPF"
+              placeholder="Digite o CPF"
+              pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+              {...register('cpf', {
+                onChange: handleChangeCpf,
+              })}
+            />
 
-              <div className="input-box">
-                <label>Orgão emissor</label>
-                <input
-                  type="text"
-                  className="input input-bordered input-md w-full max-w-xs"
-                  placeholder="Diga qual foi o orgão emissor do RG"
-                  {...register('organ', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                />
-              </div>
+            <Input label="RG" placeholder="Digite o RG" {...register('rg')} />
 
-              <div className="input-box">
-                <label>CTPS</label>
-                <input
-                  type="text"
-                  className="input input-bordered input-md w-full max-w-xs"
-                  placeholder="Diga qual CTPS"
-                  {...register('ctps', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                />
-              </div>
+            <Input label="Data de emissão" type="date" {...register('emission')} />
 
-              <div className="input-box">
-                <label>Escolaridade</label>
-                <select
-                  className="select select-secondary w-full max-w-xs"
-                  {...register('schooling', {
-                    required: 'Este campo é obrigatório',
-                  })}
-                >
-                  <option key="">Qual a escolaridade do assistido?</option>
-                  {degrees.map((degree, index) => (
-                    <option key={index}>{degree}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="input-box">
-                <label>Objetivos:</label>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    className="input input-bordered input-lg w-full max-w-xs"
-                  />
-                </div>
-              </div>
-              <div className="input-box">
-                <label>Motivos para estar em situação de rua:</label>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    className="input input-bordered input-lg w-full max-w-xs"
-                  />
-                </div>
-              </div>
-              <div className="input-box">
-                <label>Tempo em situação de rua:</label>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    className="input input-bordered input-lg w-full max-w-xs"
-                  />
-                </div>
-              </div>
-              <div className="input-box">
-                <label>Lugar que pernoita:</label>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    className="input input-bordered input-lg w-full max-w-xs"
-                  />
-                </div>
-              </div>
-              <div className="input-box">
-                <label>Renda:</label>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    className="input input-bordered input-lg w-full max-w-xs"
-                  />
-                </div>
-              </div>
-              <div className="input-box">
-                <label>Necessidade especiais:</label>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    className="input input-bordered input-lg w-full max-w-xs"
-                  />
-                </div>
-              </div>
-              <div className="input-box">
-                <label>Expulsão:</label>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    className="input input-bordered input-lg w-full max-w-xs"
-                  />
-                </div>
-              </div>
-              <div className="input-box">
-                <label>Desaparecido</label>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    className="input input-bordered input-lg w-full max-w-xs"
-                  />
-                </div>
-              </div>
-              <div className="input-box">
-                <label>Observações</label>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Type here"
-                    className="input input-bordered input-lg w-full max-w-xs"
-                  />
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
+            <Input
+              label="Orgão emissor"
+              placeholder="Diga qual foi o orgão emissor do RG"
+              {...register('organ')}
+            />
+
+            <Input label="CTPS" placeholder="Diga qual CTPS" {...register('ctps')} />
+
+            <Select
+              label="Escolaridade"
+              defaultValue="Qual a escolaridade do assistido?"
+              options={degrees.map((degree) => ({
+                key: degree.toLowerCase(),
+                label: degree,
+                value: degree,
+              }))}
+              {...register('schooling')}
+            />
+
+            <Input label="Objetivos:" placeholder="Digite os objetivos" />
+
+            <Input
+              label="Situação de rua:"
+              placeholder="Diga o motivo por estar em situação de rua"
+            />
+
+            <Input
+              label="Tempo em situação de rua:"
+              placeholder="Quanto tempo em situação de rua?"
+            />
+
+            <Input label="Renda:" placeholder="Diga sua renda" />
+
+            <Input label="Necessidade especiais:" placeholder="Diga qual necessidade especial" />
+
+            <Input label="Expulsão:" placeholder="Diga o motivo da expulsão" />
+
+            <Input label="Desaparecido" placeholder="Diga se está desaparecido" />
+
+            <Input label="Observações" placeholder="Diga qual observação deve ser feita" />
+          </InputGroup>
+        </form>
       </div>
     </>
   )

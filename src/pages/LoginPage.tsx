@@ -1,12 +1,12 @@
 import React from 'react'
 import vineResolver from '../utils/vine.resolver.js'
 import useUser from '../hooks/useUser.js'
+import Input from '../components/form/Input.jsx'
+import Checkbox from '../components/form/Checkbox.jsx'
+import vine from '@vinejs/vine'
 import { useForm } from 'react-hook-form'
 import { useToast } from '@chakra-ui/react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-
-import './styles/Login.scss'
-import vine from '@vinejs/vine'
 
 const loginUserFormSchema = vine.object({
   email: vine.string().minLength(3).maxLength(64),
@@ -77,71 +77,81 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="hero min-h-screen bg-base-200">
-      <div className="hero-content flex-col lg:flex-row-reverse">
-        <div className="text-center">
-          <picture>
-            <img
-              className="fsf-logo"
-              src="https://www.fraternidadesemfronteiras.org.br/wp-content/uploads/2021/07/LOGO.png"
-              style={{ width: '30%', height: '30%' }}
-            />
-          </picture>
+    <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="text-center">
+        <picture className="flex justify-center">
+          <img
+            src="https://www.fraternidadesemfronteiras.org.br/wp-content/uploads/2021/07/LOGO.png"
+            style={{ width: '30%', height: '30%' }}
+          />
+        </picture>
+        <h1 className="text-xl font-bold leading-tight tracking-tight mb-5">
+          Faça login para continuar
+        </h1>
+      </div>
 
-          <h1 className="font-bold">Entrar</h1>
-          <p className="py-1">Por favor, faça o login para continuar.</p>
-        </div>
-        <div
-          className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 card-body"
-          style={{ height: '80%' }}
-        >
-          <div className="form-control" style={{ padding: 0 }}>
-            <label className="label">
-              <span className="label-text">Email</span>
-            </label>
-            <input
-              className="input input-bordered"
-              type="text"
-              placeholder="exemplo@email.com"
-              {...register('email', {
-                required: 'O campo de email é obrigatório.',
-              })}
-            />
-            <label className="label">
-              <span className="label-text">Senha</span>
-            </label>
-            <input
-              className="input input-bordered"
-              type="text"
-              placeholder="Senha"
-              {...register('password', {
-                required: 'O campo de email é obrigatório.',
-              })}
-            />
-            <label className="label">
-              <a href="#" className="label-text-alt link link-hover">
-                Esqueci minha senha!
-              </a>
-            </label>
-            <label className="cursor-pointer label">
-              <span className="label-text">Lembre-me</span>
+      <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 bg-base-100">
+        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <form className="space-y-4 md:space-y-6" action="#">
+            <div>
+              <label htmlFor="email" className="block mb-2 text-sm font-medium">
+                Seu email
+              </label>
               <input
-                type="checkbox"
-                className="toggle toggle-primary"
-                {...register('rememberMe', {
-                  required: 'O campo de email é obrigatório.',
-                })}
+                type="email"
+                name="email"
+                id="email"
+                className="border sm:text-sm rounded-lg block w-full p-2.5 bordered"
+                placeholder="Seu email"
+                required
               />
-            </label>
+            </div>
+            <div>
+              <label htmlFor="password" className="block mb-2 text-sm font-medium">
+                Senha
+              </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Sua senha"
+                className="border sm:text-sm rounded-lg block w-full p-2.5 bordered"
+                required
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <a
+                href="#"
+                className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+              >
+                Esqueceu sua senha?
+              </a>
+              <div className="flex items-start">
+                <div className="mr-3 text-sm">
+                  <label htmlFor="remember" className="text-sm font-medium text-primary-600 ">
+                    Lembre me
+                  </label>
+                </div>
+                <div className="flex items-center h-5">
+                  <input
+                    id="remember"
+                    aria-describedby="remember"
+                    type="checkbox"
+                    className="toggle toggle-primary"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
             <button
+              type="submit"
               className="btn btn-primary"
-              onClick={handleSubmit(onSubmit)}
               disabled={isSubmitting}
               style={{ width: '100%' }}
             >
-              Entrar
+              Sign in
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
