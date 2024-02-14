@@ -11,10 +11,9 @@ interface UserProviderProps {
 
 const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderProps) => {
   const { get } = useEnv()
-  const [theme, setTheme] = React.useState<'light' | 'dark'>(() => {
-    const localTheme = localStorage.getItem('theme')
-    return localTheme ? (localTheme as 'light' | 'dark') : 'light'
-  })
+  const [theme, setTheme] = React.useState<'light' | 'dark'>(
+    () => (localStorage.getItem('theme') as 'light' | 'dark' | null) ?? 'light'
+  )
   const [volunteer, setVolunteer] = React.useState<StoreableVolunteer | null>(() => {
     const item = localStorage.getItem('volunteer')
     return item ? JSON.parse(item) : null
@@ -25,7 +24,6 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
 
   React.useLayoutEffect(() => {
     getAxiosInstance().defaults.baseURL = get('API_URL')
-    console.log(get('API_URL'))
 
     if (volunteer) {
       getAxiosInstance()

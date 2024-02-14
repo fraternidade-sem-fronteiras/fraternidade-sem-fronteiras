@@ -13,8 +13,6 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
 
-import '../../src/styles/index.scss'
-
 const AssistedFormPage = lazy(() => import('../../src/pages/assisted/AssistedFormPage.jsx'))
 const NotFound = lazy(() => import('../../src/components/errors/NotFound.jsx'))
 
@@ -30,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         children: [
+          {
+            path: '',
+            element: <SelectPage />,
+          },
           {
             path: 'listar',
             element: <VolunteerPage />,
