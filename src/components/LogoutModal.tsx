@@ -25,7 +25,7 @@ export default function LogoutModal({ isOpen, onClose }: Readonly<LogoutModalPro
 
   function handleLogout() {
     finishSession().finally(() => {
-      navigate('/')
+      navigate('/login')
       toast({
         title: 'Sessão finalizada',
         description: 'Você foi deslogado com sucesso',

@@ -1,16 +1,14 @@
 import React from 'react'
 import vineResolver from '../utils/vine.resolver.js'
 import useUser from '../hooks/useUser.js'
-import Input from '../components/form/Input.jsx'
-import Checkbox from '../components/form/Checkbox.jsx'
 import vine from '@vinejs/vine'
 import { useForm } from 'react-hook-form'
 import { useToast } from '@chakra-ui/react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 const loginUserFormSchema = vine.object({
-  email: vine.string().minLength(3).maxLength(64),
-  password: vine.string().minLength(1).maxLength(32),
+  email: vine.string().email().minLength(3).maxLength(64),
+  password: vine.string().minLength(1),
 
   rememberMe: vine.boolean(),
 })
@@ -27,9 +25,14 @@ export default function LoginPage() {
     getValues,
     handleSubmit,
     register,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<LoginProps>({
-    resolver: vineResolver(loginUserFormSchema),
+    resolver: vineResolver(loginUserFormSchema, {
+      'email.minLength': 'O email deve ter no mínimo 3 caracteres',
+      'email.maxLength': 'O email deve ter no máximo 64 caracteres',
+      'email.email': 'O email deve ser um email válido',
+      'password.minLength': 'A senha é obrigatória',
+    }),
   })
 
   const { createSession, isLoggedIn } = useUser()
@@ -92,32 +95,44 @@ export default function LoginPage() {
 
       <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 bg-base-100">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <form className="space-y-4 md:space-y-6" action="#">
+          <form className="space-y-4 md:space-y-6" noValidate>
             <div>
               <label htmlFor="email" className="block mb-2 text-sm font-medium">
                 Seu email
               </label>
               <input
                 type="email"
-                name="email"
                 id="email"
-                className="border sm:text-sm rounded-lg block w-full p-2.5 bordered"
+                className="border sm:text-sm rounded-lg block w-full p-2.5 bordered :invalid:border-red-500"
                 placeholder="Seu email"
                 required
+                {...register('email')}
               />
+              {errors.email &&
+                errors.email.message?.split(', ').map((error) => (
+                  <span className="text-xs text-red-500" key={error}>
+                    {error}
+                  </span>
+                ))}
             </div>
             <div>
               <label htmlFor="password" className="block mb-2 text-sm font-medium">
-                Senha
+                Sua senha
               </label>
               <input
                 type="password"
-                name="password"
                 id="password"
                 placeholder="Sua senha"
                 className="border sm:text-sm rounded-lg block w-full p-2.5 bordered"
                 required
+                {...register('password')}
               />
+              {errors.password &&
+                errors.password.message?.split(', ').map((error) => (
+                  <span className="text-xs text-red-500" key={error}>
+                    {error}
+                  </span>
+                ))}
             </div>
             <div className="flex items-center justify-between">
               <a
@@ -139,6 +154,7 @@ export default function LoginPage() {
                     type="checkbox"
                     className="toggle toggle-primary"
                     required
+                    {...register('rememberMe')}
                   />
                 </div>
               </div>
@@ -148,8 +164,9 @@ export default function LoginPage() {
               className="btn btn-primary"
               disabled={isSubmitting}
               style={{ width: '100%' }}
+              onClick={handleSubmit(onSubmit)}
             >
-              Sign in
+              Logar
             </button>
           </form>
         </div>

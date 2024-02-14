@@ -1,7 +1,7 @@
 import LogoutModal from '../LogoutModal.jsx'
 import { useDisclosure } from '@chakra-ui/react'
 
-export default function NavBar() {
+export default function DefaultNavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -13,12 +13,14 @@ export default function NavBar() {
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           ></ul>
         </div>
-        <picture>
-          <img
-            style={{ width: '5rem', height: '5rem' }}
-            src="https://www.fraternidadesemfronteiras.org.br/wp-content/uploads/2021/07/LOGO.png"
-          />
-        </picture>
+        <a href="/dashboard/navegar">
+          <picture>
+            <img
+              style={{ width: '5rem', height: '5rem' }}
+              src="https://www.fraternidadesemfronteiras.org.br/wp-content/uploads/2021/07/LOGO.png"
+            />
+          </picture>
+        </a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
