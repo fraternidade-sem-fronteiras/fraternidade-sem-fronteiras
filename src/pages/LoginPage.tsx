@@ -7,7 +7,7 @@ import { useToast } from '@chakra-ui/react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 const loginUserFormSchema = vine.object({
-  email: vine.string().email().minLength(3).maxLength(64),
+  email: vine.string().minLength(3).maxLength(64).email(),
   password: vine.string().minLength(1),
 
   rememberMe: vine.boolean(),
@@ -28,7 +28,7 @@ export default function LoginPage() {
     formState: { isSubmitting, errors },
   } = useForm<LoginProps>({
     resolver: vineResolver(loginUserFormSchema, {
-      'email.minLength': 'O email deve ter no mínimo 3 caracteres',
+      'email.minLength': 'O email é obrigatório',
       'email.maxLength': 'O email deve ter no máximo 64 caracteres',
       'email.email': 'O email deve ser um email válido',
       'password.minLength': 'A senha é obrigatória',
@@ -54,26 +54,30 @@ export default function LoginPage() {
   const onSubmit = () => {
     toast.promise(
       createSession(getValues('email'), getValues('password')).then(() =>
-        navigate(location.pathname == '/' ? redirect ?? '/dashboard/' : location.pathname)
+        navigate(
+          location.pathname == '/' || location.pathname == '/login'
+            ? redirect ?? '/dashboard/'
+            : location.pathname
+        )
       ),
       {
         success: {
           title: 'Logado com sucesso!',
           description: 'Seja bem-vindo de volta!',
           position: 'top-right',
-          duration: 1000,
+          duration: 500,
         },
         error: {
           title: 'Logando',
           description: 'Não foi possível fazer o login, tente novamente mais tarde.',
           position: 'top-right',
-          duration: 4000,
+          duration: 2000,
         },
         loading: {
           title: 'Logando',
           description: 'Seu login está sendo processado...',
           position: 'top-right',
-          duration: 10000,
+          duration: 15000,
         },
       }
     )

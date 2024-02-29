@@ -21,53 +21,58 @@ const NotFound = lazy(() => import('../../src/components/errors/NotFound.jsx'))
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <PrivateRouteLayout />,
     children: [
       {
-        path: 'dashboard/navegar',
-        element: <NavigationPage />,
-      },
-      {
         path: 'dashboard',
-        element: <DashboardLayout />,
+        element: <PrivateRouteLayout />,
         children: [
           {
-            path: 'assistido',
+            path: '',
+            element: <DashboardLayout />,
             children: [
               {
-                path: 'perfil',
-                element: <AssistedProfilePage />,
+                path: 'assistido',
+                children: [
+                  {
+                    path: 'perfil',
+                    element: <AssistedProfilePage />,
+                  },
+                  {
+                    path: 'fila',
+                    element: <AssistedStackPage />,
+                  },
+                  {
+                    path: 'procurar',
+                    element: <SearchAssistedPage />,
+                  },
+                  {
+                    path: 'cadastrar',
+                    element: <AssistedFormPage />,
+                  },
+                ],
               },
               {
-                path: 'fila',
-                element: <AssistedStackPage />,
-              },
-              {
-                path: 'procurar',
-                element: <SearchAssistedPage />,
-              },
-              {
-                path: 'cadastrar',
-                element: <AssistedFormPage />,
+                path: 'voluntario',
+                children: [
+                  {
+                    path: 'procurar',
+                    element: <SearchVolunteerPage />,
+                  },
+                  {
+                    path: 'perfil',
+                    element: <VolunteerProfilePage />,
+                  },
+                  {
+                    path: 'cadastrar',
+                    element: <RegisterVolunteerPage />,
+                  },
+                ],
               },
             ],
           },
           {
-            path: 'voluntario',
-            children: [
-              {
-                path: 'procurar',
-                element: <SearchVolunteerPage />,
-              },
-              {
-                path: 'perfil',
-                element: <VolunteerProfilePage />,
-              },
-              {
-                path: 'cadastrar',
-                element: <RegisterVolunteerPage />,
-              },
-            ],
+            path: 'navegar',
+            element: <NavigationPage />,
           },
         ],
       },
