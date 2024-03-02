@@ -35,7 +35,6 @@ export default class AuthenticationMiddleware {
 
       return await next()
     } catch (err) {
-      console.log(err, err.message, err.name, typeof err)
       throw new InvalidTokenException()
     }
   }

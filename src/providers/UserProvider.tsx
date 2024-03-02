@@ -48,7 +48,6 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
             duration: 5000,
             isClosable: true,
           })
-          console.log('error', error)
         })
     }
   }, [])
@@ -95,7 +94,6 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
         const newTheme = theme === 'light' ? 'dark' : 'light'
         setTheme(newTheme)
         localStorage.setItem('theme', newTheme)
-        console.log('changed', newTheme)
       }
     }
 
@@ -113,7 +111,6 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
           const { data } = await getAxiosInstance().post('volunteers/login', { email, password })
 
           const storeableVolunteer: StoreableVolunteer = { ...data.volunteer, token: data.token }
-          console.log('resposta', storeableVolunteer)
 
           localStorage.setItem('volunteer', JSON.stringify(storeableVolunteer))
           setVolunteer(storeableVolunteer)

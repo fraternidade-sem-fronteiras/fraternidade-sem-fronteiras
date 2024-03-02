@@ -1,13 +1,24 @@
 import React from 'react'
 import vine from '@vinejs/vine'
 import Checkbox from '../../components/form/Checkbox.jsx'
-import Input from '../../components/form/Input.jsx'
 import vineResolver from '../../utils/vine.resolver.js'
-import InputGroup from '../../components/form/InputGroup.jsx'
-import Select from '../../components/form/Select.jsx'
 import { useForm } from 'react-hook-form'
 
 import './styles/Form.scss'
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Grid,
+  GridItem,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  NumberInput,
+  NumberInputField,
+  Select,
+  Textarea,
+} from '@chakra-ui/react'
 
 const formSchema = vine.object({
   fullName: vine.string().minLength(3).maxLength(64),
@@ -67,6 +78,7 @@ interface FormProps {
 export default function AssistedFormPage() {
   const {
     getValues,
+    watch,
     handleSubmit,
     register,
     setValue,
@@ -91,7 +103,6 @@ export default function AssistedFormPage() {
     setRaces(['Branco', 'Preto/Negro', 'Amarelo', 'Vermelho/Índigena', 'Outro'])
     setGenders(['Homem Cisgênero', 'Mulher Cisgênero'])
     setDegrees([
-      'Sem nenhuma escolaridade',
       'Ensino Fundamental Incompleto',
       'Ensino Fundamental Completo',
       'Ensino Médio Incompleto',
@@ -105,6 +116,8 @@ export default function AssistedFormPage() {
   }, [])
 
   const handleChangeCountry = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (event.target.value !== 'Brasil') return
+
     fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
       .then((response) => response.json())
       .then((data) => {
@@ -156,147 +169,250 @@ export default function AssistedFormPage() {
           <h1>O assistido concorda em compartilhar seus dados com a organização ?</h1>
           <Checkbox {...register('shareData')} />
         </div>
-        <InputGroup>
-          <Input
-            label="Nome Social/Apelido"
-            placeholder="Digite o seu nome social"
-            {...register('socialName')}
-          />
 
-          <Input label="Data de nascimento" type="date" {...register('birthDate')} />
+        <Grid templateColumns="2fr repeat(3, 1fr)" gap={'1rem'}>
+          <GridItem>
+            <FormControl>
+              <FormLabel>Nome completo</FormLabel>
+              <Input placeholder="Digite o nome completo" {...register('fullName')} />
+            </FormControl>
+          </GridItem>
 
-          <Select
-            label="Etnia"
-            defaultValue="Qual a sua etnia?"
-            options={races.map((race) => ({
-              key: race.toLowerCase(),
-              label: race,
-              value: race,
-            }))}
-            {...register('race')}
-          />
+          <GridItem>
+            <FormControl>
+              <FormLabel>Escolaridade</FormLabel>
+              <Select defaultValue="Sem nenhuma escolaridade" {...register('schooling')}>
+                <option key={'Sem nenhuma escolaridade'} disabled>
+                  Sem nenhuma escolaridade
+                </option>
+                {degrees.map((degree) => (
+                  <option key={degree}>{degree}</option>
+                ))}
+              </Select>
+            </FormControl>
+          </GridItem>
 
-          <Select
-            label="Identidade de gênero"
-            defaultValue="Qual a sua identidade de gênero?"
-            options={genders.map((gender) => ({
-              key: gender.toLowerCase(),
-              label: gender,
-              value: gender,
-            }))}
-            {...register('gender')}
-          />
+          <GridItem>
+            <FormControl>
+              <FormLabel>Nome social</FormLabel>
+              <Input placeholder="Digite o seu nome social" {...register('socialName')} />
+            </FormControl>
+          </GridItem>
 
-          <Input
-            label="Nome do pai"
-            placeholder="Digite o nome do pai do assistido"
-            {...register('fatherName')}
-          />
+          <GridItem>
+            <FormControl>
+              <FormLabel>Data de nascimento</FormLabel>
+              <Input type="date" {...register('birthDate')} />
+            </FormControl>
+          </GridItem>
+        </Grid>
 
-          <Input
-            label="Nome do pai"
-            placeholder="Digite o nome do pai do assistido"
-            {...register('fatherName')}
-          />
+        <Grid templateColumns="repeat(2, 1fr)" gap={'1rem'} marginTop={'1rem'}>
+          <GridItem>
+            <FormControl>
+              <FormLabel>Nome do pai</FormLabel>
+              <Input placeholder="Digite o nome do pai do assistido" {...register('fatherName')} />
+            </FormControl>
+          </GridItem>
 
-          <Input
-            label="Nome da mãe"
-            placeholder="Digite o nome da mãe do assistido"
-            {...register('motherName')}
-          />
+          <GridItem>
+            <FormControl>
+              <FormLabel>Nome da mãe</FormLabel>
+              <Input placeholder="Digite o nome da mãe do assistido" {...register('motherName')} />
+            </FormControl>
+          </GridItem>
+        </Grid>
 
-          <Select
-            label="País"
-            defaultValue="Qual país você nasceu?"
-            options={countries.map((country) => ({
-              key: country.toLowerCase(),
-              label: country,
-              value: country,
-            }))}
-            {...register('country', {
-              onChange: handleChangeCountry,
-            })}
-          />
+        <Grid templateColumns="250px 1fr" gap={'1rem'} marginTop={'1rem'}>
+          <GridItem>
+            <FormControl>
+              <FormLabel>Etnia</FormLabel>
+              <Select defaultValue=" " {...register('race')}>
+                <option key=" " label="Selecione a etnia" disabled>
+                  Selecione a etnia
+                </option>
+                {races.map((race) => (
+                  <option key={race} label={race}>
+                    {race}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+          </GridItem>
 
-          {getValues('country') === 'Brasil' && (
-            <>
-              <Select
-                label="Estado"
-                defaultValue="Qual estado você nasceu?"
-                options={states.map((state) => ({
-                  key: state.toLowerCase(),
-                  label: state,
-                  value: state,
-                }))}
-                {...register('state', {
-                  onChange: handleChangeState,
+          <GridItem>
+            <FormControl>
+              <FormLabel>Identidade de gênero</FormLabel>
+              <Select defaultValue="" {...register('gender')}>
+                <option key="" label="Selecione a identidade de gênero" disabled>
+                  Selecione a identidade de gênero
+                </option>
+                {genders.map((gender) => (
+                  <option key={gender} label={gender}>
+                    {gender}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+          </GridItem>
+        </Grid>
+
+        <Grid templateColumns="repeat(3, 250px) 1fr 250px" gap={'1rem'} marginTop={'1rem'}>
+          <GridItem>
+            <FormControl>
+              <FormLabel>CPF</FormLabel>
+              <Input
+                placeholder="Digite o CPF"
+                pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                {...register('cpf', {
+                  onChange: handleChangeCpf,
                 })}
               />
+            </FormControl>
+          </GridItem>
 
-              <Select
-                label="Cidade"
-                defaultValue="Qual cidade você nasceu?"
-                options={cities.map((city) => ({
-                  key: city.toLowerCase(),
-                  label: city,
-                  value: city,
-                }))}
-                {...register('city')}
-              />
+          <GridItem>
+            <FormControl>
+              <FormLabel>RG</FormLabel>
+              <Input placeholder="Digite o RG" {...register('rg')} />
+            </FormControl>
+          </GridItem>
+
+          <GridItem>
+            <FormControl>
+              <FormLabel>Data de emissão</FormLabel>
+              <Input type="date" {...register('emission')} />
+            </FormControl>
+          </GridItem>
+
+          <GridItem>
+            <FormControl>
+              <FormLabel>Orgão emissor</FormLabel>
+              <Input placeholder="Diga qual foi o orgão emissor do RG" {...register('organ')} />
+            </FormControl>
+          </GridItem>
+
+          <GridItem>
+            <FormControl>
+              <FormLabel>Renda</FormLabel>
+              <InputGroup>
+                <InputLeftAddon>R$</InputLeftAddon>
+                <NumberInput defaultValue={0} precision={2} min={0} max={1000000000.0}>
+                  <NumberInputField placeholder="Diga sua renda" />
+                </NumberInput>
+              </InputGroup>
+            </FormControl>
+          </GridItem>
+        </Grid>
+
+        <Grid templateColumns={'1fr 1fr 1fr'} gap={'1rem'} marginTop={'1rem'}>
+          <FormControl>
+            <FormLabel>País</FormLabel>
+            <Select
+              defaultValue="Brasil"
+              {...register('country', {
+                onChange: handleChangeCountry,
+              })}
+            >
+              {countries.map((country) => (
+                <option key={country} label={country}>
+                  {country}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+
+          {watch('country') === 'Brasil' && (
+            <>
+              <FormControl>
+                <FormLabel>Estado</FormLabel>
+                <Select
+                  defaultValue="Qual estado você nasceu?"
+                  {...register('state', {
+                    onChange: handleChangeState,
+                  })}
+                >
+                  {states.map((state) => (
+                    <option key={state} label={state}>
+                      {state}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Cidade</FormLabel>
+                <Select defaultValue="Qual cidade você nasceu?" {...register('city')}>
+                  {cities.map((city) => (
+                    <option key={city} label={city}>
+                      {city}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
             </>
           )}
+        </Grid>
 
-          <Input
-            label="CPF"
-            placeholder="Digite o CPF"
-            pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
-            {...register('cpf', {
-              onChange: handleChangeCpf,
-            })}
-          />
+        <FormControl>
+          <FormLabel>CTPS</FormLabel>
+          <Input placeholder="Diga qual CTPS" {...register('ctps')} />
+        </FormControl>
 
-          <Input label="RG" placeholder="Digite o RG" {...register('rg')} />
+        <Grid
+          templateColumns={'3fr 2fr'}
+          templateRows={'repeat(3, 1fr)'}
+          gap={'1rem'}
+          rowGap={'1rem'}
+          marginTop={'1rem'}
+        >
+          <GridItem>
+            <FormControl>
+              <FormLabel>Objetivos</FormLabel>
+              <Textarea placeholder="Digite os objetivos" />
+            </FormControl>
+          </GridItem>
 
-          <Input label="Data de emissão" type="date" {...register('emission')} />
+          <GridItem>
+            <FormControl>
+              <FormLabel>Tempo em situação de rua</FormLabel>
+              <Textarea placeholder="Quanto tempo em situação de rua?" />
+            </FormControl>
+          </GridItem>
 
-          <Input
-            label="Orgão emissor"
-            placeholder="Diga qual foi o orgão emissor do RG"
-            {...register('organ')}
-          />
+          <GridItem>
+            <FormLabel>Situação de rua</FormLabel>
+            <Textarea placeholder="Diga o motivo por estar em situação de rua" />
+          </GridItem>
 
-          <Input label="CTPS" placeholder="Diga qual CTPS" {...register('ctps')} />
+          <GridItem>
+            <FormLabel>Necessidade especiais</FormLabel>
+            <Textarea placeholder="Diga o motivo por estar em situação de rua" />
+          </GridItem>
 
-          <Select
-            label="Escolaridade"
-            defaultValue="Qual a escolaridade do assistido?"
-            options={degrees.map((degree) => ({
-              key: degree.toLowerCase(),
-              label: degree,
-              value: degree,
-            }))}
-            {...register('schooling')}
-          />
+          <GridItem>
+            <FormControl>
+              <FormLabel>Expulsão</FormLabel>
+              <Textarea placeholder="Diga o motivo da expulsão" />
+            </FormControl>
+          </GridItem>
 
-          <Input label="Objetivos:" placeholder="Digite os objetivos" />
+          <GridItem>
+            <FormControl>
+              <FormLabel>Observações</FormLabel>
+              <Textarea placeholder="Diga qual observação deve ser feita" />
+            </FormControl>
+          </GridItem>
+        </Grid>
 
-          <Input
-            label="Situação de rua:"
-            placeholder="Diga o motivo por estar em situação de rua"
-          />
+        <FormControl>
+          <FormLabel>Desaparecido</FormLabel>
+          <Input placeholder="Diga se está desaparecido" />
+        </FormControl>
 
-          <Input label="Tempo em situação de rua:" placeholder="Quanto tempo em situação de rua?" />
-
-          <Input label="Renda:" placeholder="Diga sua renda" />
-
-          <Input label="Necessidade especiais:" placeholder="Diga qual necessidade especial" />
-
-          <Input label="Expulsão:" placeholder="Diga o motivo da expulsão" />
-
-          <Input label="Desaparecido" placeholder="Diga se está desaparecido" />
-
-          <Input label="Observações" placeholder="Diga qual observação deve ser feita" />
-        </InputGroup>
+        <Button type="submit" width={'100%'} colorScheme="#9D2D88">
+          Enviar
+        </Button>
       </form>
     </div>
   )

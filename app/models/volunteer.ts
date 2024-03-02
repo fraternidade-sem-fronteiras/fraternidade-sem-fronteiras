@@ -32,9 +32,7 @@ export default class Volunteer extends BaseModel {
   @beforeSave()
   public static async hashPassword(volunteer: Volunteer) {
     if (volunteer.$dirty.password) {
-      console.log(volunteer.$dirty.password)
       const newPassword = await hash.make(volunteer.password)
-      console.log(newPassword)
       volunteer.password = newPassword
     }
   }
