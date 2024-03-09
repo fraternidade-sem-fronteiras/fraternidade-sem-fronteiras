@@ -3,6 +3,7 @@ import vine from '@vinejs/vine'
 import Checkbox from '../../components/form/Checkbox.jsx'
 import vineResolver from '../../utils/vine.resolver.js'
 import { useForm } from 'react-hook-form'
+import { useDisclosure } from '@chakra-ui/react'
 
 import './styles/Form.scss'
 import {
@@ -76,6 +77,8 @@ interface FormProps {
 }
 
 export default function AssistedFormPage() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const {
     getValues,
     watch,
