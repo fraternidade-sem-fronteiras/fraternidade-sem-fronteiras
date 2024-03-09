@@ -6,8 +6,11 @@ import vineResolver from '../../utils/vine.resolver.js'
 import InputGroup from '../../components/form/InputGroup.jsx'
 import Select from '../../components/form/Select.jsx'
 import { useForm } from 'react-hook-form'
+import { useDisclosure } from '@chakra-ui/react'
 
 import './styles/Form.scss'
+import { Textarea, Text } from '@chakra-ui/react'
+import SendingModal from './components/sendingModal.jsx'
 
 const formSchema = vine.object({
   fullName: vine.string().minLength(3).maxLength(64),
@@ -65,6 +68,8 @@ interface FormProps {
 }
 
 export default function AssistedFormPage() {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const {
     getValues,
     handleSubmit,
@@ -297,6 +302,14 @@ export default function AssistedFormPage() {
 
           <Input label="Observações" placeholder="Diga qual observação deve ser feita" />
         </InputGroup>
+
+        <div className='send'>
+          <button className="btn btn-secondary btn-sm" id="enviar" onClick={onOpen}>
+            Enviar
+          </button>
+
+          <SendingModal isOpen={isOpen} onClose={onClose} />
+        </div>
       </form>
     </div>
   )
