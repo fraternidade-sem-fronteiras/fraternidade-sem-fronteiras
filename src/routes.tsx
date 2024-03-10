@@ -70,10 +70,6 @@ const router = createBrowserRouter([
                     path: 'cadastrar',
                     element: <RegisterVolunteerPage />,
                   },
-                  {
-                    path: '*',
-                    element: <NotFound />,
-                  },
                 ],
               },
             ],

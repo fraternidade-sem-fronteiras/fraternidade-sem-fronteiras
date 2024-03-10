@@ -2,7 +2,7 @@ import NavBar from '../navbar/DefaultNavBar.jsx'
 import DashboardSuspenseFallback from '../suspense/DashboardSuspenseFallback.jsx'
 import { useOutlet } from 'react-router-dom'
 import { Suspense } from 'react'
-import NotFound from '../errors/NotFound.jsx'
+import NotFound from '../errors/dashboard/NotFound.jsx'
 
 export default function DashboardLayout() {
   const outlet = useOutlet()
@@ -10,7 +10,11 @@ export default function DashboardLayout() {
   return (
     <>
       <NavBar />
-      <Suspense fallback={<DashboardSuspenseFallback />}>{outlet ?? <NotFound />}</Suspense>
+      {outlet ? (
+        <Suspense fallback={<DashboardSuspenseFallback />}>{outlet}</Suspense>
+      ) : (
+        <NotFound />
+      )}
     </>
   )
 }
