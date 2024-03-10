@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./resources/**/*.edge', './**/*.{js,jsx,ts,tsx,edge}'],
+  content: ['./resources/**/*.edge', './src/**/*.{js,jsx,ts,tsx,edge}'],
   darkMode: 'media', // or 'media' or 'class'
   theme: {
     extend: {},

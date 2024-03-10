@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import LogoutModal from '../LogoutModal.jsx'
 import { useDisclosure } from '@chakra-ui/react'
 
@@ -11,16 +12,16 @@ export default function DefaultNavBar() {
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-          ></ul>
+          />
         </div>
-        <a href="/dashboard/navegar">
+        <Link to="/dashboard/navegar">
           <picture>
             <img
               style={{ width: '5rem', height: '5rem' }}
               src="https://www.fraternidadesemfronteiras.org.br/wp-content/uploads/2021/07/LOGO.png"
             />
           </picture>
-        </a>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">

@@ -173,7 +173,7 @@ export default function AssistedFormPage() {
           <Checkbox {...register('shareData')} />
         </div>
 
-        <Grid templateColumns="2fr repeat(3, 1fr)" gap={'1rem'}>
+        <Grid templateColumns="1.5fr 1.3fr 1fr 0.5fr" gap={'1rem'}>
           <GridItem>
             <FormControl>
               <FormLabel>Nome completo</FormLabel>
