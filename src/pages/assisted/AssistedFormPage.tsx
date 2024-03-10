@@ -3,10 +3,11 @@ import vine from '@vinejs/vine'
 import Checkbox from '../../components/form/Checkbox.jsx'
 import vineResolver from '../../utils/vine.resolver.js'
 import { useForm } from 'react-hook-form'
-
-import './styles/Form.scss'
 import {
+  AbsoluteCenter,
+  Box,
   Button,
+  Divider,
   FormControl,
   FormLabel,
   Grid,
@@ -20,6 +21,8 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 
+import './styles/Form.scss'
+
 const formSchema = vine.object({
   fullName: vine.string().minLength(3).maxLength(64),
   socialName: vine.string().minLength(3).maxLength(32),
@@ -32,6 +35,7 @@ const formSchema = vine.object({
   country: vine.string().minLength(1),
   state: vine.string().minLength(1),
   city: vine.string().minLength(1),
+  sexuality: vine.string().minLength(1),
 
   race: vine.string(),
   gender: vine.string(),
@@ -63,6 +67,7 @@ interface FormProps {
 
   race: string
   gender: string
+  sexuality: string
 
   cpf: string
   rg: string
@@ -87,18 +92,28 @@ export default function AssistedFormPage() {
     resolver: vineResolver(formSchema),
   })
 
-  const [countries, setCountries] = React.useState<string[]>([])
+  const [countries, setCountries] = React.useState<string[]>(['Brasil'])
   const [states, setStates] = React.useState<string[]>([])
   const [cities, setCities] = React.useState<string[]>([])
 
   const [races, setRaces] = React.useState<string[]>([])
   const [genders, setGenders] = React.useState<string[]>([])
+  const [sexuality, setSexuality] = React.useState<string[]>([])
   const [degrees, setDegrees] = React.useState<string[]>([])
 
   React.useEffect(() => {
     fetch('https://servicodados.ibge.gov.br/api/v1/localidades/paises')
       .then((response) => response.json())
       .then((response) => setCountries(response.map((pais: Record<string, any>) => pais.nome)))
+
+    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+      .then((response) => response.json())
+      .then((data) => {
+        setStates(data.map((estado: Record<string, any>) => estado.sigla))
+        setCities([])
+        setValue('state', '')
+        setValue('city', '')
+      })
 
     setRaces(['Branco', 'Preto/Negro', 'Amarelo', 'Vermelho/Índigena', 'Outro'])
     setGenders(['Homem Cisgênero', 'Mulher Cisgênero'])
@@ -113,6 +128,7 @@ export default function AssistedFormPage() {
       'Doutorado',
       'Pós-Doutorado',
     ])
+    setSexuality(['Heterosexual', 'Homosexual', 'Bissexual', 'Pansexual'])
   }, [])
 
   const handleChangeCountry = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -157,6 +173,20 @@ export default function AssistedFormPage() {
     )
   }
 
+  const handleChangeRg = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // (^\d{1,2}).?(\d{3}).?(\d{3})-?(\d{1}|X|x$)
+    setValue(
+      'rg',
+      event.target.value
+        .toUpperCase()
+        .replace(/[^\dX]/g, '')
+        .replace(/(\d{2})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})((\d|X){1,2})/, '$1-$2')
+        .replace(/(-(\d|X))(\d|X)+$/, '$1')
+    )
+  }
+
   async function onValidSubmit() {
     console.log('valid', errors, isValid, getValues())
   }
@@ -164,17 +194,31 @@ export default function AssistedFormPage() {
   return (
     <div className="flex flex-col justify-center items-center p-12 bg-white">
       <form onSubmit={handleSubmit(onValidSubmit)} noValidate>
-        <h1 className="form-header">Cadastro do Assistido</h1>
-        <div className="flex justify-center items-center flex-col py-5">
+        <h1 className="form-header">Cadastro do assistido</h1>
+        <div className="flex justify-center items-center flex-col py-5 pb-8">
           <h1>O assistido concorda em compartilhar seus dados com a organização ?</h1>
           <Checkbox {...register('shareData')} />
         </div>
 
-        <Grid templateColumns="1.5fr 1.3fr 1fr 0.5fr" gap={'1rem'}>
+        <Box position="relative">
+          <Divider />
+          <AbsoluteCenter bg="white" px="4">
+            Dados pessoais
+          </AbsoluteCenter>
+        </Box>
+
+        <Grid templateColumns="1.5fr 1fr 1.3fr 0.5fr" paddingTop="10" gap={'1rem'}>
           <GridItem>
             <FormControl>
               <FormLabel>Nome completo</FormLabel>
               <Input placeholder="Digite o nome completo" {...register('fullName')} />
+            </FormControl>
+          </GridItem>
+
+          <GridItem>
+            <FormControl>
+              <FormLabel>Nome social</FormLabel>
+              <Input placeholder="Digite o nome social" {...register('socialName')} />
             </FormControl>
           </GridItem>
 
@@ -194,13 +238,6 @@ export default function AssistedFormPage() {
 
           <GridItem>
             <FormControl>
-              <FormLabel>Nome social</FormLabel>
-              <Input placeholder="Digite o seu nome social" {...register('socialName')} />
-            </FormControl>
-          </GridItem>
-
-          <GridItem>
-            <FormControl>
               <FormLabel>Data de nascimento</FormLabel>
               <Input type="date" {...register('birthDate')} />
             </FormControl>
@@ -211,24 +248,31 @@ export default function AssistedFormPage() {
           <GridItem>
             <FormControl>
               <FormLabel>Nome do pai</FormLabel>
-              <Input placeholder="Digite o nome do pai do assistido" {...register('fatherName')} />
+              <Input placeholder="Digite o nome do pai" {...register('fatherName')} />
             </FormControl>
           </GridItem>
 
           <GridItem>
             <FormControl>
               <FormLabel>Nome da mãe</FormLabel>
-              <Input placeholder="Digite o nome da mãe do assistido" {...register('motherName')} />
+              <Input placeholder="Digite o nome da mãe" {...register('motherName')} />
             </FormControl>
           </GridItem>
         </Grid>
 
-        <Grid templateColumns="250px 1fr" gap={'1rem'} marginTop={'1rem'}>
+        <Box position="relative" padding="6">
+          <Divider />
+          <AbsoluteCenter bg="white" px="4">
+            Diversidade
+          </AbsoluteCenter>
+        </Box>
+
+        <Grid templateColumns="250px 1fr 1fr" gap={'1rem'} marginTop={'1rem'}>
           <GridItem>
             <FormControl>
               <FormLabel>Etnia</FormLabel>
-              <Select defaultValue=" " {...register('race')}>
-                <option key=" " label="Selecione a etnia" disabled>
+              <Select defaultValue="" {...register('race')}>
+                <option value="" label="Selecione a etnia" disabled>
                   Selecione a etnia
                 </option>
                 {races.map((race) => (
@@ -244,7 +288,7 @@ export default function AssistedFormPage() {
             <FormControl>
               <FormLabel>Identidade de gênero</FormLabel>
               <Select defaultValue="" {...register('gender')}>
-                <option key="" label="Selecione a identidade de gênero" disabled>
+                <option value="" label="Selecione a identidade de gênero" disabled>
                   Selecione a identidade de gênero
                 </option>
                 {genders.map((gender) => (
@@ -255,7 +299,30 @@ export default function AssistedFormPage() {
               </Select>
             </FormControl>
           </GridItem>
+
+          <GridItem>
+            <FormControl>
+              <FormLabel>Sexualidade</FormLabel>
+              <Select defaultValue="" {...register('sexuality')}>
+                <option value="" label="Selecione a sexualidade" disabled>
+                  Selecione a sexualidade
+                </option>
+                {sexuality.map((sexuality) => (
+                  <option key={sexuality} label={sexuality}>
+                    {sexuality}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+          </GridItem>
         </Grid>
+
+        <Box position="relative" padding="6">
+          <Divider />
+          <AbsoluteCenter bg="white" px="4">
+            Dados de identificação
+          </AbsoluteCenter>
+        </Box>
 
         <Grid templateColumns="repeat(3, 250px) 1fr 250px" gap={'1rem'} marginTop={'1rem'}>
           <GridItem>
@@ -274,7 +341,13 @@ export default function AssistedFormPage() {
           <GridItem>
             <FormControl>
               <FormLabel>RG</FormLabel>
-              <Input placeholder="Digite o RG" {...register('rg')} />
+              <Input
+                placeholder="Digite o RG"
+                pattern="(^\d{1,2}).?(\d{3}).?(\d{3})-?(\d{1}|X|x$)"
+                {...register('rg', {
+                  onChange: handleChangeRg,
+                })}
+              />
             </FormControl>
           </GridItem>
 
@@ -315,7 +388,7 @@ export default function AssistedFormPage() {
               })}
             >
               {countries.map((country) => (
-                <option key={country} label={country}>
+                <option value={country} key={country} label={country}>
                   {country}
                 </option>
               ))}
@@ -327,11 +400,14 @@ export default function AssistedFormPage() {
               <FormControl>
                 <FormLabel>Estado</FormLabel>
                 <Select
-                  defaultValue="Qual estado você nasceu?"
+                  defaultValue=""
                   {...register('state', {
                     onChange: handleChangeState,
                   })}
                 >
+                  <option value="" label="Selecione o estado" disabled>
+                    Selecione o estado
+                  </option>
                   {states.map((state) => (
                     <option key={state} label={state}>
                       {state}
@@ -342,7 +418,10 @@ export default function AssistedFormPage() {
 
               <FormControl>
                 <FormLabel>Cidade</FormLabel>
-                <Select defaultValue="Qual cidade você nasceu?" {...register('city')}>
+                <Select defaultValue="" {...register('city')}>
+                  <option value="" label="Selecione a cidade" disabled>
+                    Selecione a cidade
+                  </option>
                   {cities.map((city) => (
                     <option key={city} label={city}>
                       {city}
@@ -358,6 +437,13 @@ export default function AssistedFormPage() {
           <FormLabel>CTPS</FormLabel>
           <Input placeholder="Diga qual CTPS" {...register('ctps')} />
         </FormControl>
+
+        <Box position="relative" padding="6">
+          <Divider />
+          <AbsoluteCenter bg="white" px="4">
+            Informações adicionais
+          </AbsoluteCenter>
+        </Box>
 
         <Grid
           templateColumns={'3fr 2fr'}

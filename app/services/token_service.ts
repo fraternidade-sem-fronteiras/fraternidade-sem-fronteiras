@@ -1,6 +1,6 @@
 import TokenExpiredException from '#exceptions/token_expired_exception'
 import Volunteer from '#models/volunteer'
-import env from '#start/env'
+import env from '../../start/env.js'
 import Session from '#validators/session'
 import jwt from 'jsonwebtoken'
 

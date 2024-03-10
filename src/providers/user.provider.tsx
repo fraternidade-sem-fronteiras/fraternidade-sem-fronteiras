@@ -1,7 +1,7 @@
 import React from 'react'
 import UserContext from '../context/user.context.js'
 import getAxiosInstance from '../utils/axios.instance.js'
-import useEnv from '../hooks/useEnv.js'
+import useEnv from '../hooks/env.hook.js'
 import { StoreableVolunteer } from '../entities/volunteer.entity.js'
 import { useToast } from '@chakra-ui/react'
 
@@ -90,10 +90,11 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
 
   React.useLayoutEffect(() => {
     const changeTheme = (event: KeyboardEvent) => {
-      if (event.key.toLowerCase() === 't') {
+      if (event.key?.toLowerCase() === 't') {
         const newTheme = theme === 'light' ? 'dark' : 'light'
         setTheme(newTheme)
         localStorage.setItem('theme', newTheme)
+        console.log('Theme changed to', newTheme)
       }
     }
 

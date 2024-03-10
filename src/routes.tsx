@@ -1,22 +1,20 @@
-import UserProvider from '../../src/providers/UserProvider.jsx'
-import EnvProvider from '../../src/providers/EnvProvider.jsx'
-import PrivateRouteLayout from '../../src/components/layouts/PrivateRouteLayout.jsx'
-import LoginPage from '../../src/pages/LoginPage.jsx'
-import NavigationPage from '../../src/pages/NavigationPage.jsx'
-import SearchVolunteerPage from '../../src/pages/volunteer/SearchVolunteerPage.jsx'
-import AssistedProfilePage from '../../src/pages/assisted/AssistedProfilePage.jsx'
-import AssistedStackPage from '../../src/pages/assisted/AssistedStackPage.jsx'
-import SearchAssistedPage from '../../src/pages/assisted/SearchAssistedPage.jsx'
-import DashboardLayout from '../../src/components/layouts/DashboardLayout.jsx'
-import VolunteerProfilePage from '../../src/pages/volunteer/VolunteerProfilePage.jsx'
-import RegisterVolunteerPage from '../../src/pages/volunteer/RegisterVolunteerPage.jsx'
+import PrivateRouteLayout from './components/layouts/PrivateRouteLayout.jsx'
+import LoginPage from './pages/LoginPage.jsx'
+import NavigationPage from './pages/NavigationPage.jsx'
+import SearchVolunteerPage from './pages/volunteer/SearchVolunteerPage.jsx'
+import AssistedProfilePage from './pages/assisted/AssistedProfilePage.jsx'
+import AssistedStackPage from './pages/assisted/AssistedStackPage.jsx'
+import SearchAssistedPage from './pages/assisted/SearchAssistedPage.jsx'
+import DashboardLayout from './components/layouts/DashboardLayout.jsx'
+import VolunteerProfilePage from './pages/volunteer/VolunteerProfilePage.jsx'
+import RegisterVolunteerPage from './pages/volunteer/RegisterVolunteerPage.jsx'
 
-import { ChakraProvider } from '@chakra-ui/react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
+import DefaultLayout from './components/layouts/DefaultLayout.jsx'
 
-const AssistedFormPage = lazy(() => import('../../src/pages/assisted/AssistedFormPage.jsx'))
-const NotFound = lazy(() => import('../../src/components/errors/NotFound.jsx'))
+const AssistedFormPage = lazy(() => import('./pages/assisted/AssistedFormPage.jsx'))
+const NotFound = lazy(() => import('./components/errors/NotFound.jsx'))
 
 const router = createBrowserRouter([
   {
@@ -32,9 +30,14 @@ const router = createBrowserRouter([
             children: [
               {
                 path: 'assistido',
+                element: <DefaultLayout />,
                 children: [
                   {
                     path: 'perfil',
+                    element: <AssistedProfilePage />,
+                  },
+                  {
+                    path: ':userName/perfil',
                     element: <AssistedProfilePage />,
                   },
                   {
@@ -53,6 +56,7 @@ const router = createBrowserRouter([
               },
               {
                 path: 'voluntario',
+                element: <DefaultLayout />,
                 children: [
                   {
                     path: 'procurar',
@@ -65,6 +69,10 @@ const router = createBrowserRouter([
                   {
                     path: 'cadastrar',
                     element: <RegisterVolunteerPage />,
+                  },
+                  {
+                    path: '*',
+                    element: <NotFound />,
                   },
                 ],
               },
@@ -88,18 +96,6 @@ const router = createBrowserRouter([
   },
 ])
 
-interface RoutesProps {
-  env: Record<string, any>
-}
-
-export default function Routes({ env }: RoutesProps) {
-  return (
-    <ChakraProvider>
-      <EnvProvider env={env}>
-        <UserProvider>
-          <RouterProvider router={router} />
-        </UserProvider>
-      </EnvProvider>
-    </ChakraProvider>
-  )
+export default function Routes() {
+  return <RouterProvider router={router} />
 }

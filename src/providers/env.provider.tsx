@@ -1,12 +1,12 @@
 import React from 'react'
 import EnvContext from '../context/env.context.js'
 
-interface UserProviderProps {
+interface EnvProviderProps {
   children?: React.ReactNode
   env: Record<string, any>
 }
 
-const UserProvider: React.FC<UserProviderProps> = ({ children, env }: UserProviderProps) => {
+const EnvProvider: React.FC<EnvProviderProps> = ({ children, env }: EnvProviderProps) => {
   return (
     <EnvContext.Provider value={{ env, get: (key: string) => env[key] }}>
       {children}
@@ -14,4 +14,4 @@ const UserProvider: React.FC<UserProviderProps> = ({ children, env }: UserProvid
   )
 }
 
-export default UserProvider
+export default EnvProvider

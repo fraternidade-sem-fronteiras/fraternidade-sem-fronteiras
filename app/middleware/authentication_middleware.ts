@@ -21,7 +21,7 @@ export default class AuthenticationMiddleware {
 
     const currentToken = typeof authorization === 'string' ? authorization : authorization[0]
 
-    if (!currentToken.includes('Bearer')) throw new InvalidTokenException()
+    if (!currentToken.includes('Bearer')) throw new TokenNotProvidedException()
 
     const token = currentToken.split(' ')[1]
 
@@ -29,6 +29,7 @@ export default class AuthenticationMiddleware {
       const payload: Session = await this.tokenService.verify(token)
 
       const volunteer: Volunteer | null = await this.volunteerService.getVolunteerById(payload.id)
+
       if (!volunteer) throw new InvalidTokenException()
 
       request.all().user = volunteer

@@ -1,10 +1,11 @@
 import React from 'react'
 import vineResolver from '../utils/vine.resolver.js'
-import useUser from '../hooks/useUser.js'
+import useUser from '../hooks/user.hook.js'
 import vine from '@vinejs/vine'
 import { useForm } from 'react-hook-form'
 import {
   Button,
+  Center,
   Checkbox,
   FormControl,
   FormErrorMessage,
@@ -12,6 +13,7 @@ import {
   Grid,
   GridItem,
   HStack,
+  Image,
   Input,
   Text,
   useToast,
@@ -55,7 +57,7 @@ export default function LoginPage() {
   const toast = useToast()
 
   React.useEffect(() => {
-    if (isLoggedIn) navigate(redirect ?? '/dashboard/')
+    if (isLoggedIn) navigate(redirect ?? '/dashboard/navegar')
   }, [])
 
   /**
@@ -103,15 +105,16 @@ export default function LoginPage() {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <div className="text-center">
-        <picture className="flex justify-center">
-          <img
+        <Center>
+          <Image
+            boxSize={'150px'}
             src="https://www.fraternidadesemfronteiras.org.br/wp-content/uploads/2021/07/LOGO.png"
-            style={{ width: '30%', height: '30%' }}
           />
-        </picture>
-        <h1 className="text-xl font-bold leading-tight tracking-tight mb-5">
+        </Center>
+
+        <Text fontSize={'xl'} as={'b'}>
           Faça login para continuar
-        </h1>
+        </Text>
       </div>
 
       <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 bg-base-100">
@@ -138,13 +141,7 @@ export default function LoginPage() {
               </Link>
             </HStack>
 
-            <Button
-              type="submit"
-              colorScheme="blue"
-              width="100%"
-              isLoading={isSubmitting}
-              isDisabled={isSubmitting}
-            >
+            <Button type="submit" width="100%" colorScheme='blue' isLoading={isSubmitting} isDisabled={isSubmitting}>
               Logar
             </Button>
           </form>

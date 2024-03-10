@@ -10,6 +10,7 @@ export default function NavigationPage() {
         <picture className="flex justify-center">
           <img
             src="https://www.fraternidadesemfronteiras.org.br/wp-content/uploads/2021/07/LOGO.png"
+            alt="Logo da Fraternidade Sem Fronteiras"
             style={{ width: '20%', height: '20%' }}
           />
         </picture>
