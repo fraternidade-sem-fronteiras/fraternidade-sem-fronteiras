@@ -15,6 +15,8 @@ import {
   HStack,
   Image,
   Input,
+  InputGroup,
+  InputRightAddon,
   Text,
   useToast,
 } from '@chakra-ui/react'
@@ -49,6 +51,7 @@ export default function LoginPage() {
     }),
   })
 
+  const [isShowingPassword, setIsShowingPassword] = React.useState(false)
   const { createSession, isLoggedIn } = useUser()
   const { redirect } = useParams()
 
@@ -64,6 +67,10 @@ export default function LoginPage() {
    * Irá fazer a requisição para o endpoint de login, passando email, senha e rememberMe.
    *
    */
+
+  const handleShowPassword = () => {
+    setIsShowingPassword((prevState) => !prevState)
+  }
 
   const onSubmit = () => {
     return new Promise<void>((resolve, reject) => {
@@ -128,7 +135,16 @@ export default function LoginPage() {
 
             <FormControl>
               <FormLabel>Sua senha</FormLabel>
-              <Input type="password" placeholder="Sua senha" {...register('password')} />
+              <InputGroup>
+                <Input
+                  type={isShowingPassword ? 'text' : 'password'}
+                  placeholder="Sua senha"
+                  {...register('password')}
+                />
+                <InputRightAddon onClick={handleShowPassword}>
+                  {isShowingPassword ? 'O' : 'o'}
+                </InputRightAddon>
+              </InputGroup>
               <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
 
@@ -141,7 +157,13 @@ export default function LoginPage() {
               </Link>
             </HStack>
 
-            <Button type="submit" width="100%" colorScheme='blue' isLoading={isSubmitting} isDisabled={isSubmitting}>
+            <Button
+              type="submit"
+              width="100%"
+              colorScheme="blue"
+              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
+            >
               Logar
             </Button>
           </form>
