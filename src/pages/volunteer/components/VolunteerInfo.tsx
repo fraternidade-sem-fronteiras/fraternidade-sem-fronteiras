@@ -1,4 +1,4 @@
-import { Button, Td, Tr, useDisclosure } from '@chakra-ui/react'
+import { Button, Skeleton, Td, Tr, useDisclosure } from '@chakra-ui/react'
 import Volunteer from '../../../entities/volunteer.entity.js'
 import DeleteVolunteerModal from './DeleteVolunteerModal.jsx'
 import { Link } from 'react-router-dom'
@@ -18,14 +18,14 @@ const Badge = ({ levelId }: { levelId: number }): React.ReactNode => {
   return levels[levelId]
 }
 
-export default function VolunteerInfo({ volunteer }: Readonly<VolunteerInfoProps>) {
+export function VolunteerInfo({ volunteer }: Readonly<VolunteerInfoProps>) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <Tr key={volunteer.id}>
-      <Td className="info">{volunteer.name}</Td>
+      <Td>{volunteer.name}</Td>
       <Td>{volunteer.email}</Td>
-      <Td className="niveis">
+      <Td>
         <Badge levelId={volunteer.levelId} />
       </Td>
       <Td>
@@ -40,6 +40,28 @@ export default function VolunteerInfo({ volunteer }: Readonly<VolunteerInfoProps
           Excluir
         </Button>
         <DeleteVolunteerModal volunteer={volunteer} isOpen={isOpen} onClose={onClose} />
+      </Td>
+    </Tr>
+  )
+}
+
+export function VolunteerInfoSkeleton() {
+  return (
+    <Tr>
+      <Td>
+        <Skeleton height="20px" width="150px" />
+      </Td>
+      <Td>
+        <Skeleton height="20px" width="170px" />
+      </Td>
+      <Td>
+        <Skeleton height="20px" width="150px" />
+      </Td>
+      <Td>
+        <Skeleton height="20px" width="75%" />
+      </Td>
+      <Td>
+        <Skeleton height="20px" width="75%" />
       </Td>
     </Tr>
   )

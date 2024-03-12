@@ -1,4 +1,4 @@
-import NavBar from '../navbar/DefaultNavBar.jsx'
+import DefaultNavBar from '../navbar/DefaultNavBar.jsx'
 import DashboardSuspenseFallback from '../suspense/DashboardSuspenseFallback.jsx'
 import { useOutlet } from 'react-router-dom'
 import { Suspense } from 'react'
@@ -9,7 +9,7 @@ export default function DashboardLayout() {
 
   return (
     <>
-      <NavBar />
+      <DefaultNavBar />
       {outlet ? (
         <Suspense fallback={<DashboardSuspenseFallback />}>{outlet}</Suspense>
       ) : (

@@ -192,7 +192,7 @@ export default function AssistedFormPage() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center p-12 bg-white">
+    <div className="flex flex-col justify-center items-center p-12">
       <form onSubmit={handleSubmit(onValidSubmit)} noValidate>
         <h1 className="form-header">Cadastro do assistido</h1>
         <div className="flex justify-center items-center flex-col py-5 pb-8">
