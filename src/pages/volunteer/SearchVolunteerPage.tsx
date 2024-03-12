@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import Volunteer from '../../entities/volunteer.entity.js'
 import getAxiosInstance from '../../utils/axios.instance.js'
 
-import { VolunteerInfo, VolunteerInfoSkeleton } from './components/VolunteerInfo.jsx'
 import {
   Button,
   Flex,
   Input,
   Menu,
   MenuButton,
+  MenuDivider,
+  MenuItem,
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
@@ -18,6 +19,15 @@ import { useDebounce } from '../../hooks/debounce.hook.js'
 
 import './styles/Volunteer.scss'
 import PaginableTable from '../../components/table/PaginableTable.jsx'
+import { Link } from 'react-router-dom'
+
+const SortingOptions = {
+  id: 'Identificador',
+  name: 'Nome',
+  email: 'Email',
+  levelId: 'Nível de Permissão',
+  createdAt: 'Data de criação',
+}
 
 export default function SearchVolunteerPage() {
   const toast = useToast()
@@ -28,6 +38,9 @@ export default function SearchVolunteerPage() {
 
   const [roleFilters, setRoleFilters] = useState<string[]>(['1', '2', '3', '4'])
 
+  const [sortingBy, setSortingBy] = useState<keyof typeof SortingOptions>('id')
+  const [sort, setSort] = useState<'asc' | 'desc'>('asc')
+
   const filteredVolunteers = volunteers
     .filter(
       (volunteer) =>
@@ -35,26 +48,36 @@ export default function SearchVolunteerPage() {
         volunteer.email.toLowerCase().includes(search.toLowerCase())
     )
     .filter((volunteer) => roleFilters.includes(volunteer.levelId.toString()))
+    .sort((a, b) => {
+      if (sort == 'asc') {
+        return a[sortingBy] > b[sortingBy] ? 1 : -1
+      } else {
+        return a[sortingBy] < b[sortingBy] ? 1 : -1
+      }
+    })
 
   const retrieveVolunteers = useDebounce(
     (page: number = 1, name: string = '', roles: string[] = []) => {
-      const filters = {
-        page,
-        name,
-        roles,
-        itemsPerPage: 50,
-      }
-
       return getAxiosInstance()
-        .get('volunteers', { params: filters })
+        .get('/volunteers', {
+          params: {
+            page,
+            name,
+            roles,
+            itemsPerPage: 50,
+          },
+        })
         .then(({ data }) => {
-          if (data.length == 0) return
+          if (data.length == 0) {
+            console.log('No volunteers found')
+            return
+          }
 
           const newArray = volunteers.filter(
             (volunteer) => !data.some((v: any) => v.id == volunteer.id)
           )
 
-          newArray.push(...volunteers)
+          newArray.push(...data)
           setVolunteers(newArray)
         })
         .catch((error) =>
@@ -85,10 +108,51 @@ export default function SearchVolunteerPage() {
     //retrieveVolunteers(currentPage, filters.name, roleFilters)
   }
 
+  const Badge = ({ levelId }: { levelId: number }): React.ReactNode => {
+    const levels: { [key: number]: React.ReactNode } = {
+      1: <div className="badge badge-outline">Administrador</div>,
+      2: <div className="badge badge-primary badge-outline">Psicólogo</div>,
+      3: <div className="badge badge-secondary badge-outline">Voluntário</div>,
+      4: <div className="badge badge-accent badge-outline">Médico</div>,
+    }
+
+    return levels[levelId]
+  }
+
   const handleNextPage = (currentPage: number, _lastPage: number, currentMaxPage: number) => {
     if (currentPage == currentMaxPage) {
       retrieveVolunteers(currentPage + 1, search, roleFilters)
     }
+  }
+
+  const content = (volunteer: Volunteer) => {
+    const createdAt = new Date(volunteer.createdAt).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })
+
+    const createdAtTime = new Date(volunteer.createdAt).toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+
+    const createdAtString = `${createdAt} às ${createdAtTime}`
+
+    return [
+      volunteer.name,
+      volunteer.email,
+      <Badge levelId={volunteer.levelId} />,
+      createdAtString,
+      <Link to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`} state={volunteer}>
+        <Button colorScheme="blue" width={'90%'}>
+          Editar
+        </Button>
+      </Link>,
+      <Button colorScheme="red" width={'90%'}>
+        Excluir
+      </Button>,
+    ]
   }
 
   return (
@@ -106,7 +170,29 @@ export default function SearchVolunteerPage() {
           <MenuButton as={Button} colorScheme={'blue'}>
             Filtros
           </MenuButton>
-          <MenuList>
+          <MenuList minWidth="240px">
+            <MenuOptionGroup
+              defaultValue="asc"
+              title="Ordenar por"
+              type="radio"
+              value={sort}
+              onChange={(value) => setSort(value as 'asc' | 'desc')}
+            >
+              <MenuItem
+                onClick={() => {
+                  const idx = Object.keys(SortingOptions).indexOf(sortingBy)
+                  const next = (idx + 1) % Object.keys(SortingOptions).length
+                  setSortingBy(Object.keys(SortingOptions)[next] as keyof typeof SortingOptions)
+                }}
+              >
+                {SortingOptions[sortingBy]}
+              </MenuItem>
+              <MenuItemOption value="asc">Crescente</MenuItemOption>
+              <MenuItemOption value="desc">Decrescente</MenuItemOption>
+            </MenuOptionGroup>
+
+            <MenuDivider />
+
             <MenuOptionGroup
               title="Filtrar grupos"
               type="checkbox"
@@ -132,18 +218,16 @@ export default function SearchVolunteerPage() {
 
       <PaginableTable
         headers={[
-          { name: 'Nome', width: '150px' },
-          { name: 'Email' },
-          { name: 'Nível de Permissão' },
-          { name: 'Editar' },
-          { name: 'Excluir' },
+          { name: 'Nome', width: '20%' },
+          { name: 'Email', width: '20%' },
+          { name: 'Nível de Permissão', width: '20%' },
+          { name: 'Criado em', width: '20%' },
+          { name: 'Editar', width: '10%' },
+          { name: 'Excluir', width: '10%' },
         ]}
         items={filteredVolunteers}
-        content={(volunteer: Volunteer) => (
-          <VolunteerInfo key={volunteer.id} volunteer={volunteer} />
-        )}
+        content={content}
         isLoading={isLoading}
-        loadingSkeleton={<VolunteerInfoSkeleton />}
         onNextPage={handleNextPage}
       />
     </>

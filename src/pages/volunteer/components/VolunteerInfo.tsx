@@ -1,4 +1,4 @@
-import { Button, Skeleton, Td, Tr, useDisclosure } from '@chakra-ui/react'
+import { Button, Td, useDisclosure } from '@chakra-ui/react'
 import Volunteer from '../../../entities/volunteer.entity.js'
 import DeleteVolunteerModal from './DeleteVolunteerModal.jsx'
 import { Link } from 'react-router-dom'
@@ -23,45 +23,21 @@ export function VolunteerInfo({ volunteer }: Readonly<VolunteerInfoProps>) {
 
   return (
     <>
-      <Td width={'100%'}>{volunteer.name}</Td>
-      <Td width={'100%'}>{volunteer.email}</Td>
-      <Td width={'100%'}>
+      <Td>{volunteer.name}</Td>
+      <Td>{volunteer.email}</Td>
+      <Td>
         <Badge levelId={volunteer.levelId} />
       </Td>
-      <Td width={'100%'}>
+      <Td>
         <Link to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`} state={volunteer}>
-          <Button colorScheme="blue" width={'75%'}>
-            Editar
-          </Button>
+          <Button colorScheme="blue">Editar</Button>
         </Link>
       </Td>
-      <Td width={'100%'}>
-        <Button colorScheme="red" width={'75%'} onClick={onOpen}>
+      <Td>
+        <Button colorScheme="red" onClick={onOpen}>
           Excluir
         </Button>
         <DeleteVolunteerModal volunteer={volunteer} isOpen={isOpen} onClose={onClose} />
-      </Td>
-    </>
-  )
-}
-
-export function VolunteerInfoSkeleton() {
-  return (
-    <>
-      <Td>
-        <Skeleton height="20px" width="150px" />
-      </Td>
-      <Td>
-        <Skeleton height="20px" width="170px" />
-      </Td>
-      <Td>
-        <Skeleton height="20px" width="150px" />
-      </Td>
-      <Td>
-        <Skeleton height="20px" width="75%" />
-      </Td>
-      <Td>
-        <Skeleton height="20px" width="75%" />
       </Td>
     </>
   )

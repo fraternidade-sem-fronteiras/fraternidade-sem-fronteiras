@@ -5,9 +5,9 @@ export default interface Volunteer {
   email: string
 
   levelId: number
+  createdAt: number
 }
 
 export interface StoreableVolunteer extends Volunteer {
   token: string
-  createdAt: number
 }

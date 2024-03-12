@@ -83,7 +83,7 @@ export default class VolunteerService {
     order: 'asc' | 'desc'
   ): Promise<Volunteer[]> {
     const volunteers = await Volunteer.query()
-      .select(['id', 'name', 'email', 'levelId'])
+      .select(['id', 'name', 'email', 'levelId', 'createdAt'])
       .orderBy(orderBy, order)
       .paginate(page, limit)
     return volunteers.all()
@@ -99,7 +99,7 @@ export default class VolunteerService {
 
   async getVolunteerById(id: number): Promise<Volunteer | null> {
     const volunteer = await Volunteer.query()
-      .select(['id', 'name', 'email', 'levelId'])
+      .select(['id', 'name', 'email', 'levelId', 'createdAt'])
       .where({ id })
       .first()
 

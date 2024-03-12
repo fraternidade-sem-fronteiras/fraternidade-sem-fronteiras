@@ -71,40 +71,41 @@ export default function LoginPage() {
   }
 
   const onSubmit = () => {
-    return new Promise<void>((resolve, reject) => {
-      toast.promise(
-        createSession(getValues('email'), getValues('password'))
-          .then(() => {
-            navigate(
-              location.pathname == '/' || location.pathname == '/login'
-                ? redirect ?? '/dashboard/navegar'
-                : location.pathname
-            )
-            resolve()
-          })
-          .catch(reject),
-        {
-          success: {
-            title: 'Logado com sucesso!',
-            description: 'Seja bem-vindo de volta!',
-            position: 'top-right',
-            duration: 500,
-          },
-          error: {
-            title: 'Logando',
-            description: 'Não foi possível fazer o login, tente novamente mais tarde.',
-            position: 'top-right',
-            duration: 2000,
-          },
-          loading: {
-            title: 'Logando',
-            description: 'Seu login está sendo processado...',
-            position: 'top-right',
-            duration: 15000,
-          },
-        }
-      )
+    const promise = new Promise<void>((resolve, reject) => {
+      createSession(getValues('email'), getValues('password'))
+        .then(() => {
+          navigate(
+            location.pathname == '/' || location.pathname == '/login'
+              ? redirect ?? '/dashboard/navegar'
+              : location.pathname
+          )
+          resolve()
+        })
+        .catch(reject)
     })
+
+    toast.promise(promise, {
+      success: {
+        title: 'Logado com sucesso!',
+        description: 'Seja bem-vindo de volta!',
+        position: 'top-right',
+        duration: 500,
+      },
+      error: {
+        title: 'Logando',
+        description: 'Não foi possível fazer o login, tente novamente mais tarde.',
+        position: 'top-right',
+        duration: 2000,
+      },
+      loading: {
+        title: 'Logando',
+        description: 'Seu login está sendo processado...',
+        position: 'top-right',
+        duration: 15000,
+      },
+    })
+
+    return promise
   }
 
   return (

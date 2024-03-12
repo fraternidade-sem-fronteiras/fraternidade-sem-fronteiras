@@ -1,5 +1,6 @@
-import React, { Component, useState } from 'react'
+import React, { useState } from 'react'
 import {
+  Box,
   Button,
   Flex,
   Select,
@@ -8,6 +9,7 @@ import {
   TableCaption,
   TableContainer,
   Tbody,
+  Td,
   Th,
   Thead,
   Tooltip,
@@ -18,10 +20,10 @@ interface PaginableTableProps<T> {
   items: (T & { id: number })[]
 
   headers: { name: string; width?: string | number }[]
-  content: (item: T) => React.ReactNode
+  content: (item: T) => React.ReactNode[]
 
   isLoading?: boolean
-  loadingSkeleton?: React.ReactNode
+  skeleton?: React.ReactNode
 
   onFirstPage?: (currentPage: number, lastPage: number, currentMaxPage: number) => void
   onNextPage?: (currentPage: number, lastPage: number, currentMaxPage: number) => void
@@ -35,7 +37,6 @@ export default function PaginableTable<T>({
   headers,
   content,
   isLoading,
-  loadingSkeleton,
 
   onFirstPage,
   onNextPage,
@@ -83,12 +84,14 @@ export default function PaginableTable<T>({
     const currentItemsPerPage = Number(event.target.value)
 
     setCurrentItemsPerPage(currentItemsPerPage)
-    setCurrentPage(Math.min(currentPage, Math.round(items.length / currentItemsPerPage)))
+    setCurrentPage(
+      Math.max(1, Math.min(currentPage, Math.round(items.length / currentItemsPerPage)))
+    )
   }
 
   return (
     <TableContainer>
-      <Table variant="simple">
+      <Box as={Table} variant="simple">
         <TableCaption>
           <Flex alignItems="center" justifyContent={'flex-end'} gap={2}>
             <Tooltip label="Primeira Página">
@@ -137,23 +140,31 @@ export default function PaginableTable<T>({
         </Thead>
 
         <Tbody>
-          {isLoading && loadingSkeleton
-            ? Array(10)
+          {isLoading
+            ? Array(7)
                 .fill(1)
-                .map((_, idx) => (
+                .map((idx) => (
                   <Tr key={idx}>
                     {headers.map((header) => (
-                      <Th key={header.name} width={header?.width ?? '100px'}>
-                        <Skeleton height="20px" width="100%" />
+                      <Th key={header.name} maxWidth={header?.width ?? '100px'}>
+                        <Skeleton height={'20px'} />
                       </Th>
                     ))}
                   </Tr>
                 ))
             : items
                 .slice((currentPage - 1) * currentItemsPerPage, currentPage * currentItemsPerPage)
-                .map((item) => <Tr key={item.id}>{content(item)}</Tr>)}
+                .map((item) => (
+                  <Tr key={item.id}>
+                    {content(item).map((content, idx) => (
+                      <Td key={idx} maxWidth={headers[0]?.width ?? '100px'}>
+                        {content}
+                      </Td>
+                    ))}
+                  </Tr>
+                ))}
         </Tbody>
-      </Table>
+      </Box>
     </TableContainer>
   )
 }

@@ -52,6 +52,8 @@ export default class VolunteersController {
       return response.status(404).json({ message: 'Nenhum voluntário encontrado.' })
     }
 
+    console.log(volunteers)
+
     /**
      * Retorna os voluntários
      */
