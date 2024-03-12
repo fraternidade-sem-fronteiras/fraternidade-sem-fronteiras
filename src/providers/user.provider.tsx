@@ -1,7 +1,7 @@
 import React from 'react'
 import UserContext from '../context/user.context.js'
 import getAxiosInstance from '../utils/axios.instance.js'
-import useEnv from '../hooks/env.hook.js'
+import { useEnv } from '../hooks/env.hook.js'
 import { StoreableVolunteer } from '../entities/volunteer.entity.js'
 import { useToast } from '@chakra-ui/react'
 
@@ -38,7 +38,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
           localStorage.setItem('volunteer', JSON.stringify(newVolunteer))
           setVolunteer(newVolunteer)
         })
-        .catch((error) => {
+        .catch(() => {
           toast({
             title: 'Sessão com problemas.',
             description:

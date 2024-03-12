@@ -1,12 +1,12 @@
 import React from 'react'
 import vine from '@vinejs/vine'
-import Checkbox from '../../components/form/Checkbox.jsx'
 import vineResolver from '../../utils/vine.resolver.js'
 import { useForm } from 'react-hook-form'
 import {
   AbsoluteCenter,
   Box,
   Button,
+  Checkbox,
   Divider,
   FormControl,
   FormLabel,

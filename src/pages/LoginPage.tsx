@@ -1,8 +1,8 @@
 import React from 'react'
 import vineResolver from '../utils/vine.resolver.js'
-import useUser from '../hooks/user.hook.js'
 import vine from '@vinejs/vine'
 import { useForm } from 'react-hook-form'
+import { useUser } from '../hooks/user.hook.js'
 import {
   Button,
   Center,
@@ -10,8 +10,6 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Grid,
-  GridItem,
   HStack,
   Image,
   Input,

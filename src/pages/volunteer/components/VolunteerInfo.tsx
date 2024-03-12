@@ -1,6 +1,7 @@
-import { useDisclosure } from '@chakra-ui/react'
+import { Button, Td, Tr, useDisclosure } from '@chakra-ui/react'
 import Volunteer from '../../../entities/volunteer.entity.js'
 import DeleteVolunteerModal from './DeleteVolunteerModal.jsx'
+import { Link } from 'react-router-dom'
 
 interface VolunteerInfoProps {
   volunteer: Volunteer
@@ -21,22 +22,25 @@ export default function VolunteerInfo({ volunteer }: Readonly<VolunteerInfoProps
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <tr key={volunteer.id}>
-      <td>{volunteer.id}</td>
-      <td className="info">{volunteer.name}</td>
-      <td>{volunteer.email}</td>
-      <td className="niveis">
+    <Tr key={volunteer.id}>
+      <Td className="info">{volunteer.name}</Td>
+      <Td>{volunteer.email}</Td>
+      <Td className="niveis">
         <Badge levelId={volunteer.levelId} />
-      </td>
-      <th>
-        <button className="btn btn-outline btn-info">Editar</button>
-      </th>
-      <th>
-        <button className="btn" onClick={onOpen}>
+      </Td>
+      <Td>
+        <Link to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`} state={volunteer}>
+          <Button colorScheme="blue" width={'75%'}>
+            Editar
+          </Button>
+        </Link>
+      </Td>
+      <Td>
+        <Button colorScheme="red" width={'75%'} onClick={onOpen}>
           Excluir
-        </button>
+        </Button>
         <DeleteVolunteerModal volunteer={volunteer} isOpen={isOpen} onClose={onClose} />
-      </th>
-    </tr>
+      </Td>
+    </Tr>
   )
 }

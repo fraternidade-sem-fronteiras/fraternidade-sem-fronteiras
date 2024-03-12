@@ -12,6 +12,7 @@ import RegisterVolunteerPage from './pages/volunteer/RegisterVolunteerPage.jsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
 import DefaultLayout from './components/layouts/DefaultLayout.jsx'
+import EditVolunteerPage from './pages/volunteer/EditVolunteerPage.jsx'
 
 const AssistedFormPage = lazy(() => import('./pages/assisted/AssistedFormPage.jsx'))
 const NotFound = lazy(() => import('./components/errors/NotFound.jsx'))
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
                   {
                     path: 'perfil',
                     element: <VolunteerProfilePage />,
+                  },
+                  {
+                    path: ':id/editar-perfil',
+                    element: <EditVolunteerPage />,
                   },
                   {
                     path: 'cadastrar',
