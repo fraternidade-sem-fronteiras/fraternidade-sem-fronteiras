@@ -131,7 +131,13 @@ export default function SearchVolunteerPage() {
       </Flex>
 
       <PaginableTable
-        headers={['Nome', 'Email', 'Nível de Permissão', 'Editar', 'Excluir']}
+        headers={[
+          { name: 'Nome', width: '150px' },
+          { name: 'Email' },
+          { name: 'Nível de Permissão' },
+          { name: 'Editar' },
+          { name: 'Excluir' },
+        ]}
         items={filteredVolunteers}
         content={(volunteer: Volunteer) => (
           <VolunteerInfo key={volunteer.id} volunteer={volunteer} />

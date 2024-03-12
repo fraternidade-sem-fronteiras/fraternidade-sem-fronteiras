@@ -22,32 +22,32 @@ export function VolunteerInfo({ volunteer }: Readonly<VolunteerInfoProps>) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Tr key={volunteer.id}>
-      <Td>{volunteer.name}</Td>
-      <Td>{volunteer.email}</Td>
-      <Td>
+    <>
+      <Td width={'100%'}>{volunteer.name}</Td>
+      <Td width={'100%'}>{volunteer.email}</Td>
+      <Td width={'100%'}>
         <Badge levelId={volunteer.levelId} />
       </Td>
-      <Td>
+      <Td width={'100%'}>
         <Link to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`} state={volunteer}>
           <Button colorScheme="blue" width={'75%'}>
             Editar
           </Button>
         </Link>
       </Td>
-      <Td>
+      <Td width={'100%'}>
         <Button colorScheme="red" width={'75%'} onClick={onOpen}>
           Excluir
         </Button>
         <DeleteVolunteerModal volunteer={volunteer} isOpen={isOpen} onClose={onClose} />
       </Td>
-    </Tr>
+    </>
   )
 }
 
 export function VolunteerInfoSkeleton() {
   return (
-    <Tr>
+    <>
       <Td>
         <Skeleton height="20px" width="150px" />
       </Td>
@@ -63,6 +63,6 @@ export function VolunteerInfoSkeleton() {
       <Td>
         <Skeleton height="20px" width="75%" />
       </Td>
-    </Tr>
+    </>
   )
 }

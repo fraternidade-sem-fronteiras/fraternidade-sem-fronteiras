@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   Select,
+  Skeleton,
   Table,
   TableCaption,
   TableContainer,
@@ -16,7 +17,7 @@ import {
 interface PaginableTableProps<T> {
   items: (T & { id: number })[]
 
-  headers: string[]
+  headers: { name: string; width?: string | number }[]
   content: (item: T) => React.ReactNode
 
   isLoading?: boolean
@@ -128,7 +129,9 @@ export default function PaginableTable<T>({
         <Thead>
           <Tr>
             {headers.map((header) => (
-              <Th key={header}>{header}</Th>
+              <Th key={header.name} width={header?.width ?? '100px'}>
+                {header.name}
+              </Th>
             ))}
           </Tr>
         </Thead>
@@ -137,10 +140,18 @@ export default function PaginableTable<T>({
           {isLoading && loadingSkeleton
             ? Array(10)
                 .fill(1)
-                .map((_, idx) => <React.Fragment key={idx}>{loadingSkeleton}</React.Fragment>)
+                .map((_, idx) => (
+                  <Tr key={idx}>
+                    {headers.map((header) => (
+                      <Th key={header.name} width={header?.width ?? '100px'}>
+                        <Skeleton height="20px" width="100%" />
+                      </Th>
+                    ))}
+                  </Tr>
+                ))
             : items
                 .slice((currentPage - 1) * currentItemsPerPage, currentPage * currentItemsPerPage)
-                .map((item) => content(item))}
+                .map((item) => <Tr key={item.id}>{content(item)}</Tr>)}
         </Tbody>
       </Table>
     </TableContainer>
