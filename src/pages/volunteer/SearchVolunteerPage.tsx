@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Volunteer from '../../entities/volunteer.entity.js'
-import getAxiosInstance from '../../utils/axios.instance.js'
+import axios from '../../utils/axios.instance.js'
+import PaginableTable from '../../components/table/PaginableTable.jsx'
 
 import {
   Button,
@@ -16,9 +17,6 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useDebounce } from '../../hooks/debounce.hook.js'
-
-import './styles/Volunteer.scss'
-import PaginableTable from '../../components/table/PaginableTable.jsx'
 import { Link } from 'react-router-dom'
 
 const SortingOptions = {
@@ -27,6 +25,17 @@ const SortingOptions = {
   email: 'Email',
   levelId: 'Nível de Permissão',
   createdAt: 'Data de criação',
+}
+
+const Badge = ({ levelId }: { levelId: number }): React.ReactNode => {
+  const levels: { [key: number]: React.ReactNode } = {
+    1: <div className="badge badge-outline">Administrador</div>,
+    2: <div className="badge badge-primary badge-outline">Psicólogo</div>,
+    3: <div className="badge badge-secondary badge-outline">Voluntário</div>,
+    4: <div className="badge badge-accent badge-outline">Médico</div>,
+  }
+
+  return levels[levelId]
 }
 
 export default function SearchVolunteerPage() {
@@ -58,7 +67,7 @@ export default function SearchVolunteerPage() {
 
   const retrieveVolunteers = useDebounce(
     (page: number = 1, name: string = '', roles: string[] = []) => {
-      return getAxiosInstance()
+      return axios
         .get('/volunteers', {
           params: {
             page,
@@ -106,17 +115,6 @@ export default function SearchVolunteerPage() {
     setSearch(event.target.value)
     //const filters = { name: event.target.value }
     //retrieveVolunteers(currentPage, filters.name, roleFilters)
-  }
-
-  const Badge = ({ levelId }: { levelId: number }): React.ReactNode => {
-    const levels: { [key: number]: React.ReactNode } = {
-      1: <div className="badge badge-outline">Administrador</div>,
-      2: <div className="badge badge-primary badge-outline">Psicólogo</div>,
-      3: <div className="badge badge-secondary badge-outline">Voluntário</div>,
-      4: <div className="badge badge-accent badge-outline">Médico</div>,
-    }
-
-    return levels[levelId]
   }
 
   const handleNextPage = (currentPage: number, _lastPage: number, currentMaxPage: number) => {

@@ -1,12 +1,15 @@
+import LogoutModal from '../LogoutModal.jsx'
 import { Link } from 'react-router-dom'
 import { Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react'
-import LogoutModal from '../LogoutModal.jsx'
+import { useUser } from '../../hooks/user.hook.js'
 
 export default function DefaultNavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const { volunteer } = useUser()
+
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100" style={{backgroundColor: "#4a7494"}}>
       <div className="navbar-start">
         <Link to="/dashboard/navegar">
           <picture>
@@ -19,21 +22,23 @@ export default function DefaultNavBar() {
       </div>
 
       <Flex justifyContent={'space-between'} alignItems={'center'} gap={'40px'}>
-        <Menu>
-          <MenuButton>
-            <Text color={'white'}>Adicionar</Text>
-          </MenuButton>
+        {volunteer?.levelId === 1 && (
+          <Menu>
+            <MenuButton>
+              <Text color={'white'}>Adicionar</Text>
+            </MenuButton>
 
-          <MenuList>
-            <MenuItem>
-              <Link to="/dashboard/voluntario/cadastrar">Voluntários</Link>
-            </MenuItem>
+            <MenuList>
+              <MenuItem>
+                <Link to="/dashboard/voluntario/cadastrar">Voluntários</Link>
+              </MenuItem>
 
-            <MenuItem>
-              <Link to="/dashboard/assistido/cadastrar">Assistidos</Link>
-            </MenuItem>
-          </MenuList>
-        </Menu>
+              <MenuItem>
+                <Link to="/dashboard/assistido/cadastrar">Assistidos</Link>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        )}
 
         <Menu>
           <MenuButton>

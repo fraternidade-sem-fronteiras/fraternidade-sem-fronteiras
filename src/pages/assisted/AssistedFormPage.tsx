@@ -6,9 +6,11 @@ import {
   AbsoluteCenter,
   Box,
   Button,
-  Checkbox,
+  Center,
   Divider,
+  Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Grid,
   GridItem,
@@ -18,10 +20,12 @@ import {
   NumberInput,
   NumberInputField,
   Select,
+  Switch,
   Textarea,
 } from '@chakra-ui/react'
 
-import './styles/Form.scss'
+import { TextoSublinhado } from '../../components/TextoSublinhado.jsx'
+import { Infer } from '@vinejs/vine/types'
 
 const formSchema = vine.object({
   fullName: vine.string().minLength(3).maxLength(64),
@@ -33,52 +37,32 @@ const formSchema = vine.object({
   birthDate: vine.date(),
 
   country: vine.string().minLength(1),
-  state: vine.string().minLength(1),
-  city: vine.string().minLength(1),
+  state: vine.string().optional().requiredWhen('country', '=', 'Brasil'),
+  city: vine.string().optional().requiredWhen('country', '=', 'Brasil'),
   sexuality: vine.string().minLength(1),
 
-  race: vine.string(),
-  gender: vine.string(),
+  race: vine.string().minLength(1),
+  gender: vine.string().minLength(1),
 
-  cpf: vine.string().regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/),
-  rg: vine.string().minLength(9).maxLength(9),
+  cpf: vine
+    .string()
+    .minLength(1)
+    .regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/),
+  rg: vine
+    .string()
+    .minLength(1)
+    .regex(/(^\d{1,2}).?(\d{3}).?(\d{3})-?(\d{1}|X|x$)/),
   emission: vine.date(),
   organ: vine.string().minLength(3).maxLength(32),
 
   ctps: vine.string().minLength(7).maxLength(7),
 
-  schooling: vine.string().minLength(3).maxLength(32),
+  schooling: vine.string().minLength(3),
 
   shareData: vine.boolean(),
 })
 
-interface FormProps {
-  fullName: string
-  socialName: string
-
-  motherName: string
-  fatherName: string
-
-  birthDate: Date
-
-  country: string
-  state: string
-  city: string
-
-  race: string
-  gender: string
-  sexuality: string
-
-  cpf: string
-  rg: string
-  emission: Date
-  organ: string
-
-  ctps: string
-  schooling: string
-
-  shareData: boolean
-}
+type FormProps = Infer<typeof formSchema>
 
 export default function AssistedFormPage() {
   const {
@@ -89,7 +73,29 @@ export default function AssistedFormPage() {
     setValue,
     formState: { errors, isValid },
   } = useForm<FormProps>({
-    resolver: vineResolver(formSchema),
+    resolver: vineResolver(formSchema, {
+      'fullName.minLength': 'O nome é obrigatório e precisa ter pelo menos 3 caracteres.',
+      'fullName.maxLength': 'O nome deve ter no máximo 64 caracteres',
+      'socialName.minLength': 'O nome social é obrigatório e precisa ter pelo menos 3 caracteres.',
+      'socialName.maxLength': 'O nome social deve ter no máximo 32 caracteres',
+      'motherName.minLength': 'O nome da mãe é obrigatório e precisa ter pelo menos 3 caracteres.',
+      'motherName.maxLength': 'O nome da mãe deve ter no máximo 64 caracteres',
+      'fatherName.minLength': 'O nome do pai é obrigatório e precisa ter pelo menos 3 caracteres.',
+      'fatherName.maxLength': 'O nome do pai deve ter no máximo 64 caracteres',
+      'schooling.minLength': 'A escolaridade é obrigatória.',
+      'sexuality.minLength': 'A sexualidade é obrigatória.',
+      'gender.minLength': 'A identidade de gênero é obrigatória.',
+      'race.minLength': 'A etnia é obrigatória.',
+      'birthDate.date': 'A data de nascimento é obrigatória.',
+      'cpf.minLength': 'O CPF é obrigatório.',
+      'cpf.regex': 'O CPF é inválido.',
+      'emission.date': 'A data de emissão é obrigatória.',
+      'organ.minLength': 'O orgão emissor é obrigatório.',
+      'rg.minLength': 'O RG é obrigatório.',
+      'rg.regex': 'O RG é inválido.',
+      'state.minLength': 'Selecione o estado.',
+      'city.minLength': 'Selecione a cidade.',
+    }),
   })
 
   const [countries, setCountries] = React.useState<string[]>(['Brasil'])
@@ -187,17 +193,22 @@ export default function AssistedFormPage() {
     )
   }
 
-  async function onValidSubmit() {
+  async function onValidSubmit(data: FormProps) {
+    console.log(data)
     console.log('valid', errors, isValid, getValues())
   }
 
+  const isInvalid = (name: keyof FormProps) => {
+    return errors[name] !== undefined
+  }
+
   return (
-    <div className="flex flex-col justify-center items-center p-12">
-      <form onSubmit={handleSubmit(onValidSubmit)} noValidate>
-        <h1 className="form-header">Cadastro do assistido</h1>
+    <Flex justifyContent={'center'} alignItems={'center'} padding={'2rem'}>
+      <form onSubmit={handleSubmit(onValidSubmit)} noValidate style={{ width: '100%' }}>
+        <TextoSublinhado>Cadastro do assistido</TextoSublinhado>
         <div className="flex justify-center items-center flex-col py-5 pb-8">
           <h1>O assistido concorda em compartilhar seus dados com a organização ?</h1>
-          <Checkbox {...register('shareData')} />
+          <Switch {...register('shareData')} />
         </div>
 
         <Box position="relative">
@@ -209,53 +220,59 @@ export default function AssistedFormPage() {
 
         <Grid templateColumns="1.5fr 1fr 1.3fr 0.5fr" paddingTop="10" gap={'1rem'}>
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('fullName')}>
               <FormLabel>Nome completo</FormLabel>
               <Input placeholder="Digite o nome completo" {...register('fullName')} />
+              <FormErrorMessage>{errors.fullName?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('socialName')}>
               <FormLabel>Nome social</FormLabel>
               <Input placeholder="Digite o nome social" {...register('socialName')} />
+              <FormErrorMessage>{errors.socialName?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('schooling')}>
               <FormLabel>Escolaridade</FormLabel>
-              <Select defaultValue="Sem nenhuma escolaridade" {...register('schooling')}>
-                <option key={'Sem nenhuma escolaridade'} disabled>
+              <Select defaultValue={1} {...register('schooling')}>
+                <option key={'Sem nenhuma escolaridade'} value={1} disabled>
                   Sem nenhuma escolaridade
                 </option>
                 {degrees.map((degree) => (
                   <option key={degree}>{degree}</option>
                 ))}
               </Select>
+              <FormErrorMessage>{errors.schooling?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('birthDate')}>
               <FormLabel>Data de nascimento</FormLabel>
               <Input type="date" {...register('birthDate')} />
+              <FormErrorMessage>{errors.birthDate?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
         </Grid>
 
         <Grid templateColumns="repeat(2, 1fr)" gap={'1rem'} marginTop={'1rem'}>
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('fatherName')}>
               <FormLabel>Nome do pai</FormLabel>
               <Input placeholder="Digite o nome do pai" {...register('fatherName')} />
+              <FormErrorMessage>{errors.fatherName?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('motherName')}>
               <FormLabel>Nome da mãe</FormLabel>
               <Input placeholder="Digite o nome da mãe" {...register('motherName')} />
+              <FormErrorMessage>{errors.motherName?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
         </Grid>
@@ -269,10 +286,10 @@ export default function AssistedFormPage() {
 
         <Grid templateColumns="250px 1fr 1fr" gap={'1rem'} marginTop={'1rem'}>
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('race')}>
               <FormLabel>Etnia</FormLabel>
-              <Select defaultValue="" {...register('race')}>
-                <option value="" label="Selecione a etnia" disabled>
+              <Select defaultValue={''} {...register('race')}>
+                <option value={''} label="Selecione a etnia" disabled>
                   Selecione a etnia
                 </option>
                 {races.map((race) => (
@@ -281,14 +298,15 @@ export default function AssistedFormPage() {
                   </option>
                 ))}
               </Select>
+              <FormErrorMessage>{errors.race?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('gender')}>
               <FormLabel>Identidade de gênero</FormLabel>
-              <Select defaultValue="" {...register('gender')}>
-                <option value="" label="Selecione a identidade de gênero" disabled>
+              <Select defaultValue={''} {...register('gender')}>
+                <option value={''} label="Selecione a identidade de gênero" disabled>
                   Selecione a identidade de gênero
                 </option>
                 {genders.map((gender) => (
@@ -297,11 +315,12 @@ export default function AssistedFormPage() {
                   </option>
                 ))}
               </Select>
+              <FormErrorMessage>{errors.gender?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('sexuality')}>
               <FormLabel>Sexualidade</FormLabel>
               <Select defaultValue="" {...register('sexuality')}>
                 <option value="" label="Selecione a sexualidade" disabled>
@@ -313,6 +332,7 @@ export default function AssistedFormPage() {
                   </option>
                 ))}
               </Select>
+              <FormErrorMessage>{errors.sexuality?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
         </Grid>
@@ -326,7 +346,7 @@ export default function AssistedFormPage() {
 
         <Grid templateColumns="repeat(3, 250px) 1fr 250px" gap={'1rem'} marginTop={'1rem'}>
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('cpf')}>
               <FormLabel>CPF</FormLabel>
               <Input
                 placeholder="Digite o CPF"
@@ -335,11 +355,12 @@ export default function AssistedFormPage() {
                   onChange: handleChangeCpf,
                 })}
               />
+              <FormErrorMessage>{errors.cpf?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('rg')}>
               <FormLabel>RG</FormLabel>
               <Input
                 placeholder="Digite o RG"
@@ -348,25 +369,28 @@ export default function AssistedFormPage() {
                   onChange: handleChangeRg,
                 })}
               />
+              <FormErrorMessage>{errors.rg?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('emission')}>
               <FormLabel>Data de emissão</FormLabel>
               <Input type="date" {...register('emission')} />
+              <FormErrorMessage>{errors.emission?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('organ')}>
               <FormLabel>Orgão emissor</FormLabel>
               <Input placeholder="Diga qual foi o orgão emissor do RG" {...register('organ')} />
+              <FormErrorMessage>{errors.organ?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
           <GridItem>
-            <FormControl>
+            <FormControl isInvalid={isInvalid('ctps')}>
               <FormLabel>Renda</FormLabel>
               <InputGroup>
                 <InputLeftAddon>R$</InputLeftAddon>
@@ -374,68 +398,79 @@ export default function AssistedFormPage() {
                   <NumberInputField placeholder="Diga sua renda" />
                 </NumberInput>
               </InputGroup>
+              <FormErrorMessage>{errors.ctps?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
         </Grid>
 
         <Grid templateColumns={'1fr 1fr 1fr'} gap={'1rem'} marginTop={'1rem'}>
-          <FormControl>
-            <FormLabel>País</FormLabel>
-            <Select
-              defaultValue="Brasil"
-              {...register('country', {
-                onChange: handleChangeCountry,
-              })}
-            >
-              {countries.map((country) => (
-                <option value={country} key={country} label={country}>
-                  {country}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
+          <GridItem>
+            <FormControl isInvalid={isInvalid('country')}>
+              <FormLabel>País</FormLabel>
+              <Select
+                defaultValue="Brasil"
+                {...register('country', {
+                  onChange: handleChangeCountry,
+                })}
+              >
+                {countries.map((country) => (
+                  <option value={country} key={country} label={country}>
+                    {country}
+                  </option>
+                ))}
+              </Select>
+              <FormErrorMessage>{errors.country?.message}</FormErrorMessage>
+            </FormControl>
+          </GridItem>
 
           {watch('country') === 'Brasil' && (
             <>
-              <FormControl>
-                <FormLabel>Estado</FormLabel>
-                <Select
-                  defaultValue=""
-                  {...register('state', {
-                    onChange: handleChangeState,
-                  })}
-                >
-                  <option value="" label="Selecione o estado" disabled>
-                    Selecione o estado
-                  </option>
-                  {states.map((state) => (
-                    <option key={state} label={state}>
-                      {state}
+              <GridItem>
+                <FormControl isInvalid={isInvalid('state')}>
+                  <FormLabel>Estado</FormLabel>
+                  <Select
+                    defaultValue=""
+                    {...register('state', {
+                      onChange: handleChangeState,
+                    })}
+                  >
+                    <option value="" label="Selecione o estado" disabled>
+                      Selecione o estado
                     </option>
-                  ))}
-                </Select>
-              </FormControl>
+                    {states.map((state) => (
+                      <option key={state} label={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </Select>
+                  <FormErrorMessage>{errors.state?.message}</FormErrorMessage>
+                </FormControl>
+              </GridItem>
 
-              <FormControl>
-                <FormLabel>Cidade</FormLabel>
-                <Select defaultValue="" {...register('city')}>
-                  <option value="" label="Selecione a cidade" disabled>
-                    Selecione a cidade
-                  </option>
-                  {cities.map((city) => (
-                    <option key={city} label={city}>
-                      {city}
+              <GridItem>
+                <FormControl isInvalid={isInvalid('city')}>
+                  <FormLabel>Cidade</FormLabel>
+                  <Select defaultValue="" {...register('city')}>
+                    <option value="" label="Selecione a cidade" disabled>
+                      Selecione a cidade
                     </option>
-                  ))}
-                </Select>
-              </FormControl>
+                    {cities.map((city) => (
+                      <option key={city} label={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </Select>
+                  <FormErrorMessage>{errors.city?.message}</FormErrorMessage>
+                </FormControl>
+              </GridItem>
             </>
           )}
         </Grid>
 
-        <FormControl>
+        <FormControl isInvalid={isInvalid('ctps')} marginTop={'1rem'}>
           <FormLabel>CTPS</FormLabel>
           <Input placeholder="Diga qual CTPS" {...register('ctps')} />
+          <FormErrorMessage>{errors.ctps?.message}</FormErrorMessage>
         </FormControl>
 
         <Box position="relative" padding="6">
@@ -496,10 +531,12 @@ export default function AssistedFormPage() {
           <Input placeholder="Diga se está desaparecido" />
         </FormControl>
 
-        <Button type="submit" width={'100%'} colorScheme="#9D2D88">
-          Enviar
-        </Button>
+        <Center paddingTop={'50px'}>
+          <Button type="submit" width={'40%'} colorScheme="blue">
+            Enviar
+          </Button>
+        </Center>
       </form>
-    </div>
+    </Flex>
   )
 }

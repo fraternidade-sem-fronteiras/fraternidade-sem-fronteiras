@@ -1,6 +1,6 @@
 import React from 'react'
 import UserContext from '../context/user.context.js'
-import getAxiosInstance from '../utils/axios.instance.js'
+import axios from '../utils/axios.instance.js'
 import { useEnv } from '../hooks/env.hook.js'
 import { StoreableVolunteer } from '../entities/volunteer.entity.js'
 import { useToast } from '@chakra-ui/react'
@@ -23,10 +23,10 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
   const toast = useToast()
 
   React.useLayoutEffect(() => {
-    getAxiosInstance().defaults.baseURL = get('API_URL')
+    axios.defaults.baseURL = get('API_URL')
 
     if (volunteer) {
-      getAxiosInstance()
+      axios
         .get('volunteers/profile', { headers: { Authorization: `Bearer ${volunteer.token}` } })
         .then(({ data }) => {
           const { id, email, name } = data
@@ -55,7 +55,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
   React.useLayoutEffect(() => {
     if (!volunteer) return
 
-    const responseInterceptor = getAxiosInstance().interceptors.response.use(
+    const responseInterceptor = axios.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response.status === 401) {
@@ -75,7 +75,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
       }
     )
 
-    const requestInterceptor = getAxiosInstance().interceptors.request.use((config) => {
+    const requestInterceptor = axios.interceptors.request.use((config) => {
       config.headers.Authorization = `Bearer ${volunteer.token ?? 'unknown'}`
       return config
     })
@@ -83,8 +83,8 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
     return () => {
       if (!volunteer) return
 
-      getAxiosInstance().interceptors.response.eject(responseInterceptor)
-      getAxiosInstance().interceptors.request.eject(requestInterceptor)
+      axios.interceptors.response.eject(responseInterceptor)
+      axios.interceptors.request.eject(requestInterceptor)
     }
   }, [volunteer])
 
@@ -109,7 +109,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
     async (email: string, password: string): Promise<StoreableVolunteer> => {
       return new Promise<StoreableVolunteer>(async (resolve, reject) => {
         try {
-          const { data } = await getAxiosInstance().post('volunteers/login', { email, password })
+          const { data } = await axios.post('volunteers/login', { email, password })
 
           const storeableVolunteer: StoreableVolunteer = { ...data.volunteer, token: data.token }
 

@@ -1,13 +1,9 @@
-.w-full {
-  width: 30rem;
-}
-
-.form-header {
+.texto-sublinhado {
   font-size: 2rem;
   font-weight: 600;
 }
 
-.form-header::after {
+.texto-sublinhado::after {
   content: '';
   display: block;
   width: 21rem;
@@ -17,14 +13,3 @@
   position: absolute;
   border-radius: 10px;
 }
-
-.send{
-  display: flex;
-  justify-content: center;
-}
-
-#enviar{
-  width: 55rem;
-  margin-left: 10rem;
-}
-
