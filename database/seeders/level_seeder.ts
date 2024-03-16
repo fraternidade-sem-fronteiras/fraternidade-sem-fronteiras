@@ -5,16 +5,20 @@ export default class extends BaseSeeder {
   async run() {
     await Level.createMany([
       {
-        name: 'Administrador',
+        id: 1,
+        name: 'Usuário',
       },
       {
-        name: 'Médico',
-      },
-      {
+        id: 2,
         name: 'Assitente Social',
       },
       {
-        name: 'Usuário',
+        id: 3,
+        name: 'Médico',
+      },
+      {
+        id: 4,
+        name: 'Administrador',
       },
     ])
   }

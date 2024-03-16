@@ -4,7 +4,7 @@ export default interface Volunteer {
   name: string
   email: string
 
-  levelId: number
+  roleId: number
   createdAt: number
 }
 

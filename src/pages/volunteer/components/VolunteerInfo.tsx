@@ -7,7 +7,7 @@ interface VolunteerInfoProps {
   volunteer: Volunteer
 }
 
-const Badge = ({ levelId }: { levelId: number }): React.ReactNode => {
+const Badge = ({ role }: { role: number }): React.ReactNode => {
   const levels: { [key: number]: React.ReactNode } = {
     1: <div className="badge badge-outline">Administrador</div>,
     2: <div className="badge badge-primary badge-outline">Psicólogo</div>,
@@ -15,7 +15,7 @@ const Badge = ({ levelId }: { levelId: number }): React.ReactNode => {
     4: <div className="badge badge-accent badge-outline">Médico</div>,
   }
 
-  return levels[levelId]
+  return levels[role]
 }
 
 export function VolunteerInfo({ volunteer }: Readonly<VolunteerInfoProps>) {
@@ -26,7 +26,7 @@ export function VolunteerInfo({ volunteer }: Readonly<VolunteerInfoProps>) {
       <Td>{volunteer.name}</Td>
       <Td>{volunteer.email}</Td>
       <Td>
-        <Badge levelId={volunteer.levelId} />
+        <Badge role={volunteer.role} />
       </Td>
       <Td>
         <Link to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`} state={volunteer}>

@@ -22,7 +22,7 @@ export default function DefaultNavBar() {
       </div>
 
       <Flex justifyContent={'space-between'} alignItems={'center'} gap={'40px'}>
-        {volunteer?.levelId === 1 && (
+        {volunteer?.role === 1 && (
           <Menu>
             <MenuButton>
               <Text color={'white'}>Adicionar</Text>

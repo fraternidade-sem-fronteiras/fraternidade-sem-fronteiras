@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       table.string('password')
       table.boolean('registered').defaultTo(false)
       table
-        .integer('level_id')
+        .integer('role_id')
         .defaultTo(1)
         .notNullable()
         .unsigned()

@@ -26,20 +26,15 @@ export default class AuthenticationMiddleware {
 
     const token = currentToken.split(' ')[1]
 
-    try {
-      const payload: Session = await this.tokenService.verify(token)
+    const payload: Session = await this.tokenService.verify(token)
+    const volunteer: Volunteer | null = await this.volunteerService.getVolunteerById(payload.id)
 
-      const volunteer: Volunteer | null = await this.volunteerService.getVolunteerById(payload.id)
+    if (!volunteer) throw new InvalidTokenException()
 
-      if (!volunteer) throw new InvalidTokenException()
+    if (!volunteer.registered) throw new UnregisteredVolunteerException()
 
-      if (!volunteer.registered) throw new UnregisteredVolunteerException()
+    request.all().user = volunteer
 
-      request.all().user = volunteer
-
-      return await next()
-    } catch (err) {
-      throw new InvalidTokenException()
-    }
+    return await next()
   }
 }

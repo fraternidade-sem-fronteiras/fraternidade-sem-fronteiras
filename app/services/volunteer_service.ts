@@ -4,6 +4,7 @@ import { inject } from '@adonisjs/core'
 import hash from '@adonisjs/core/services/hash'
 import TokenService from '#services/token_service'
 import EntityNotFoundException from '#exceptions/entity_not_found_exception'
+import ConflictException from '#exceptions/conflict_exception'
 
 @inject()
 export default class VolunteerService {
@@ -18,28 +19,21 @@ export default class VolunteerService {
    * @param name - Nome do voluntário
    * @param email - Email do voluntário
    * @param password - Senha do voluntário (opcional)
-   * @param levelId - ID do nível do voluntário
+   * @param role - ID do nível do voluntário
    * @return Volunteer
    */
 
-  async createVolunteer(
-    name: string,
-    email: string,
-    password: string,
-    levelId: number
-  ): Promise<Volunteer> {
+  async createVolunteer(name: string, email: string, roleId: number): Promise<Volunteer> {
     let volunteer = await Volunteer.findBy('email', email)
 
-    if (volunteer) {
-      return volunteer
-    }
+    if (volunteer) throw new ConflictException('O voluntário com email ' + email + ' já existe')
 
     volunteer = new Volunteer()
 
     volunteer.name = name
     volunteer.email = email
-    volunteer.password = password
-    volunteer.levelId = levelId
+    volunteer.password = email
+    volunteer.roleId = roleId
 
     await volunteer.save()
 
@@ -94,7 +88,7 @@ export default class VolunteerService {
     order: 'asc' | 'desc'
   ): Promise<Volunteer[]> {
     const volunteers = await Volunteer.query()
-      .select(['id', 'name', 'email', 'levelId', 'createdAt'])
+      .select(['id', 'name', 'email', 'roleId', 'createdAt'])
       .orderBy(orderBy, order)
       .paginate(page, limit)
     return volunteers.all()
@@ -110,7 +104,7 @@ export default class VolunteerService {
 
   async getVolunteerById(id: number): Promise<Volunteer | null> {
     const volunteer = await Volunteer.query()
-      .select(['id', 'name', 'email', 'levelId', 'createdAt'])
+      .select(['id', 'name', 'email', 'roleId', 'createdAt', 'registered'])
       .where({ id })
       .first()
 
@@ -127,7 +121,7 @@ export default class VolunteerService {
 
   async getVolunteerByEmail(email: string): Promise<Volunteer | null> {
     const volunteer = await Volunteer.query()
-      .select(['id', 'name', 'email', 'levelId'])
+      .select(['id', 'name', 'email', 'role'])
       .where({ email })
       .first()
 
@@ -145,9 +139,9 @@ export default class VolunteerService {
   async hasPermission(volunteer: number | Volunteer, permission: string): Promise<boolean> {
     if (typeof volunteer === 'number') {
       const user = await Volunteer.query()
-        .select(['id', 'name', 'email', 'levelId'])
+        .select(['id', 'name', 'email', 'role'])
         .where({ id: volunteer })
-        .whereHas('level', (query) => {
+        .whereHas('role', (query) => {
           query.whereHas('levelsPermission', (query) => {
             query.where('name', permission)
           })
@@ -156,7 +150,7 @@ export default class VolunteerService {
 
       return !!user
     } else {
-      return volunteer.level.levelsPermission.some((p) => p.permission.name === permission)
+      return volunteer.role.levelsPermission.some((p) => p.permission.name === permission)
     }
   }
 
@@ -177,14 +171,14 @@ export default class VolunteerService {
 
     const oldVolunteer = {
       name: volunteer?.name,
-      levelId: volunteer?.levelId,
+      role: volunteer?.role,
     }
 
     await volunteer
       .merge({
         name: payload.name,
         password: payload.password,
-        levelId: payload.levelId,
+        roleId: payload.role,
       })
       .save()
 
@@ -197,9 +191,9 @@ export default class VolunteerService {
           newValue: volunteer.name,
         },
         {
-          fieldName: 'levelId',
-          oldValue: oldVolunteer.levelId,
-          newValue: volunteer.levelId,
+          fieldName: 'role',
+          oldValue: oldVolunteer.role,
+          newValue: volunteer.role,
         },
       ],
     }

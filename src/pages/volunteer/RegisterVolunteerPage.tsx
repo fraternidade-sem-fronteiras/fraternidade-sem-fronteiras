@@ -1,6 +1,6 @@
 import vine from '@vinejs/vine'
 import vineResolver from '@/utils/vine.resolver'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useUser } from '@/hooks/user.hook'
 import { TextoSublinhado } from '@/components/TextoSublinhado'
@@ -16,38 +16,30 @@ import {
   Input,
   Select,
   Text,
-  useToast,
 } from '@chakra-ui/react'
 import { Infer } from '@vinejs/vine/types'
-
-const RolesOption: { [key: string]: string } = {
-  admin: 'Administrador',
-  psicologo: 'Psicológo',
-  medico: 'Médico',
-  voluntario: 'Voluntário',
-}
+import useToast from '@/hooks/toast.hook'
+import axios from '@/utils/axios.instance'
+import Role from '@/entities/role.entity'
 
 const formSchema = vine.object({
-  fullName: vine.string().minLength(3).maxLength(64),
-
+  name: vine.string().minLength(3).maxLength(64),
   email: vine.string().minLength(3).maxLength(64).email(),
-  role: vine.array(vine.string().in(Object.keys(RolesOption))),
+  role: vine.number().min(1),
 })
 
 type FormProps = Infer<typeof formSchema>
 
 export default function RegisterVolunteerPage() {
+  const { handleToast, handleErrorToast } = useToast()
   const {
-    getValues,
-    watch,
     handleSubmit,
     register,
-    setValue,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<FormProps>({
     resolver: vineResolver(formSchema, {
-      'fullName.minLength': 'O nome é obrigatório',
-      'fullName.maxLength': 'O nome deve ter no máximo 64 caracteres',
+      'name.minLength': 'O nome é obrigatório',
+      'name.maxLength': 'O nome deve ter no máximo 64 caracteres',
       'email.required': 'O email é obrigatório',
       'email.minLength': 'O email precisa ter pelo menos 3 caracteres',
       'email.maxLength': 'O email deve ter no máximo 64 caracteres',
@@ -56,23 +48,31 @@ export default function RegisterVolunteerPage() {
     }),
   })
 
-  const toast = useToast()
+  const [roles, setRoles] = useState<Role[]>([])
   const { volunteer } = useUser()
 
   useEffect(() => {
-    if (volunteer?.levelId !== 1) {
-      toast({
-        title: 'Sem permissão',
-        description: 'Você não tem permissão para acessar essa página',
-        position: 'top-right',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-      })
+    if (volunteer?.roleId !== 1) {
+      handleErrorToast('Sem permissão', 'Você não tem permissão para acessar essa página')
+      return
     }
+
+    axios
+      .get('/roles')
+      .then(({ data }) => {
+        console.log(data)
+        setRoles(data)
+      })
+      .catch(({ response }) => {
+        handleErrorToast(
+          'Erro ao buscar cargos',
+          response?.data?.message ??
+            'Ocorreu um erro ao buscar os cargos, verifique sua conexão e tente novamente.'
+        )
+      })
   }, [])
 
-  if (volunteer?.levelId !== 1) {
+  if (volunteer?.roleId !== 1) {
     return (
       <Flex
         justifyContent={'center'}
@@ -86,8 +86,21 @@ export default function RegisterVolunteerPage() {
     )
   }
 
-  const onValidSubmit = async (data: FormProps) => {
+  const onSubmit = async (data: FormProps) => {
     console.log(data)
+    axios
+      .post('/volunteers', data)
+      .then(({ data }: any) => {
+        console.log(data)
+        handleToast('Voluntário cadastrado com sucesso', 'success')
+      })
+      .catch(({ response }) => {
+        handleErrorToast(
+          'Erro ao cadastrar voluntário',
+          response?.data?.message ??
+            'Não foi possível fazer o cadastro de usuário, verifique sua conexão e tente novamente.'
+        )
+      })
   }
 
   const isInvalid = (name: keyof FormProps) => {
@@ -96,15 +109,18 @@ export default function RegisterVolunteerPage() {
 
   return (
     <Flex justifyContent={'center'} alignItems={'center'} padding={'2rem'} width={'100%'}>
-      <form onSubmit={handleSubmit(onValidSubmit)} style={{ width: '100%' }}>
+      <form
+        onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))}
+        style={{ width: '100%' }}
+      >
         <TextoSublinhado>Cadastro do voluntário</TextoSublinhado>
 
         <Grid templateColumns="2fr 1fr" paddingTop="10" gap={'1rem'}>
           <GridItem>
-            <FormControl isInvalid={isInvalid('fullName')}>
+            <FormControl isInvalid={isInvalid('name')}>
               <FormLabel>Nome completo</FormLabel>
-              <Input placeholder="Digite o nome completo" {...register('fullName')} />
-              <FormErrorMessage>{errors.fullName?.message}</FormErrorMessage>
+              <Input placeholder="Digite o nome completo" {...register('name')} />
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
@@ -121,16 +137,17 @@ export default function RegisterVolunteerPage() {
           <GridItem>
             <FormControl>
               <FormLabel>Cargo no sistema</FormLabel>
-              <Select defaultValue="" {...register('role')} multiple>
+              <Select defaultValue="" {...register('role')}>
                 <option value="" disabled>
                   Selecione o cargo
                 </option>
-                {Object.keys(RolesOption).map((role, idx) => (
-                  <option key={idx} value={role}>
-                    {RolesOption[role]}
+                {roles.map((role) => (
+                  <option key={role.id} value={role.id}>
+                    {role.name}
                   </option>
                 ))}
               </Select>
+              <FormErrorMessage>{errors.role?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 

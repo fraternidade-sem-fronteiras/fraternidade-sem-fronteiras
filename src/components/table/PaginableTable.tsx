@@ -108,7 +108,7 @@ export default function PaginableTable<T>({
 
             {currentPage + ' de ' + currentMaxPage}
 
-            <Select width={'10%'} value={currentItemsPerPage} onChange={handleChangePageSize}>
+            <Select width={'12%'} value={currentItemsPerPage} onChange={handleChangePageSize}>
               {[10, 20, 30, 40, 50].map((size) => (
                 <option value={size} key={size}>
                   Mostrar {size}
@@ -143,7 +143,7 @@ export default function PaginableTable<T>({
           {isLoading
             ? Array(7)
                 .fill(1)
-                .map((idx) => (
+                .map((_, idx) => (
                   <Tr key={idx}>
                     {headers.map((header) => (
                       <Th key={header.name} maxWidth={header?.width ?? '100px'}>

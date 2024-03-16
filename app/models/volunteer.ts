@@ -21,10 +21,10 @@ export default class Volunteer extends BaseModel {
   declare registered: boolean
 
   @column()
-  declare levelId: number
+  declare roleId: number
 
   @hasOne(() => Level)
-  declare level: HasOne<typeof Level>
+  declare role: HasOne<typeof Level>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

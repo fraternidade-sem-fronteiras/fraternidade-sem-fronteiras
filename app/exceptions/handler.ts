@@ -15,6 +15,7 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    */
   async handle(error: unknown, ctx: HttpContext) {
     if (error instanceof CustomErrorException) {
+      console.log('message', error.message)
       return ctx.response.status(error.status).send({
         message: error.message,
         error: error.name.replace('Exception', ''),

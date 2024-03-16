@@ -14,34 +14,25 @@ import {
   MenuItemOption,
   MenuList,
   MenuOptionGroup,
-  useToast,
 } from '@chakra-ui/react'
 import { useDebounce } from '@/hooks/debounce.hook'
 import { Link } from 'react-router-dom'
+import Role from '@/entities/role.entity'
+import useToast from '@/hooks/toast.hook'
 
 const SortingOptions = {
   id: 'Identificador',
   name: 'Nome',
   email: 'Email',
-  levelId: 'Nível de Permissão',
+  roleId: 'Nível de Permissão',
   createdAt: 'Data de criação',
 }
 
-const Badge = ({ levelId }: { levelId: number }): React.ReactNode => {
-  const levels: { [key: number]: React.ReactNode } = {
-    1: <div className="badge badge-outline">Administrador</div>,
-    2: <div className="badge badge-primary badge-outline">Psicólogo</div>,
-    3: <div className="badge badge-secondary badge-outline">Voluntário</div>,
-    4: <div className="badge badge-accent badge-outline">Médico</div>,
-  }
-
-  return levels[levelId]
-}
-
 export default function SearchVolunteerPage() {
-  const toast = useToast()
+  const { handleErrorToast } = useToast()
   const [isLoading, setIsLoading] = useState(true)
 
+  const [roles, setRoles] = useState<Role[]>([])
   const [volunteers, setVolunteers] = useState<Volunteer[]>([])
   const [search, setSearch] = useState('')
 
@@ -56,7 +47,7 @@ export default function SearchVolunteerPage() {
         volunteer.name.toLowerCase().includes(search.toLowerCase()) ||
         volunteer.email.toLowerCase().includes(search.toLowerCase())
     )
-    .filter((volunteer) => roleFilters.includes(volunteer.levelId.toString()))
+    .filter((volunteer) => roleFilters.includes(volunteer.roleId.toString()))
     .sort((a, b) => {
       if (sort == 'asc') {
         return a[sortingBy] > b[sortingBy] ? 1 : -1
@@ -66,7 +57,7 @@ export default function SearchVolunteerPage() {
     })
 
   const retrieveVolunteers = useDebounce(
-    (page: number = 1, name: string = '', roles: string[] = []) => {
+    async (page: number = 1, name: string = '', roles: string[] = []) => {
       return axios
         .get('/volunteers', {
           params: {
@@ -89,22 +80,27 @@ export default function SearchVolunteerPage() {
           newArray.push(...data)
           setVolunteers(newArray)
         })
-        .catch((error) =>
-          toast({
-            title: 'Erro ao buscar voluntários',
-            description: error.message,
-            status: 'error',
-            duration: 1500,
-            position: 'top-right',
-            isClosable: true,
-          })
-        )
+        .catch((error) => handleErrorToast('Erro ao buscar voluntários', error.message))
     },
     700
   )
 
   useEffect(() => {
-    retrieveVolunteers().then(() => setIsLoading(false))
+    Promise.all([
+      retrieveVolunteers(),
+      axios.get('/roles').then(({ data }) => {
+        console.log(data)
+        setRoles(data)
+      }),
+    ])
+      .catch(({ response }) => {
+        handleErrorToast(
+          'Erro ao buscar os voluntários',
+          response?.data?.message ??
+            'Ocorreu um erro ao buscar os voluntários, verifique sua conexão e tente novamente.'
+        )
+      })
+      .finally(() => setIsLoading(false))
   }, [])
 
   const handleRoleFilter = (roles: string | string[]) => {
@@ -140,7 +136,9 @@ export default function SearchVolunteerPage() {
     return [
       volunteer.name,
       volunteer.email,
-      <Badge levelId={volunteer.levelId} />,
+      <div className="badge badge-outline">
+        {roles.find((role) => role.id == volunteer.roleId)?.name}
+      </div>,
       createdAtString,
       <Link to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`} state={volunteer}>
         <Button colorScheme="blue" width={'90%'}>

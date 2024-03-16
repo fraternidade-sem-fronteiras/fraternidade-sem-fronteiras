@@ -75,7 +75,10 @@ export default function LoginPage() {
       createSession(getValues('email'), getValues('password'))
         .then(({ registered }) => {
           if (registered) {
-            handleToast('Conta registrada!', 'Sua conta foi ativa e a senha registrada, seja bem vindo!')
+            handleToast(
+              'Conta registrada!',
+              'Sua conta foi ativa e a senha registrada, seja bem vindo!'
+            )
           }
 
           navigate(

@@ -18,7 +18,6 @@ export default class VolunteersController {
     const { email, password } = await loginVolunteerValidator.validate(request.all())
 
     const data = await this.volunteersService.createSession(email, password)
-
     return response.json(data)
   }
 
@@ -52,8 +51,6 @@ export default class VolunteersController {
       return response.status(404).json({ message: 'Nenhum voluntário encontrado.' })
     }
 
-    console.log(volunteers)
-
     /**
      * Retorna os voluntários
      */
@@ -61,39 +58,27 @@ export default class VolunteersController {
   }
 
   async store({ request, response }: HttpContext) {
-    try {
-      /**
-       * Valida os dados do formulário
-       */
+    /**
+     * Valida os dados do formulário
+     */
 
-      let payload = await createVolunteerValidator.validate(request.all())
-      /**
-       * Cria um novo voluntário
-       */
+    let payload = await createVolunteerValidator.validate(request.all())
 
-      if (payload.password == null) {
-        payload.password = payload.email
-      }
+    /**
+     * Cria um novo voluntário
+     */
 
-      const volunteer = await this.volunteersService.createVolunteer(
-        payload.name,
-        payload.email,
-        payload.password,
-        payload.levelId
-      )
+    const volunteer = await this.volunteersService.createVolunteer(
+      payload.name,
+      payload.email,
+      payload.role
+    )
 
-      /**
-       * Retorna o voluntário criado
-       */
+    /**
+     * Retorna o voluntário criado
+     */
 
-      return response.status(201).json(volunteer)
-    } catch (error) {
-      /**
-       * Retorna o erro de validação, caso haja
-       */
-
-      return response.status(409).json(error)
-    }
+    return response.status(201).json(volunteer)
   }
 
   async show({ response, params }: HttpContext) {
@@ -131,25 +116,17 @@ export default class VolunteersController {
 
     const { id } = params
 
-    try {
-      /**
-       * Valida os dados do formulário
-       */
-      let payload = await updateVolunteerValidator.validate(request.all())
+    /**
+     * Valida os dados do formulário
+     */
+    let payload = await updateVolunteerValidator.validate(request.all())
 
-      /**
-       * Atualiza voluntário
-       */
-      const data = await this.volunteersService.updateVolunteer(id, payload)
+    /**
+     * Atualiza voluntário
+     */
+    const data = await this.volunteersService.updateVolunteer(id, payload)
 
-      return response.json({ ...data })
-    } catch (error) {
-      /**
-       * Retorna que não é possível atualizar um voluntário que não existe
-       */
-
-      return response.status(404).json(error)
-    }
+    return response.json({ ...data })
   }
 
   async destroy({ params, response }: HttpContext) {
@@ -163,24 +140,12 @@ export default class VolunteersController {
      * Deleta o voluntário pelo Service
      */
 
-    try {
-      await this.volunteersService.deleteVolunteer(id)
+    await this.volunteersService.deleteVolunteer(id)
 
-      /**
-       * Retorna o status 204 (No Content)
-       */
+    /**
+     * Retorna o status 204 (No Content)
+     */
 
-      return response.status(204)
-    } catch (error) {
-      /**
-       * Retorna que não é possível deletar um voluntário que não existe
-       */
-
-      if (error instanceof Error) {
-        return response.status(404).json({ error: error.message })
-      }
-
-      return response.status(500).json({ error: 'Internal Server Error' })
-    }
+    return response.status(204)
   }
 }

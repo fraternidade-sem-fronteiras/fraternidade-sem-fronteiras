@@ -8,7 +8,7 @@ export default class extends BaseSeeder {
         name: 'Administrador',
         email: 'admin@fsf.com',
         password: 'admin@fsf.com',
-        levelId: 1,
+        roleId: 1,
         registered: false,
       },
     ])
