@@ -1,9 +1,9 @@
-import React from 'react'
-import UserContext from '../context/user.context.js'
-import axios from '../utils/axios.instance.js'
-import { useEnv } from '../hooks/env.hook.js'
-import { StoreableVolunteer } from '../entities/volunteer.entity.js'
-import { useToast } from '@chakra-ui/react'
+import React, { useCallback } from 'react'
+import UserContext from '@/context/user.context'
+import axios from '@/utils/axios.instance'
+import useToast from '@/hooks/toast.hook'
+import { useEnv } from '@/hooks/env.hook'
+import { StoreableVolunteer } from '@/entities/volunteer.entity'
 
 interface UserProviderProps {
   children?: React.ReactNode
@@ -18,9 +18,10 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
     const item = localStorage.getItem('volunteer')
     return item ? JSON.parse(item) : null
   })
+
   const isLoggedIn = !!volunteer
 
-  const toast = useToast()
+  const { handleErrorToast } = useToast()
 
   React.useLayoutEffect(() => {
     axios.defaults.baseURL = get('API_URL')
@@ -38,52 +39,34 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
           localStorage.setItem('volunteer', JSON.stringify(newVolunteer))
           setVolunteer(newVolunteer)
         })
-        .catch(() => {
-          toast({
-            title: 'Sessão com problemas.',
-            description:
-              'Não foi possível recuperar os dados da sua sessão, alguns recursos podem não funcionar.',
-            status: 'error',
-            position: 'top-right',
-            duration: 5000,
-            isClosable: true,
-          })
+        .catch(({ response }) => {
+          if (!response) {
+            handleErrorToast(
+              'Sessão com problemas.',
+              'Não foi possível recuperar os dados da sua sessão, alguns recursos podem não funcionar.'
+            )
+            return
+          }
+
+          const statusCode = response.status
+
+          if (statusCode === 401) {
+            handleErrorToast(
+              'Não autorizado',
+              'Sua sessão expirou ou seu token de acesso não é válido, faça login novamente para continuar.'
+            )
+          }
         })
     }
   }, [])
 
   React.useLayoutEffect(() => {
-    if (!volunteer) return
-
-    const responseInterceptor = axios.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response.status === 401) {
-          toast({
-            title: 'Sessão expirou.',
-            description: 'Sua sessão expirou, faça login novamente.',
-            status: 'error',
-            position: 'top-right',
-            duration: 5000,
-            isClosable: true,
-          })
-
-          finishSession()
-        }
-
-        return new Promise(error)
-      }
-    )
-
     const requestInterceptor = axios.interceptors.request.use((config) => {
-      config.headers.Authorization = `Bearer ${volunteer.token ?? 'unknown'}`
+      if (volunteer) config.headers.Authorization = `Bearer ${volunteer.token ?? 'unknown'}`
       return config
     })
 
     return () => {
-      if (!volunteer) return
-
-      axios.interceptors.response.eject(responseInterceptor)
       axios.interceptors.request.eject(requestInterceptor)
     }
   }, [volunteer])
@@ -106,30 +89,37 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
   }, [theme])
 
   const createSession = React.useCallback(
-    async (email: string, password: string): Promise<StoreableVolunteer> => {
-      return new Promise<StoreableVolunteer>(async (resolve, reject) => {
-        try {
-          const { data } = await axios.post('volunteers/login', { email, password })
+    async (
+      email: string,
+      password: string
+    ): Promise<StoreableVolunteer & { registered: true | undefined }> => {
+      return new Promise<StoreableVolunteer & { registered: true | undefined }>(
+        (resolve, reject) => {
+          axios
+            .post('volunteers/login', { email, password })
+            .then(({ data }) => {
+              const storeableVolunteer: StoreableVolunteer = {
+                ...data.volunteer,
+                token: data.token,
+              }
 
-          const storeableVolunteer: StoreableVolunteer = { ...data.volunteer, token: data.token }
-
-          localStorage.setItem('volunteer', JSON.stringify(storeableVolunteer))
-          setVolunteer(storeableVolunteer)
-          resolve(storeableVolunteer)
-        } catch (error) {
-          reject(error)
+              localStorage.setItem('volunteer', JSON.stringify(storeableVolunteer))
+              setVolunteer(storeableVolunteer)
+              resolve({ ...storeableVolunteer, registered: data.registered })
+            })
+            .catch(reject)
         }
-      })
+      )
     },
     []
   )
 
-  const forceFinishSession = React.useCallback(async () => {
+  const forceFinishSession = useCallback(async () => {
     localStorage.removeItem('volunteer')
     setVolunteer(null)
   }, [])
 
-  const finishSession = React.useCallback(() => {
+  const finishSession = useCallback(() => {
     forceFinishSession()
     return Promise.resolve()
   }, [])

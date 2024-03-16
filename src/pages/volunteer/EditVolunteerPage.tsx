@@ -1,8 +1,8 @@
+import Volunteer from '@/entities/volunteer.entity'
+import axios from '@/utils/axios.instance'
 import { useEffect, useState } from 'react'
-import Volunteer from '../../entities/volunteer.entity.js'
 import { useLocation, useParams } from 'react-router-dom'
-import getAxiosInstance from '../../utils/axios.instance.js'
-import { useUser } from '../../hooks/user.hook.js'
+import { useUser } from '@/hooks/user.hook'
 
 export default function EditVolunteerPage() {
   const { id } = useParams()
@@ -12,7 +12,7 @@ export default function EditVolunteerPage() {
   const { volunteer } = useUser()
 
   useEffect(() => {
-    getAxiosInstance()
+    axios
       .get(`/volunteers/${id}`)
       .then(({ data }) => setCurrentVolunteer(data))
       .catch((error) => {

@@ -3,6 +3,7 @@ import Volunteer from '#models/volunteer'
 import { inject } from '@adonisjs/core'
 import hash from '@adonisjs/core/services/hash'
 import TokenService from '#services/token_service'
+import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 
 @inject()
 export default class VolunteerService {
@@ -48,20 +49,30 @@ export default class VolunteerService {
   async createSession(
     email: string,
     password: string
-  ): Promise<{ token: string; volunteer: Volunteer }> {
+  ): Promise<{ token: string; volunteer: Volunteer; registered?: boolean }> {
     const volunteer = await Volunteer.findBy('email', email)
 
-    if (!volunteer) {
-      throw new Error('Voluntário não encontrado')
+    if (!volunteer)
+      throw new EntityNotFoundException('The volunteer with email ' + email + ' was not found')
+
+    let registered: true | undefined = undefined
+
+    if (volunteer.registered) {
+      const match = await hash.verify(volunteer.password, password)
+      if (!match) throw new WrongPasswordException()
+    } else {
+      await volunteer
+        .merge({
+          password,
+          registered: true,
+        })
+        .save()
+      registered = true
     }
-
-    const match = await hash.verify(volunteer.password, password)
-
-    if (!match) throw new WrongPasswordException()
 
     const token = await this.tokenService.generate(volunteer)
 
-    return { token, volunteer }
+    return { token, volunteer, registered }
   }
 
   /**

@@ -1,8 +1,8 @@
 import React from 'react'
-import vineResolver from '../utils/vine.resolver.js'
+import vineResolver from '@/utils/vine.resolver'
 import vine from '@vinejs/vine'
 import { useForm } from 'react-hook-form'
-import { useUser } from '../hooks/user.hook.js'
+import { useUser } from '@/hooks/user.hook'
 import {
   Button,
   Center,
@@ -16,9 +16,9 @@ import {
   InputGroup,
   InputRightAddon,
   Text,
-  useToast,
 } from '@chakra-ui/react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import useToast from '@/hooks/toast.hook'
 
 const loginUserFormSchema = vine.object({
   email: vine.string().minLength(3).maxLength(64).email(),
@@ -55,7 +55,7 @@ export default function LoginPage() {
 
   const navigate = useNavigate()
   const location = useLocation()
-  const toast = useToast()
+  const { handleToast, handleErrorToast } = useToast()
 
   React.useEffect(() => {
     if (isLoggedIn) navigate(redirect ?? '/dashboard/navegar')
@@ -71,9 +71,13 @@ export default function LoginPage() {
   }
 
   const onSubmit = () => {
-    const promise = new Promise<void>((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       createSession(getValues('email'), getValues('password'))
-        .then(() => {
+        .then(({ registered }) => {
+          if (registered) {
+            handleToast('Conta registrada!', 'Sua conta foi ativa e a senha registrada, seja bem vindo!')
+          }
+
           navigate(
             location.pathname == '/' || location.pathname == '/login'
               ? redirect ?? '/dashboard/navegar'
@@ -81,31 +85,11 @@ export default function LoginPage() {
           )
           resolve()
         })
-        .catch(reject)
+        .catch(() => {
+          handleErrorToast('Logando', 'Não foi possível fazer o login, tente novamente mais tarde.')
+          reject()
+        })
     })
-
-    toast.promise(promise, {
-      success: {
-        title: 'Logado com sucesso!',
-        description: 'Seja bem-vindo de volta!',
-        position: 'top-right',
-        duration: 500,
-      },
-      error: {
-        title: 'Logando',
-        description: 'Não foi possível fazer o login, tente novamente mais tarde.',
-        position: 'top-right',
-        duration: 2000,
-      },
-      loading: {
-        title: 'Logando',
-        description: 'Seu login está sendo processado...',
-        position: 'top-right',
-        duration: 15000,
-      },
-    })
-
-    return promise
   }
 
   return (

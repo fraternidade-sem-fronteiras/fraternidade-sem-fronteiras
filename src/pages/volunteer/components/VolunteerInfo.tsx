@@ -1,5 +1,5 @@
 import { Button, Td, useDisclosure } from '@chakra-ui/react'
-import Volunteer from '../../../entities/volunteer.entity.js'
+import Volunteer from '@/entities/volunteer.entity'
 import DeleteVolunteerModal from './DeleteVolunteerModal.jsx'
 import { Link } from 'react-router-dom'
 

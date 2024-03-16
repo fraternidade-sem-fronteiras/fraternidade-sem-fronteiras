@@ -1,4 +1,4 @@
-import Volunteer from '../../../entities/volunteer.entity.js'
+import Volunteer from '@/entities/volunteer.entity'
 import {
   Modal,
   ModalOverlay,

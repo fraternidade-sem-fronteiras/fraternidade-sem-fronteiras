@@ -1,10 +1,10 @@
 import { Suspense, lazy } from 'react'
-import EnvProvider from './providers/env.provider.jsx'
-import SuspenseFallback from './components/suspense/SuspenseFallback.jsx'
-import UserProvider from './providers/user.provider.jsx'
-import ThemeProvider from './providers/theme.provider.jsx'
+import EnvProvider from '@/providers/env.provider'
+import SuspenseFallback from '@/components/suspense/SuspenseFallback'
+import UserProvider from '@/providers/user.provider'
+import ThemeProvider from '@/providers/theme.provider'
 
-const Routes = lazy(() => import('./routes.jsx'))
+const Routes = lazy(() => import('@/routes'))
 
 interface RoutesProps {
   env: Record<string, any>

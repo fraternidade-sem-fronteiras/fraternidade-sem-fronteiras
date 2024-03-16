@@ -1,6 +1,7 @@
 import React from 'react'
 import vine from '@vinejs/vine'
-import vineResolver from '../../utils/vine.resolver.js'
+import vineResolver from '@/utils/vine.resolver'
+import axios from '@/utils/axios.instance'
 import { useForm } from 'react-hook-form'
 import {
   AbsoluteCenter,
@@ -24,11 +25,12 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 
-import { TextoSublinhado } from '../../components/TextoSublinhado.jsx'
+import { TextoSublinhado } from '@/components/TextoSublinhado'
 import { Infer } from '@vinejs/vine/types'
+import useToast from '@/hooks/toast.hook'
 
 const formSchema = vine.object({
-  fullName: vine.string().minLength(3).maxLength(64),
+  name: vine.string().minLength(3).maxLength(64),
   socialName: vine.string().minLength(3).maxLength(32),
 
   motherName: vine.string().minLength(3).maxLength(64),
@@ -51,7 +53,7 @@ const formSchema = vine.object({
   rg: vine
     .string()
     .minLength(1)
-    .regex(/(^\d{1,2}).?(\d{3}).?(\d{3})-?(\d{1}|X|x$)/),
+    .regex(/(^\d{1,2}).?(\d{3}).?(\d{3})-?(\d|X|x$)/),
   emission: vine.date(),
   organ: vine.string().minLength(3).maxLength(32),
 
@@ -65,17 +67,18 @@ const formSchema = vine.object({
 type FormProps = Infer<typeof formSchema>
 
 export default function AssistedFormPage() {
+  const { handleToast, handleErrorToast } = useToast()
   const {
-    getValues,
     watch,
     handleSubmit,
     register,
     setValue,
-    formState: { errors, isValid },
+    reset,
+    formState: { errors },
   } = useForm<FormProps>({
     resolver: vineResolver(formSchema, {
-      'fullName.minLength': 'O nome é obrigatório e precisa ter pelo menos 3 caracteres.',
-      'fullName.maxLength': 'O nome deve ter no máximo 64 caracteres',
+      'name.minLength': 'O nome é obrigatório e precisa ter pelo menos 3 caracteres.',
+      'name.maxLength': 'O nome deve ter no máximo 64 caracteres',
       'socialName.minLength': 'O nome social é obrigatório e precisa ter pelo menos 3 caracteres.',
       'socialName.maxLength': 'O nome social deve ter no máximo 32 caracteres',
       'motherName.minLength': 'O nome da mãe é obrigatório e precisa ter pelo menos 3 caracteres.',
@@ -140,14 +143,15 @@ export default function AssistedFormPage() {
   const handleChangeCountry = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (event.target.value !== 'Brasil') return
 
-    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
-      .then((response) => response.json())
-      .then((data) => {
+    axios
+      .get('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+      .then(({ data }) => {
         setStates(data.map((estado: Record<string, any>) => estado.sigla))
         setCities([])
         setValue('state', '')
         setValue('city', '')
       })
+      .catch(() => {})
 
     event.preventDefault()
   }
@@ -193,9 +197,23 @@ export default function AssistedFormPage() {
     )
   }
 
-  async function onValidSubmit(data: FormProps) {
-    console.log(data)
-    console.log('valid', errors, isValid, getValues())
+  async function onSubmit(data: FormProps) {
+    axios
+      .post('/assisteds', data)
+      .then(() => {
+        handleToast('Assistido cadastrado com sucesso', 'O assistido foi cadastrado com sucesso.')
+        reset()
+      })
+      .catch(({ response }) => {
+        if (response) {
+          handleErrorToast('Falha ao cadastrar', response.data.message)
+        } else {
+          handleErrorToast(
+            'Falha ao cadastrar',
+            'Ocorreu um erro desconhecido ao registrar o assistido, tente novamente.'
+          )
+        }
+      })
   }
 
   const isInvalid = (name: keyof FormProps) => {
@@ -204,7 +222,7 @@ export default function AssistedFormPage() {
 
   return (
     <Flex justifyContent={'center'} alignItems={'center'} padding={'2rem'}>
-      <form onSubmit={handleSubmit(onValidSubmit)} noValidate style={{ width: '100%' }}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate style={{ width: '100%' }}>
         <TextoSublinhado>Cadastro do assistido</TextoSublinhado>
         <div className="flex justify-center items-center flex-col py-5 pb-8">
           <h1>O assistido concorda em compartilhar seus dados com a organização ?</h1>
@@ -220,10 +238,10 @@ export default function AssistedFormPage() {
 
         <Grid templateColumns="1.5fr 1fr 1.3fr 0.5fr" paddingTop="10" gap={'1rem'}>
           <GridItem>
-            <FormControl isInvalid={isInvalid('fullName')}>
+            <FormControl isInvalid={isInvalid('name')}>
               <FormLabel>Nome completo</FormLabel>
-              <Input placeholder="Digite o nome completo" {...register('fullName')} />
-              <FormErrorMessage>{errors.fullName?.message}</FormErrorMessage>
+              <Input placeholder="Digite o nome completo" {...register('name')} />
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
@@ -390,7 +408,7 @@ export default function AssistedFormPage() {
           </GridItem>
 
           <GridItem>
-            <FormControl isInvalid={isInvalid('ctps')}>
+            <FormControl>
               <FormLabel>Renda</FormLabel>
               <InputGroup>
                 <InputLeftAddon>R$</InputLeftAddon>
@@ -398,7 +416,6 @@ export default function AssistedFormPage() {
                   <NumberInputField placeholder="Diga sua renda" />
                 </NumberInput>
               </InputGroup>
-              <FormErrorMessage>{errors.ctps?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
         </Grid>

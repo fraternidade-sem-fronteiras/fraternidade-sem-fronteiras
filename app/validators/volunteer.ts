@@ -27,7 +27,7 @@ export const createVolunteerValidator = vine.compile(
       .string()
       .trim()
       .minLength(6)
-      .confirmed({ confirmationField: 'password_confirmation' }),
+      .confirmed({ confirmationField: 'passwordConfirmation' }),
     levelId: vine.number(),
   })
 )

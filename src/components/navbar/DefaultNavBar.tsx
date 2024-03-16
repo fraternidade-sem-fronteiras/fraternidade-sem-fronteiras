@@ -1,7 +1,7 @@
 import LogoutModal from '../LogoutModal.jsx'
 import { Link } from 'react-router-dom'
 import { Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react'
-import { useUser } from '../../hooks/user.hook.js'
+import { useUser } from '@/hooks/user.hook'
 
 export default function DefaultNavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -9,7 +9,7 @@ export default function DefaultNavBar() {
   const { volunteer } = useUser()
 
   return (
-    <div className="navbar bg-base-100" style={{backgroundColor: "#4a7494"}}>
+    <div className="navbar bg-base-100" style={{ backgroundColor: '#4a7494' }}>
       <div className="navbar-start">
         <Link to="/dashboard/navegar">
           <picture>

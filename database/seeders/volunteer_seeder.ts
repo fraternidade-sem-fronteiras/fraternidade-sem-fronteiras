@@ -9,6 +9,7 @@ export default class extends BaseSeeder {
         email: 'admin@fsf.com',
         password: 'admin@fsf.com',
         levelId: 1,
+        registered: false,
       },
     ])
   }

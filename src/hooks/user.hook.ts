@@ -1,5 +1,5 @@
 import React from 'react'
-import UserContext, { UserContextProps } from '../context/user.context.js'
+import UserContext, { UserContextProps } from '@/context/user.context'
 
 export function useUser(): UserContextProps {
   const context = React.useContext(UserContext)

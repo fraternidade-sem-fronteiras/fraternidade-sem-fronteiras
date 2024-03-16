@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Volunteer from '../../entities/volunteer.entity.js'
-import axios from '../../utils/axios.instance.js'
-import PaginableTable from '../../components/table/PaginableTable.jsx'
+import Volunteer from '@/entities/volunteer.entity'
+import axios from '@/utils/axios.instance'
+import PaginableTable from '@/components/table/PaginableTable'
 
 import {
   Button,
@@ -16,7 +16,7 @@ import {
   MenuOptionGroup,
   useToast,
 } from '@chakra-ui/react'
-import { useDebounce } from '../../hooks/debounce.hook.js'
+import { useDebounce } from '@/hooks/debounce.hook'
 import { Link } from 'react-router-dom'
 
 const SortingOptions = {

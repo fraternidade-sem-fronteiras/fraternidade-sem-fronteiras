@@ -17,9 +17,9 @@ export default class VolunteersController {
   async login({ request, response }: HttpContext) {
     const { email, password } = await loginVolunteerValidator.validate(request.all())
 
-    const { token, volunteer } = await this.volunteersService.createSession(email, password)
+    const data = await this.volunteersService.createSession(email, password)
 
-    return response.json({ volunteer, token: token })
+    return response.json(data)
   }
 
   async logout({ response }: HttpContext) {

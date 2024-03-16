@@ -1,5 +1,5 @@
 import React from 'react'
-import EnvContext, { EnvContextProps } from '../context/env.context.js'
+import EnvContext, { EnvContextProps } from '@/context/env.context'
 
 export function useEnv(): EnvContextProps {
   const context = React.useContext(EnvContext)

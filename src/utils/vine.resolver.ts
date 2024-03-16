@@ -26,7 +26,6 @@ export default function vineResolver<T>(
           const { field, message } = error
           const array = errors[field]?.message
           errors[field] = { message: array ? `${array}, ${message}` : message }
-          console.log(error)
         }
       }
 

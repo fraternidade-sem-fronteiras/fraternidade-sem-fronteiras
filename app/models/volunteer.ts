@@ -18,6 +18,9 @@ export default class Volunteer extends BaseModel {
   declare password: string
 
   @column()
+  declare registered: boolean
+
+  @column()
   declare levelId: number
 
   @hasOne(() => Level)

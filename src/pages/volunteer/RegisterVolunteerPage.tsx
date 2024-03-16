@@ -1,9 +1,9 @@
 import vine from '@vinejs/vine'
-import vineResolver from '../../utils/vine.resolver.js'
+import vineResolver from '@/utils/vine.resolver'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { useUser } from '../../hooks/user.hook.js'
-import { TextoSublinhado } from '../../components/TextoSublinhado.jsx'
+import { useUser } from '@/hooks/user.hook'
+import { TextoSublinhado } from '@/components/TextoSublinhado'
 import {
   Button,
   Center,

@@ -44,17 +44,9 @@ export default class AssistedsController {
   }
 
   public async store({ request, response }: HttpContext) {
-    try {
-      const { name } = await createAssistedValidator.validate(request.body())
-      const assisted = await this.assistedService.createAssisted(name)
+    const data = await createAssistedValidator.validate(request.body())
+    const assisted = await this.assistedService.createAssisted(data)
 
-      return response.status(201).json(assisted)
-    } catch (error) {
-      if (error instanceof Error) {
-        return response.status(409).json({ message: error.message })
-      }
-
-      return response.status(409).json({ message: 'Erro ao criar assistido' })
-    }
+    return response.status(201).json(assisted)
   }
 }

@@ -7,6 +7,7 @@ import VolunteerService from '#services/volunteer_service'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import { inject } from '@adonisjs/core'
+import UnregisteredVolunteerException from '#exceptions/unregistered_volunteer_exception'
 
 @inject()
 export default class AuthenticationMiddleware {
@@ -31,6 +32,8 @@ export default class AuthenticationMiddleware {
       const volunteer: Volunteer | null = await this.volunteerService.getVolunteerById(payload.id)
 
       if (!volunteer) throw new InvalidTokenException()
+
+      if (!volunteer.registered) throw new UnregisteredVolunteerException()
 
       request.all().user = volunteer
 

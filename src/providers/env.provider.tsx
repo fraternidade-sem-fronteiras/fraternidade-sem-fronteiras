@@ -1,5 +1,5 @@
 import React from 'react'
-import EnvContext from '../context/env.context.js'
+import EnvContext from '@/context/env.context'
 
 interface EnvProviderProps {
   children?: React.ReactNode
