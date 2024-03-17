@@ -2,7 +2,7 @@ import InvalidTokenException from '#exceptions/invalid_token_exception'
 import TokenNotProvidedException from '#exceptions/token_not_provided_exception'
 import TokenService from '#services/token_service'
 import Session from '#validators/session'
-import Volunteer from '#models/volunteer'
+import { VolunteerDto } from '#models/volunteer'
 import VolunteerService from '#services/volunteer_service'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
@@ -27,7 +27,9 @@ export default class AuthenticationMiddleware {
     const token = currentToken.split(' ')[1]
 
     const payload: Session = await this.tokenService.verify(token)
-    const volunteer: Volunteer | null = await this.volunteerService.getVolunteerById(payload.id)
+    const volunteer: VolunteerDto | null = await this.volunteerService.getVolunteer({
+      id: payload.id,
+    })
 
     if (!volunteer) throw new InvalidTokenException()
 

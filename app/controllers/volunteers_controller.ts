@@ -1,5 +1,6 @@
 // import type { HttpContext } from '@adonisjs/core/http'
 
+import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import VolunteerService from '#services/volunteer_service'
 import {
   createVolunteerValidator,
@@ -71,7 +72,7 @@ export default class VolunteersController {
     const volunteer = await this.volunteersService.createVolunteer(
       payload.name,
       payload.email,
-      payload.role
+      payload.roles
     )
 
     /**
@@ -92,15 +93,13 @@ export default class VolunteersController {
      * Busca o voluntário pelo id
      */
 
-    const volunteer = await this.volunteersService.getVolunteerById(id)
+    const volunteer = await this.volunteersService.getVolunteer({ id })
 
     /**
      * Verifica se o voluntário existe
      */
 
-    if (!volunteer) {
-      return response.status(404).json({ message: 'Voluntário não encontrado' })
-    }
+    if (!volunteer) throw new EntityNotFoundException('O voluntário de id ' + id + ' não existe.')
 
     /**
      * Retorna o voluntário
@@ -124,9 +123,9 @@ export default class VolunteersController {
     /**
      * Atualiza voluntário
      */
-    const data = await this.volunteersService.updateVolunteer(id, payload)
+    //const data = await this.volunteersService.updateVolunteer(id, payload)
 
-    return response.json({ ...data })
+    //return response.json({ ...data })
   }
 
   async destroy({ params, response }: HttpContext) {

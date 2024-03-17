@@ -1,17 +1,17 @@
-import Level from './level.js'
+import Role from './role.js'
 import Permission from './permission.js'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
-export default class LevelPermission extends BaseModel {
+export default class RolePermission extends BaseModel {
   @column({ isPrimary: true })
-  declare id_level: number
+  declare roleName: string
 
   @column({ isPrimary: true })
-  declare id_permission: number
+  declare permissionName: string
 
-  @belongsTo(() => Level)
-  declare level: BelongsTo<typeof Level>
+  @belongsTo(() => Role)
+  declare role: BelongsTo<typeof Role>
 
   @belongsTo(() => Permission)
   declare permission: BelongsTo<typeof Permission>

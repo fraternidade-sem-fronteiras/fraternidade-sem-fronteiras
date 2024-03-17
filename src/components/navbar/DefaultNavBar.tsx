@@ -2,6 +2,7 @@ import LogoutModal from '../LogoutModal.jsx'
 import { Link } from 'react-router-dom'
 import { Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react'
 import { useUser } from '@/hooks/user.hook'
+import { hasAtLeastOnePermission, hasPermission } from '@/entities/volunteer.entity'
 
 export default function DefaultNavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -22,20 +23,24 @@ export default function DefaultNavBar() {
       </div>
 
       <Flex justifyContent={'space-between'} alignItems={'center'} gap={'40px'}>
-        {volunteer?.role === 1 && (
+        {hasAtLeastOnePermission(volunteer!, ['CREATE_VOLUNTEER', 'CREATE_ASSISTED']) && (
           <Menu>
             <MenuButton>
               <Text color={'white'}>Adicionar</Text>
             </MenuButton>
 
             <MenuList>
-              <MenuItem>
-                <Link to="/dashboard/voluntario/cadastrar">Voluntários</Link>
-              </MenuItem>
+              {hasPermission(volunteer!, ['CREATE_VOLUNTEER']) && (
+                <MenuItem>
+                  <Link to="/dashboard/voluntario/cadastrar">Voluntários</Link>
+                </MenuItem>
+              )}
 
-              <MenuItem>
-                <Link to="/dashboard/assistido/cadastrar">Assistidos</Link>
-              </MenuItem>
+              {hasPermission(volunteer!, ['CREATE_ASSISTED']) && (
+                <MenuItem>
+                  <Link to="/dashboard/assistido/cadastrar">Assistidos</Link>
+                </MenuItem>
+              )}
             </MenuList>
           </Menu>
         )}

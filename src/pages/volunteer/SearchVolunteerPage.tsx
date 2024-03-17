@@ -24,7 +24,6 @@ const SortingOptions = {
   id: 'Identificador',
   name: 'Nome',
   email: 'Email',
-  roleId: 'Nível de Permissão',
   createdAt: 'Data de criação',
 }
 
@@ -36,7 +35,7 @@ export default function SearchVolunteerPage() {
   const [volunteers, setVolunteers] = useState<Volunteer[]>([])
   const [search, setSearch] = useState('')
 
-  const [roleFilters, setRoleFilters] = useState<string[]>(['1', '2', '3', '4'])
+  const [roleFilters, setRoleFilters] = useState<string[]>([])
 
   const [sortingBy, setSortingBy] = useState<keyof typeof SortingOptions>('id')
   const [sort, setSort] = useState<'asc' | 'desc'>('asc')
@@ -47,7 +46,7 @@ export default function SearchVolunteerPage() {
         volunteer.name.toLowerCase().includes(search.toLowerCase()) ||
         volunteer.email.toLowerCase().includes(search.toLowerCase())
     )
-    .filter((volunteer) => roleFilters.includes(volunteer.roleId.toString()))
+    .filter((volunteer) => volunteer.roles.some((role) => roleFilters.includes(role.name)))
     .sort((a, b) => {
       if (sort == 'asc') {
         return a[sortingBy] > b[sortingBy] ? 1 : -1
@@ -69,7 +68,6 @@ export default function SearchVolunteerPage() {
         })
         .then(({ data }) => {
           if (data.length == 0) {
-            console.log('No volunteers found')
             return
           }
 
@@ -89,8 +87,8 @@ export default function SearchVolunteerPage() {
     Promise.all([
       retrieveVolunteers(),
       axios.get('/roles').then(({ data }) => {
-        console.log(data)
         setRoles(data)
+        setRoleFilters(data.map((role: { name: string }) => role.name))
       }),
     ])
       .catch(({ response }) => {
@@ -136,16 +134,24 @@ export default function SearchVolunteerPage() {
     return [
       volunteer.name,
       volunteer.email,
-      <div className="badge badge-outline">
-        {roles.find((role) => role.id == volunteer.roleId)?.name}
+      <div key={volunteer.id}>
+        {volunteer.roles.map((role) => (
+          <div key={role.name} className="block mx-2 my-2 badge badge-outline">
+            {role.name}
+          </div>
+        ))}
       </div>,
       createdAtString,
-      <Link to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`} state={volunteer}>
+      <Link
+        key={volunteer.id}
+        to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`}
+        state={volunteer}
+      >
         <Button colorScheme="blue" width={'90%'}>
           Editar
         </Button>
       </Link>,
-      <Button colorScheme="red" width={'90%'}>
+      <Button key={volunteer.id} colorScheme="red" width={'90%'}>
         Excluir
       </Button>,
     ]
@@ -195,18 +201,11 @@ export default function SearchVolunteerPage() {
               value={roleFilters}
               onChange={handleRoleFilter}
             >
-              <MenuItemOption value="1" defaultChecked>
-                Administrador
-              </MenuItemOption>
-              <MenuItemOption value="2" defaultChecked>
-                Psicólogo
-              </MenuItemOption>
-              <MenuItemOption value="3" defaultChecked>
-                Voluntário
-              </MenuItemOption>
-              <MenuItemOption value="4" defaultChecked>
-                Médico
-              </MenuItemOption>
+              {roles.map((role) => (
+                <MenuItemOption key={role.name} value={role.name} defaultChecked>
+                  {role.name}
+                </MenuItemOption>
+              ))}
             </MenuOptionGroup>
           </MenuList>
         </Menu>

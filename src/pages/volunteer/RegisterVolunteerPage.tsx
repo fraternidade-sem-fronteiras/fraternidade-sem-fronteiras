@@ -21,6 +21,7 @@ import { Infer } from '@vinejs/vine/types'
 import useToast from '@/hooks/toast.hook'
 import axios from '@/utils/axios.instance'
 import Role from '@/entities/role.entity'
+import { hasPermission } from '@/entities/volunteer.entity'
 
 const formSchema = vine.object({
   name: vine.string().minLength(3).maxLength(64),
@@ -52,7 +53,7 @@ export default function RegisterVolunteerPage() {
   const { volunteer } = useUser()
 
   useEffect(() => {
-    if (volunteer?.roleId !== 1) {
+    if (!hasPermission(volunteer, 'CREATE_VOLUNTEER')) {
       handleErrorToast('Sem permissão', 'Você não tem permissão para acessar essa página')
       return
     }
@@ -60,7 +61,6 @@ export default function RegisterVolunteerPage() {
     axios
       .get('/roles')
       .then(({ data }) => {
-        console.log(data)
         setRoles(data)
       })
       .catch(({ response }) => {
@@ -72,7 +72,7 @@ export default function RegisterVolunteerPage() {
       })
   }, [])
 
-  if (volunteer?.roleId !== 1) {
+  if (!hasPermission(volunteer, 'CREATE_VOLUNTEER')) {
     return (
       <Flex
         justifyContent={'center'}
@@ -87,11 +87,9 @@ export default function RegisterVolunteerPage() {
   }
 
   const onSubmit = async (data: FormProps) => {
-    console.log(data)
     axios
       .post('/volunteers', data)
       .then(({ data }: any) => {
-        console.log(data)
         handleToast('Voluntário cadastrado com sucesso', 'success')
       })
       .catch(({ response }) => {
@@ -109,10 +107,7 @@ export default function RegisterVolunteerPage() {
 
   return (
     <Flex justifyContent={'center'} alignItems={'center'} padding={'2rem'} width={'100%'}>
-      <form
-        onSubmit={handleSubmit(onSubmit, (errors) => console.log(errors))}
-        style={{ width: '100%' }}
-      >
+      <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
         <TextoSublinhado>Cadastro do voluntário</TextoSublinhado>
 
         <Grid templateColumns="2fr 1fr" paddingTop="10" gap={'1rem'}>
@@ -142,7 +137,7 @@ export default function RegisterVolunteerPage() {
                   Selecione o cargo
                 </option>
                 {roles.map((role) => (
-                  <option key={role.id} value={role.id}>
+                  <option key={role.name} value={role.name}>
                     {role.name}
                   </option>
                 ))}

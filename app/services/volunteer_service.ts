@@ -1,5 +1,5 @@
 import WrongPasswordException from '#exceptions/wrong_password_exception'
-import Volunteer from '#models/volunteer'
+import Volunteer, { VolunteerDto } from '#models/volunteer'
 import { inject } from '@adonisjs/core'
 import hash from '@adonisjs/core/services/hash'
 import TokenService from '#services/token_service'
@@ -23,7 +23,7 @@ export default class VolunteerService {
    * @return Volunteer
    */
 
-  async createVolunteer(name: string, email: string, roleId: number): Promise<Volunteer> {
+  async createVolunteer(name: string, email: string, roles: string[]): Promise<Volunteer> {
     let volunteer = await Volunteer.findBy('email', email)
 
     if (volunteer) throw new ConflictException('O voluntário com email ' + email + ' já existe')
@@ -33,9 +33,12 @@ export default class VolunteerService {
     volunteer.name = name
     volunteer.email = email
     volunteer.password = email
-    volunteer.roleId = roleId
 
-    await volunteer.save()
+    volunteer = await volunteer.save()
+
+    volunteer
+      .related('roles')
+      .createMany(roles.map((role) => ({ roleName: role, volunteerId: volunteer!.id })))
 
     return volunteer
   }
@@ -43,11 +46,28 @@ export default class VolunteerService {
   async createSession(
     email: string,
     password: string
-  ): Promise<{ token: string; volunteer: Volunteer; registered?: boolean }> {
-    const volunteer = await Volunteer.findBy('email', email)
+  ): Promise<{ token: string; volunteer: VolunteerDto; registered?: boolean }> {
+    const volunteer = await Volunteer.query()
+      .select(['id', 'name', 'email', 'password', 'createdAt', 'registered'])
+      .preload('roles', (rolesQuery) =>
+        rolesQuery.preload('role', (roleQuery) => roleQuery.preload('permissions'))
+      )
+      .where({ email })
+      .first()
 
-    if (!volunteer)
-      throw new EntityNotFoundException('The volunteer with email ' + email + ' was not found')
+    if (!volunteer) throw new EntityNotFoundException('Voluntário não encontrado')
+
+    const realVolunteer: VolunteerDto = {
+      id: volunteer.id,
+      name: volunteer.name,
+      email: volunteer.email,
+      roles: volunteer.roles.map((role) => ({
+        name: role.roleName,
+        permissions: role.role.permissions.map((perm) => perm.permissionName),
+      })),
+      registered: volunteer.registered,
+      createdAt: volunteer.createdAt.toISO()!,
+    }
 
     let registered: true | undefined = undefined
 
@@ -66,7 +86,7 @@ export default class VolunteerService {
 
     const token = await this.tokenService.generate(volunteer)
 
-    return { token, volunteer, registered }
+    return { token, volunteer: realVolunteer, registered }
   }
 
   /**
@@ -86,12 +106,27 @@ export default class VolunteerService {
     limit: number,
     orderBy: string,
     order: 'asc' | 'desc'
-  ): Promise<Volunteer[]> {
-    const volunteers = await Volunteer.query()
-      .select(['id', 'name', 'email', 'roleId', 'createdAt'])
+  ): Promise<VolunteerDto[]> {
+    const volunteersPagination = await Volunteer.query()
+      .select(['id', 'name', 'email', 'createdAt'])
+      .preload('roles', (rolesQuery) =>
+        rolesQuery.preload('role', (roleQuery) => roleQuery.preload('permissions'))
+      )
       .orderBy(orderBy, order)
       .paginate(page, limit)
-    return volunteers.all()
+
+    const volunteers = volunteersPagination.all()
+
+    return volunteers.map((volunteer) => ({
+      id: volunteer.id,
+      name: volunteer.name,
+      email: volunteer.email,
+      roles: volunteer.roles.map((role) => ({
+        name: role.roleName,
+        permissions: role.role.permissions.map((perm) => perm.permissionName),
+      })),
+      createdAt: volunteer.createdAt.toISO()!,
+    }))
   }
 
   /**
@@ -102,55 +137,27 @@ export default class VolunteerService {
    *
    */
 
-  async getVolunteerById(id: number): Promise<Volunteer | null> {
+  async getVolunteer(query: { id?: number; email?: string }): Promise<VolunteerDto | null> {
     const volunteer = await Volunteer.query()
-      .select(['id', 'name', 'email', 'roleId', 'createdAt', 'registered'])
-      .where({ id })
+      .select(['id', 'name', 'email', 'createdAt', 'registered'])
+      .preload('roles', (rolesQuery) =>
+        rolesQuery.preload('role', (roleQuery) => roleQuery.preload('permissions'))
+      )
+      .where(query)
       .first()
 
-    return volunteer
-  }
+    if (!volunteer) return null
 
-  /**
-   *
-   * Retorn um voluntário pelo email ou null, caso não exista
-   *
-   * @param email - Email do voluntário
-   * @return Volunteer | null
-   */
-
-  async getVolunteerByEmail(email: string): Promise<Volunteer | null> {
-    const volunteer = await Volunteer.query()
-      .select(['id', 'name', 'email', 'role'])
-      .where({ email })
-      .first()
-
-    return volunteer
-  }
-
-  /**
-   * Prototipo de função para verificar se uma propriedade existe dentro do model
-   *
-   * @param volunteerId - ID do voluntário
-   * @param permission - Permissão a ser verificada
-   * @return boolean
-   */
-
-  async hasPermission(volunteer: number | Volunteer, permission: string): Promise<boolean> {
-    if (typeof volunteer === 'number') {
-      const user = await Volunteer.query()
-        .select(['id', 'name', 'email', 'role'])
-        .where({ id: volunteer })
-        .whereHas('role', (query) => {
-          query.whereHas('levelsPermission', (query) => {
-            query.where('name', permission)
-          })
-        })
-        .first()
-
-      return !!user
-    } else {
-      return volunteer.role.levelsPermission.some((p) => p.permission.name === permission)
+    return {
+      id: volunteer.id,
+      name: volunteer.name,
+      email: volunteer.email,
+      roles: volunteer.roles.map((role) => ({
+        name: role.roleName,
+        permissions: role.role.permissions.map((perm) => perm.permissionName),
+      })),
+      registered: volunteer.registered,
+      createdAt: volunteer.createdAt.toISO()!,
     }
   }
 
@@ -162,14 +169,14 @@ export default class VolunteerService {
    * @returns
    */
 
-  async updateVolunteer(id: number, payload: any): Promise<any> {
+  /* async updateVolunteer(id: number, payload: any): Promise<any> {
     const volunteer = await Volunteer.findBy('id', id)
 
     if (!volunteer) {
       throw new Error('Voluntário não encontrado')
     }
 
-    const oldVolunteer = {
+    const oldVolunteer: { name: string; roles: string[] } = {
       name: volunteer?.name,
       role: volunteer?.role,
     }
@@ -178,7 +185,7 @@ export default class VolunteerService {
       .merge({
         name: payload.name,
         password: payload.password,
-        roleId: payload.role,
+        roles: payload.roles,
       })
       .save()
 
@@ -197,7 +204,7 @@ export default class VolunteerService {
         },
       ],
     }
-  }
+  }*/
 
   /**
    *

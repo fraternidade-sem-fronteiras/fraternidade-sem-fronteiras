@@ -1,3 +1,4 @@
+import RoleVolunteer from '#models/role_volunteer'
 import Volunteer from '#models/volunteer'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
@@ -8,8 +9,14 @@ export default class extends BaseSeeder {
         name: 'Administrador',
         email: 'admin@fsf.com',
         password: 'admin@fsf.com',
-        roleId: 1,
         registered: false,
+      },
+    ])
+
+    await RoleVolunteer.createMany([
+      {
+        roleName: 'Administrador',
+        volunteerId: 1,
       },
     ])
   }

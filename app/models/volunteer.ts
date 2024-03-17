@@ -1,8 +1,9 @@
-import Level from './level.js'
-import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, column, hasOne } from '@adonisjs/lucid/orm'
-import type { HasOne } from '@adonisjs/lucid/types/relations'
 import hash from '@adonisjs/core/services/hash'
+import RoleVolunteer from './role_volunteer.js'
+import { DateTime } from 'luxon'
+import { BaseModel, beforeSave, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import Role, { RoleDto } from './role.js'
 
 export default class Volunteer extends BaseModel {
   @column({ isPrimary: true })
@@ -20,11 +21,8 @@ export default class Volunteer extends BaseModel {
   @column()
   declare registered: boolean
 
-  @column()
-  declare roleId: number
-
-  @hasOne(() => Level)
-  declare role: HasOne<typeof Level>
+  @hasMany(() => RoleVolunteer)
+  declare roles: HasMany<typeof RoleVolunteer>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -39,4 +37,13 @@ export default class Volunteer extends BaseModel {
       volunteer.password = newPassword
     }
   }
+}
+
+export interface VolunteerDto {
+  id: number
+  name: string
+  email: string
+  roles: RoleDto[]
+  registered?: boolean
+  createdAt: string
 }
