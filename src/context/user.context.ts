@@ -7,7 +7,10 @@ export interface UserContextProps {
   isLoggedIn: boolean
   volunteer: StoreableVolunteer | null
 
-  createSession: (email: string, password: string) => Promise<StoreableVolunteer>
+  createSession: (
+    email: string,
+    password: string
+  ) => Promise<StoreableVolunteer & { registered: true | undefined }>
   finishSession: () => Promise<void>
   forceFinishSession: () => void
 }

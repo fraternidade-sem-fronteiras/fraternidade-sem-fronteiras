@@ -1,9 +1,18 @@
+import LoginPage from '@/pages/LoginPage'
 import { Outlet } from 'react-router-dom'
-import useUser from '../../hooks/useUser.js'
-import LoginPage from '../../pages/LoginPage.jsx'
+import { useUser } from '@/hooks/user.hook'
+import UnregisteredException from '@/exceptions/unregistered.exception'
 
 export default function PrivateRouteLayout() {
-  const { theme, isLoggedIn } = useUser()
+  const { isLoggedIn, volunteer } = useUser()
 
-  return <div data-theme={theme}>{isLoggedIn ? <Outlet /> : <LoginPage />}</div>
+  console.log('registered', volunteer?.registered)
+
+  if (isLoggedIn) {
+    if (!volunteer?.registered) throw new UnregisteredException()
+
+    return <Outlet />
+  }
+
+  return <LoginPage />
 }

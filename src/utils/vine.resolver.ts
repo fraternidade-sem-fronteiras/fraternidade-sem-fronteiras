@@ -29,8 +29,6 @@ export default function vineResolver<T>(
         }
       }
 
-      console.log('errors no formulário: ', Object.entries(errors))
-
       return {
         values: data,
         errors: errors,

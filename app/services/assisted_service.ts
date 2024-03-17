@@ -13,16 +13,8 @@ export default class AssistedService {
    * @returns
    */
 
-  async createAssisted(name: string): Promise<Assisted> {
-    const assisted = await Assisted.query().where('name', name).orWhere('social_name', name).first()
-
-    if (assisted) {
-      throw new Error('Assisted already exists')
-    }
-
-    return Assisted.create({
-      name: name,
-    })
+  async createAssisted(data: Partial<Assisted> & { name: string }): Promise<Assisted> {
+    return Assisted.create(data)
   }
 
   /**

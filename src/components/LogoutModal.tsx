@@ -9,7 +9,7 @@ import {
   Button,
   useToast,
 } from '@chakra-ui/react'
-import useUser from '../hooks/useUser.js'
+import { useUser } from '../hooks/user.hook.js'
 import { useNavigate } from 'react-router-dom'
 
 interface LogoutModalProps {

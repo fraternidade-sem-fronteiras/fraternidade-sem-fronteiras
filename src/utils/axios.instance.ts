@@ -1,10 +1,10 @@
-import axios from 'axios'
-import Constants from './constants.js'
+import axiosBuilder from 'axios'
 
-const instance = axios.create({
-  baseURL: Constants.API_URL,
-})
+const axios = axiosBuilder.create()
 
-export default function getAxiosInstance() {
-  return instance
-}
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => Promise.reject(error)
+)
+
+export default axios

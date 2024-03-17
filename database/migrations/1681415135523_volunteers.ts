@@ -9,13 +9,7 @@ export default class extends BaseSchema {
       table.string('name').notNullable()
       table.string('email').notNullable().unique()
       table.string('password')
-      table
-        .integer('level_id')
-        .defaultTo(1)
-        .notNullable()
-        .unsigned()
-        .references('id')
-        .inTable('levels')
+      table.boolean('registered').defaultTo(false)
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
