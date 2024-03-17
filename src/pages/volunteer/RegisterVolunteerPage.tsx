@@ -7,6 +7,8 @@ import { TextoSublinhado } from '@/components/TextoSublinhado'
 import {
   Button,
   Center,
+  Checkbox,
+  CheckboxGroup,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -14,7 +16,7 @@ import {
   Grid,
   GridItem,
   Input,
-  Select,
+  Stack,
   Text,
 } from '@chakra-ui/react'
 import { Infer } from '@vinejs/vine/types'
@@ -26,7 +28,7 @@ import { hasPermission } from '@/entities/volunteer.entity'
 const formSchema = vine.object({
   name: vine.string().minLength(3).maxLength(64),
   email: vine.string().minLength(3).maxLength(64).email(),
-  role: vine.number().min(1),
+  roles: vine.array(vine.string().trim().escape().minLength(3).maxLength(32)),
 })
 
 type FormProps = Infer<typeof formSchema>
@@ -34,6 +36,7 @@ type FormProps = Infer<typeof formSchema>
 export default function RegisterVolunteerPage() {
   const { handleToast, handleErrorToast } = useToast()
   const {
+    setValue,
     handleSubmit,
     register,
     formState: { errors },
@@ -89,7 +92,7 @@ export default function RegisterVolunteerPage() {
   const onSubmit = async (data: FormProps) => {
     axios
       .post('/volunteers', data)
-      .then(({ data }: any) => {
+      .then(() => {
         handleToast('Voluntário cadastrado com sucesso', 'success')
       })
       .catch(({ response }) => {
@@ -104,6 +107,8 @@ export default function RegisterVolunteerPage() {
   const isInvalid = (name: keyof FormProps) => {
     return !!errors[name]
   }
+
+  console.log(errors)
 
   return (
     <Flex justifyContent={'center'} alignItems={'center'} padding={'2rem'} width={'100%'}>
@@ -132,17 +137,16 @@ export default function RegisterVolunteerPage() {
           <GridItem>
             <FormControl>
               <FormLabel>Cargo no sistema</FormLabel>
-              <Select defaultValue="" {...register('role')}>
-                <option value="" disabled>
-                  Selecione o cargo
-                </option>
-                {roles.map((role) => (
-                  <option key={role.name} value={role.name}>
-                    {role.name}
-                  </option>
-                ))}
-              </Select>
-              <FormErrorMessage>{errors.role?.message}</FormErrorMessage>
+              <CheckboxGroup onChange={(value: string[]) => setValue('roles', value)}>
+                <Stack spacing={[1, 3]} direction={['column', 'row']}>
+                  {roles.map((role) => (
+                    <Checkbox key={role.name} value={role.name}>
+                      {role.name}
+                    </Checkbox>
+                  ))}
+                </Stack>
+              </CheckboxGroup>
+              <FormErrorMessage>{errors.roles?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 

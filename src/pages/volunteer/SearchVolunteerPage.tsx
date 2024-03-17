@@ -19,6 +19,7 @@ import { useDebounce } from '@/hooks/debounce.hook'
 import { Link } from 'react-router-dom'
 import Role from '@/entities/role.entity'
 import useToast from '@/hooks/toast.hook'
+import DeleteVolunteerModal from './components/DeleteVolunteerModal.jsx'
 
 const SortingOptions = {
   id: 'Identificador',
@@ -131,6 +132,21 @@ export default function SearchVolunteerPage() {
 
     const createdAtString = `${createdAt} às ${createdAtTime}`
 
+    const handleDeleteVolunteer = (volunteer: Volunteer) => {
+      axios
+        .delete(`/volunteers/${volunteer.id}`)
+        .then(() => {
+          setVolunteers(volunteers.filter((v) => v.id != volunteer.id))
+        })
+        .catch(({ response }) => {
+          handleErrorToast(
+            'Erro ao excluir voluntário',
+            response?.data?.message ??
+              'Ocorreu um erro ao excluir o voluntário, verifique sua conexão e tente novamente.'
+          )
+        })
+    }
+
     return [
       volunteer.name,
       volunteer.email,
@@ -151,9 +167,11 @@ export default function SearchVolunteerPage() {
           Editar
         </Button>
       </Link>,
-      <Button key={volunteer.id} colorScheme="red" width={'90%'}>
-        Excluir
-      </Button>,
+      <DeleteVolunteerModal
+        key={volunteer.id}
+        volunteer={volunteer}
+        onDelete={handleDeleteVolunteer}
+      />,
     ]
   }
 

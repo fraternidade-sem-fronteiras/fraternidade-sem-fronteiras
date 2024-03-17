@@ -7,13 +7,11 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table
         .string('role_name')
-        .primary()
         .notNullable()
         .references('name')
         .inTable('roles')
       table
         .string('permission_name')
-        .primary()
         .notNullable()
         .references('name')
         .inTable('permissions')
