@@ -11,6 +11,8 @@ export default interface Volunteer {
 
   roles: Role[]
   createdAt: Date
+
+  registered: boolean
 }
 
 export interface StoreableVolunteer extends Volunteer {

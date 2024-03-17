@@ -4,6 +4,7 @@ import axios from '@/utils/axios.instance'
 import { Button, Center } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import DeleteRoleModal from './components/DeleteRoleModal.jsx'
 
 export default function ListRolePage() {
   const { handleToast } = useToast()
@@ -19,10 +20,6 @@ export default function ListRolePage() {
         console.error(error)
       })
   }, [])
-
-  const editRole = (role: Role) => {
-    console.log(role)
-  }
 
   const deleteRole = (role: Role) => {
     axios
@@ -50,13 +47,17 @@ export default function ListRolePage() {
           ) : (
             <p>Sem nenhuma permissão atualmente</p>
           )}
-          <Button colorScheme="blue" onClick={() => editRole(role)}>
-            Editar permissões
-          </Button>
-          <Button colorScheme="pink">Listar usuários</Button>
-          <Button colorScheme="red" onClick={() => deleteRole(role)}>
-            Excluir permissão
-          </Button>
+          <Link to={role.name + '/editar'}>
+            <Button colorScheme="blue">Editar permissões</Button>
+          </Link>
+
+          <Link to={role.name + '/listar-usuarios'}>
+            <Button colorScheme="pink">Listar usuários</Button>
+          </Link>
+
+          <DeleteRoleModal role={role} handleDeleteRole={() => deleteRole(role)}>
+            <Button colorScheme="red">Excluir permissão</Button>
+          </DeleteRoleModal>
         </div>
       ))}
       <Button marginTop={'3rem'}>

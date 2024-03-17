@@ -30,23 +30,14 @@ export default class ActivitiesController {
    * Criar novo Activity no servidor
    */
   async create({ request, response }: HttpContext) {
-    try {
-      // valida as informações pelo Validator
-      let payload = await activityValidator.validate(request.all())
+    // valida as informações pelo Validator
+    const payload = await activityValidator.validate(request.all())
 
-      // cria um Activity pelo Service
-      let obj = await this.activityService.createActivity(payload.name)
+    // cria um Activity pelo Service
+    const obj = await this.activityService.createActivity(payload.name)
 
-      // retorna o Activity
-      return response.status(201).json(obj)
-    } catch (error) {
-      // retorna a mensagem de erro, caso alguma instrução do try dê problema
-      if (error instanceof Error) {
-        return response.status(409).json({ message: error.message })
-      }
-
-      return response.status(409).json({ message: 'Erro ao criar atividade' })
-    }
+    // retorna o Activity
+    return response.status(201).json(obj)
   }
 
   /**
@@ -94,23 +85,14 @@ export default class ActivitiesController {
     // desestrutura o id do Activity da requisição
     const { id } = params
 
-    try {
-      // valida as informações pelo Validator
-      let payload = await activityValidator.validate(request.all())
+    // valida as informações pelo Validator
+    const payload = await activityValidator.validate(request.all())
 
-      // atualiza as informações pelo Service
-      let data = await this.activityService.updateActivity(id, payload.name)
+    // atualiza as informações pelo Service
+    const data = await this.activityService.updateActivity(id, payload.name)
 
-      // retorna as atualizações realizadas
-      return response.json({ ...data })
-    } catch (error) {
-      // retorna erro, caso alguma instrução do try dê problema
-      if (error instanceof Error) {
-        return response.status(409).json({ message: error.message })
-      }
-
-      return response.status(409).json({ message: 'Erro ao atualizar atividade' })
-    }
+    // retorna as atualizações realizadas
+    return response.json({ ...data })
   }
 
   /**
@@ -120,19 +102,10 @@ export default class ActivitiesController {
     // desestrutura o id do Activity da requisição
     const { id } = params
 
-    try {
-      // deleta o Activity pelo Service
-      await this.activityService.deleteActivity(id)
+    // deleta o Activity pelo Service
+    await this.activityService.deleteActivity(id)
 
-      // retorna status de sucesso: deletado
-      return response.status(204)
-    } catch (error) {
-      // retorna erro, caso alguma instrução do try dê problema
-      if (error instanceof Error) {
-        return response.status(409).json({ message: error.message })
-      }
-
-      return response.status(409).json({ message: 'Erro ao deletar atividade' })
-    }
+    // retorna status de sucesso: deletado
+    return response.status(204)
   }
 }

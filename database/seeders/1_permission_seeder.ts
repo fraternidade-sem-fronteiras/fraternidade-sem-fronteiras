@@ -11,13 +11,16 @@ export default class extends BaseSeeder {
       'CREATE_ROLE',
       'DELETE_ROLE',
       'EDIT_ROLE',
-      'LIST_ROLE',
+
+      'CREATE_PERMISSION',
+      'DELETE_PERMISSION',
+      'LIST_PERMISSION',
 
       'CREATE_ASSISTED',
       'DELETE_ASSISTED',
       'EDIT_ASSISTED',
 
-      'ALL'
+      'ALL',
     ]
 
     await Permission.createMany(permissions.map((permission) => ({ name: permission })))

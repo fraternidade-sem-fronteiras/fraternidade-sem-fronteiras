@@ -1,4 +1,5 @@
 import ConflictException from '#exceptions/conflict_exception'
+import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import Permission from '#models/permission'
 import Role, { RoleDto } from '#models/role'
 
@@ -38,7 +39,9 @@ export default class RoleService {
   }
 
   async deleteRole(name: string): Promise<void> {
-    const role = await Role.findOrFail(name)
+    const role = await Role.findBy('name', name)
+
+    if (!role) throw new EntityNotFoundException('The role ' + name + ' does not exist')
 
     await role.delete()
   }

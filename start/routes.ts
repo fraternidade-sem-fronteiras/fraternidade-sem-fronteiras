@@ -12,7 +12,8 @@ const DrugsController = () => import('#controllers/drugs_controller')
 const GendersController = () => import('#controllers/genders_controller')
 const IllnessAssistedsController = () => import('#controllers/illness_assisteds_controller')
 const IllnessesController = () => import('#controllers/illnesses_controller')
-const LevelController = () => import('#controllers/roles_controller')
+const PermissionController = () => import('#controllers/permissions_controller')
+const RoleController = () => import('#controllers/roles_controller')
 const MaritalStatusesController = () => import('#controllers/marital_statuses_controller')
 const MedicinesController = () => import('#controllers/medicines_controller')
 const VisitActivitiesController = () => import('#controllers/visit_activities_controller')
@@ -75,7 +76,12 @@ router
       .use('*', middleware.auth())
 
     router
-      .resource('roles', LevelController)
+      .resource('permissions', PermissionController)
+      .only(['index', 'store', 'show', 'update', 'destroy'])
+      .use('*', middleware.auth())
+
+    router
+      .resource('roles', RoleController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
       .use('*', middleware.auth())
 

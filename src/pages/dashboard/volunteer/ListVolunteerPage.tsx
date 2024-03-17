@@ -28,7 +28,7 @@ const SortingOptions = {
   createdAt: 'Data de criação',
 }
 
-export default function SearchVolunteerPage() {
+export default function ListVolunteerPage() {
   const { handleErrorToast } = useToast()
   const [isLoading, setIsLoading] = useState(true)
 
@@ -119,20 +119,19 @@ export default function SearchVolunteerPage() {
   }
 
   const content = (volunteer: Volunteer) => {
-    const createdAt = new Date(volunteer.createdAt).toLocaleDateString('pt-BR', {
+    const date = new Date(volunteer.createdAt)
+    const createdAt = date.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
     })
 
-    const createdAtTime = new Date(volunteer.createdAt).toLocaleTimeString('pt-BR', {
+    const createdAtTime = date.toLocaleTimeString('pt-BR', {
       hour: '2-digit',
       minute: '2-digit',
     })
 
-    const createdAtString = `${createdAt} às ${createdAtTime}`
-
-    const handleDeleteVolunteer = (volunteer: Volunteer) => {
+    const handleDeleteVolunteer = () => {
       axios
         .delete(`/volunteers/${volunteer.id}`)
         .then(() => {
@@ -157,7 +156,7 @@ export default function SearchVolunteerPage() {
           </div>
         ))}
       </div>,
-      createdAtString,
+      `${createdAt} às ${createdAtTime}`,
       <Link
         key={volunteer.id}
         to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`}
@@ -170,8 +169,12 @@ export default function SearchVolunteerPage() {
       <DeleteVolunteerModal
         key={volunteer.id}
         volunteer={volunteer}
-        onDelete={handleDeleteVolunteer}
-      />,
+        handleDeleteVolunteer={handleDeleteVolunteer}
+      >
+        <Button key={volunteer.id} colorScheme="red" width={'90%'}>
+          Excluir
+        </Button>
+      </DeleteVolunteerModal>,
     ]
   }
 

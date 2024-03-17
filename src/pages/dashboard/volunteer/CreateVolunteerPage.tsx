@@ -33,7 +33,7 @@ const formSchema = vine.object({
 
 type FormProps = Infer<typeof formSchema>
 
-export default function RegisterVolunteerPage() {
+export default function CreateVolunteerPage() {
   const { handleToast, handleErrorToast } = useToast()
   const {
     setValue,
@@ -54,7 +54,7 @@ export default function RegisterVolunteerPage() {
 
   const [roles, setRoles] = useState<Role[]>([])
   const { volunteer } = useUser()
-  
+
   if (!hasPermission(volunteer, 'CREATE_VOLUNTEER')) throw new InsufficientPermissionException()
 
   useEffect(() => {

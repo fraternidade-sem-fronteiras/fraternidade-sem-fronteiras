@@ -9,23 +9,26 @@ import {
   Button,
   useDisclosure,
 } from '@chakra-ui/react'
+import { ReactElement, cloneElement } from 'react'
 
 interface DeleteVolunteerModalProps {
   volunteer: Volunteer
-  onDelete: (volunteer: Volunteer) => void
+  handleDeleteVolunteer: () => void
+  children: ReactElement
 }
 
 export default function DeleteVolunteerModal({
   volunteer,
-  onDelete,
+  handleDeleteVolunteer,
+  children,
 }: Readonly<DeleteVolunteerModalProps>) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
-      <Button key={volunteer.id} colorScheme="red" width={'90%'} onClick={onOpen}>
-        Excluir
-      </Button>{' '}
+      {cloneElement(children, {
+        onClick: onOpen,
+      })}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -40,7 +43,7 @@ export default function DeleteVolunteerModal({
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Cancelar ação
             </Button>
-            <Button colorScheme="red" onClick={() => onDelete(volunteer)}>
+            <Button colorScheme="red" onClick={() => handleDeleteVolunteer()}>
               Excluir permanentemente
             </Button>
           </ModalFooter>

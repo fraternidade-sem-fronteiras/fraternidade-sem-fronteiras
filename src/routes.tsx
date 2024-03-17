@@ -1,23 +1,31 @@
-import PrivateRouteLayout from '@/components/layouts/PrivateRouteLayout'
-import LoginPage from '@/pages/LoginPage'
-import NavigationPage from '@/pages/NavigationPage'
-import SearchVolunteerPage from '@/pages/dashboard/volunteer/SearchVolunteerPage'
-import AssistedProfilePage from '@/pages/dashboard/assisted/AssistedProfilePage'
-import AssistedStackPage from '@/pages/dashboard/assisted/AssistedStackPage'
-import SearchAssistedPage from '@/pages/dashboard/assisted/SearchAssistedPage'
-import DashboardLayout from '@/components/layouts/DashboardLayout'
-import VolunteerProfilePage from '@/pages/dashboard/volunteer/VolunteerProfilePage'
-import RegisterVolunteerPage from '@/pages/dashboard/volunteer/RegisterVolunteerPage'
+import ProfileAssistedPage from '@/pages/dashboard/assisted/ProfileAssistedPage'
+import StackAssistedPage from '@/pages/dashboard/assisted/StackAssistedPage'
+import ListAssistedPage from '@/pages/dashboard/assisted/ListAssistedPage'
+
+import ListVolunteerPage from '@/pages/dashboard/volunteer/ListVolunteerPage'
+import ProfileVolunteerPage from '@/pages/dashboard/volunteer/ProfileVolunteerPage'
+import EditVolunteerPage from '@/pages/dashboard/volunteer/EditVolunteerPage'
+
 import CreateRolePage from '@/pages/dashboard/roles/CreateRolePage'
 import ListRolePage from '@/pages/dashboard/roles/ListRolePage'
+import EditRolePage from '@/pages/dashboard/roles/EditRolePage'
+
+import PrivateRouteLayout from '@/components/layouts/PrivateRouteLayout'
+import DashboardLayout from '@/components/layouts/DashboardLayout'
+import DefaultLayout from '@/components/layouts/DefaultLayout'
 
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
-import DefaultLayout from '@/components/layouts/DefaultLayout'
-import EditVolunteerPage from '@/pages/dashboard/volunteer/EditVolunteerPage'
-import ErrorBoundary from '@/components/errors/ErrorBoundary'
 
-const AssistedFormPage = lazy(() => import('@/pages/dashboard/assisted/AssistedFormPage'))
+const CreateAssistedPage = lazy(() => import('@/pages/dashboard/assisted/CreateAssistedPage'))
+
+const CreateVolunteerPage = lazy(() => import('@/pages/dashboard/volunteer/CreateVolunteerPage'))
+
+const ErrorBoundary = lazy(() => import('@/components/errors/ErrorBoundary'))
+
+const LoginPage = lazy(() => import('@/pages/LoginPage'))
+const NavigationPage = lazy(() => import('@/pages/NavigationPage'))
+
 const NotFound = lazy(() => import('@/components/errors/NotFoundError'))
 
 const router = createBrowserRouter([
@@ -39,23 +47,23 @@ const router = createBrowserRouter([
                 children: [
                   {
                     path: 'perfil',
-                    element: <AssistedProfilePage />,
+                    element: <ProfileAssistedPage />,
                   },
                   {
                     path: ':userName/perfil',
-                    element: <AssistedProfilePage />,
+                    element: <ProfileAssistedPage />,
                   },
                   {
                     path: 'fila',
-                    element: <AssistedStackPage />,
+                    element: <StackAssistedPage />,
                   },
                   {
                     path: 'procurar',
-                    element: <SearchAssistedPage />,
+                    element: <ListAssistedPage />,
                   },
                   {
                     path: 'cadastrar',
-                    element: <AssistedFormPage />,
+                    element: <CreateAssistedPage />,
                   },
                 ],
               },
@@ -65,11 +73,11 @@ const router = createBrowserRouter([
                 children: [
                   {
                     path: 'procurar',
-                    element: <SearchVolunteerPage />,
+                    element: <ListVolunteerPage />,
                   },
                   {
-                    path: 'perfil',
-                    element: <VolunteerProfilePage />,
+                    path: ':id/perfil',
+                    element: <ProfileVolunteerPage />,
                   },
                   {
                     path: ':id/editar-perfil',
@@ -77,7 +85,7 @@ const router = createBrowserRouter([
                   },
                   {
                     path: 'cadastrar',
-                    element: <RegisterVolunteerPage />,
+                    element: <CreateVolunteerPage />,
                   },
                 ],
               },
@@ -88,6 +96,14 @@ const router = createBrowserRouter([
                   {
                     path: 'cadastrar',
                     element: <CreateRolePage />,
+                  },
+                  {
+                    path: ':roleName/editar',
+                    element: <EditRolePage />,
+                  },
+                  {
+                    path: ':roleName/listar-usuarios',
+                    element: <EditRolePage />,
                   },
                   {
                     path: '',

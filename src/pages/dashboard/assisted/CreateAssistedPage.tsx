@@ -22,7 +22,6 @@ import {
   NumberInputField,
   Select,
   Switch,
-  Text,
   Textarea,
 } from '@chakra-ui/react'
 
@@ -70,7 +69,7 @@ const formSchema = vine.object({
 
 type FormProps = Infer<typeof formSchema>
 
-export default function AssistedFormPage() {
+export default function CreateAssistedPage() {
   const { handleToast, handleErrorToast } = useToast()
   const {
     watch,

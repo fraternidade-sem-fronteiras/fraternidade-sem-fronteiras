@@ -1,3 +1,6 @@
+import { useParams } from 'react-router-dom'
+
 export default function EditRolePage() {
-  return <div>olá</div>
+  const { roleName } = useParams()
+  return <div>{roleName}</div>
 }

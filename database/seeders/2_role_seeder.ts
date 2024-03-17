@@ -1,5 +1,4 @@
 import Role from '#models/role'
-import Permission from '#models/permission'
 import RolePermission from '#models/role_permission'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
@@ -29,20 +28,6 @@ export default class extends BaseSeeder {
     ]
 
     await Role.createMany(roles.map((role) => ({ name: role.name })))
-
-    await Permission.createMany(
-      roles
-        .map((role) => {
-          const array: { name: string }[] = []
-
-          role.permission.forEach((name) => {
-            array.push({ name: name })
-          })
-
-          return array
-        })
-        .flat()
-    )
 
     await RolePermission.createMany(
       roles

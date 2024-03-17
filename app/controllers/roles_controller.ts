@@ -25,10 +25,8 @@ export default class RolesController {
   }
 
   async destroy({ request, response }: HttpContext) {
-    const { id } = request.params()
+    const id = decodeURI(request.param('id'))
 
-    console.log(id)
-    return
     await this.roleService.deleteRole(id)
 
     return response.status(204)

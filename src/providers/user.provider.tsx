@@ -4,6 +4,7 @@ import axios from '@/utils/axios.instance'
 import useToast from '@/hooks/toast.hook'
 import { useEnv } from '@/hooks/env.hook'
 import { StoreableVolunteer } from '@/entities/volunteer.entity'
+import { deepEqual } from '@/utils/utils'
 
 interface UserProviderProps {
   children?: React.ReactNode
@@ -30,11 +31,9 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
       axios
         .get('volunteers/profile', { headers: { Authorization: `Bearer ${volunteer.token}` } })
         .then(({ data }) => {
-          const { id, email, name } = data
-
           const newVolunteer: StoreableVolunteer = { ...data, token: volunteer.token }
 
-          if (id === volunteer.id && email === volunteer.email && name === volunteer.name) return
+          if (deepEqual(newVolunteer, volunteer)) return
 
           localStorage.setItem('volunteer', JSON.stringify(newVolunteer))
           setVolunteer(newVolunteer)
