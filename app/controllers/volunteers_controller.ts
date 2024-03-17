@@ -6,7 +6,6 @@ import {
   createVolunteerValidator,
   filtersVolunteerValidator,
   loginVolunteerValidator,
-  updateVolunteerValidator,
 } from '#validators/volunteer'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
@@ -108,25 +107,16 @@ export default class VolunteersController {
     return response.json(volunteer)
   }
 
-  async update({ request, params, response }: HttpContext) {
-    /**
-     * Desestrutura o id do voluntário da requisição
-     */
-
+  /*async update({ request, params, response }: HttpContext) {
+    
     const { id } = params
 
-    /**
-     * Valida os dados do formulário
-     */
     let payload = await updateVolunteerValidator.validate(request.all())
 
-    /**
-     * Atualiza voluntário
-     */
     //const data = await this.volunteersService.updateVolunteer(id, payload)
 
     //return response.json({ ...data })
-  }
+  }*/
 
   async destroy({ params, response }: HttpContext) {
     /**

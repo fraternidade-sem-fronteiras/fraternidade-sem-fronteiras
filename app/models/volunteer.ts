@@ -2,8 +2,8 @@ import hash from '@adonisjs/core/services/hash'
 import RoleVolunteer from './role_volunteer.js'
 import { DateTime } from 'luxon'
 import { BaseModel, beforeSave, column, hasMany } from '@adonisjs/lucid/orm'
+import { RoleDto } from './role.js'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
-import Role, { RoleDto } from './role.js'
 
 export default class Volunteer extends BaseModel {
   @column({ isPrimary: true })

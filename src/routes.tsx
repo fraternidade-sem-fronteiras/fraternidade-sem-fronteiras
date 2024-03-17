@@ -10,12 +10,12 @@ import CreateRolePage from '@/pages/dashboard/roles/CreateRolePage'
 import ListRolePage from '@/pages/dashboard/roles/ListRolePage'
 import EditRolePage from '@/pages/dashboard/roles/EditRolePage'
 
-import PrivateRouteLayout from '@/components/layouts/PrivateRouteLayout'
-import DashboardLayout from '@/components/layouts/DashboardLayout'
-import DefaultLayout from '@/components/layouts/DefaultLayout'
-
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
+
+const PrivateRouteLayout = lazy(() => import('@/components/layouts/PrivateRouteLayout'))
+const DashboardLayout = lazy(() => import('@/components/layouts/DashboardLayout'))
+const DefaultLayout = lazy(() => import('@/components/layouts/DefaultLayout'))
 
 const CreateAssistedPage = lazy(() => import('@/pages/dashboard/assisted/CreateAssistedPage'))
 

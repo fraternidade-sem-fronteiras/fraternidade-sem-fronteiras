@@ -1,7 +1,6 @@
 // fiz esse regex pra testar se é cpf, mas não sei se é o melhor jeito
 // eu fiz todos, menos o primeiro, tendo a possiblidade de ser de 0,3 para que não houvesse problemas
 
-import ConflictException from '#exceptions/conflict_exception'
 import Assisted from '#models/assisted'
 
 // com o search sem ser um cpf

@@ -46,7 +46,7 @@ export default class VolunteerService {
   async createSession(
     email: string,
     password: string
-  ): Promise<{ token: string; volunteer: VolunteerDto; registered?: boolean }> {
+  ): Promise<{ token: string; volunteer: VolunteerDto }> {
     const volunteer = await Volunteer.query()
       .select(['id', 'name', 'email', 'password', 'createdAt', 'registered'])
       .preload('roles', (rolesQuery) =>
@@ -69,8 +69,6 @@ export default class VolunteerService {
       createdAt: volunteer.createdAt.toISO()!,
     }
 
-    let registered: true | undefined = undefined
-
     if (volunteer.registered) {
       const match = await hash.verify(volunteer.password, password)
       if (!match) throw new WrongPasswordException()
@@ -81,12 +79,11 @@ export default class VolunteerService {
           registered: true,
         })
         .save()
-      registered = true
     }
 
     const token = await this.tokenService.generate(volunteer)
 
-    return { token, volunteer: realVolunteer, registered }
+    return { token, volunteer: { ...realVolunteer, registered: true } }
   }
 
   /**

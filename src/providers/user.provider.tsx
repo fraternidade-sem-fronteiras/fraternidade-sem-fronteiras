@@ -54,6 +54,13 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
               'Não autorizado',
               'Sua sessão expirou ou seu token de acesso não é válido, faça login novamente para continuar.'
             )
+          } else if (statusCode === 403) {
+            handleErrorToast(
+              'Não autorizado',
+              'Sua conta não está registrada ou foi desativada, entre em contato com o administrador do sistema.'
+            )
+
+            forceFinishSession()
           }
         })
     }
