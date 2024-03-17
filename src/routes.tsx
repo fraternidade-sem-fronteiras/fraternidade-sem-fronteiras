@@ -2,11 +2,9 @@ import ProfileAssistedPage from '@/pages/dashboard/assisted/ProfileAssistedPage'
 import StackAssistedPage from '@/pages/dashboard/assisted/StackAssistedPage'
 import ListAssistedPage from '@/pages/dashboard/assisted/ListAssistedPage'
 
-import ListVolunteerPage from '@/pages/dashboard/volunteer/ListVolunteerPage'
 import ProfileVolunteerPage from '@/pages/dashboard/volunteer/ProfileVolunteerPage'
 import EditVolunteerPage from '@/pages/dashboard/volunteer/EditVolunteerPage'
 
-import CreateRolePage from '@/pages/dashboard/roles/CreateRolePage'
 import ListRolePage from '@/pages/dashboard/roles/ListRolePage'
 import EditRolePage from '@/pages/dashboard/roles/EditRolePage'
 
@@ -20,6 +18,9 @@ const DefaultLayout = lazy(() => import('@/components/layouts/DefaultLayout'))
 const CreateAssistedPage = lazy(() => import('@/pages/dashboard/assisted/CreateAssistedPage'))
 
 const CreateVolunteerPage = lazy(() => import('@/pages/dashboard/volunteer/CreateVolunteerPage'))
+const ListVolunteerPage = lazy(() => import('@/pages/dashboard/volunteer/ListVolunteerPage'))
+
+const CreateRolePage = lazy(() => import('@/pages/dashboard/roles/CreateRolePage'))
 
 const ErrorBoundary = lazy(() => import('@/components/errors/ErrorBoundary'))
 

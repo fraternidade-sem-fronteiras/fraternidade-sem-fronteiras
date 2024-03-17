@@ -1,8 +1,10 @@
 import { Suspense, lazy } from 'react'
-import EnvProvider from '@/providers/env.provider'
-import SuspenseFallback from '@/components/suspense/SuspenseFallback'
-import UserProvider from '@/providers/user.provider'
-import ThemeProvider from '@/providers/theme.provider'
+
+const EnvProvider = lazy(() => import('@/providers/env.provider'))
+const UserProvider = lazy(() => import('@/providers/user.provider'))
+const ThemeProvider = lazy(() => import('@/providers/theme.provider'))
+
+const SuspenseFallback = lazy(() => import('@/components/suspense/SuspenseFallback'))
 
 const Routes = lazy(() => import('@/routes'))
 
