@@ -1,4 +1,4 @@
-export default function NotFound() {
+export default function NotFoundError() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-4xl font-bold text-gray-800">404</h1>

@@ -17,13 +17,13 @@ import {
   GridItem,
   Input,
   Stack,
-  Text,
 } from '@chakra-ui/react'
 import { Infer } from '@vinejs/vine/types'
 import useToast from '@/hooks/toast.hook'
 import axios from '@/utils/axios.instance'
 import Role from '@/entities/role.entity'
 import { hasPermission } from '@/entities/volunteer.entity'
+import InsufficientPermissionException from '@/exceptions/insufficient_permission.exception'
 
 const formSchema = vine.object({
   name: vine.string().minLength(3).maxLength(64),
@@ -56,10 +56,7 @@ export default function RegisterVolunteerPage() {
   const { volunteer } = useUser()
 
   useEffect(() => {
-    if (!hasPermission(volunteer, 'CREATE_VOLUNTEER')) {
-      handleErrorToast('Sem permissão', 'Você não tem permissão para acessar essa página')
-      return
-    }
+    if (!hasPermission(volunteer, 'CREATE_VOLUNTEER')) throw new InsufficientPermissionException()
 
     axios
       .get('/roles')
@@ -75,25 +72,11 @@ export default function RegisterVolunteerPage() {
       })
   }, [])
 
-  if (!hasPermission(volunteer, 'CREATE_VOLUNTEER')) {
-    return (
-      <Flex
-        justifyContent={'center'}
-        alignItems={'center'}
-        height={'60vh'}
-        flexDirection={'column'}
-      >
-        <Text fontSize={'2xl'}>Você não tem permissão para acessar essa página</Text>
-        <Text fontSize={'2xl'}>Somente administradores podem acessar essa página!</Text>
-      </Flex>
-    )
-  }
-
   const onSubmit = async (data: FormProps) => {
     axios
       .post('/volunteers', data)
       .then(() => {
-        handleToast('Voluntário cadastrado com sucesso', 'success')
+        handleToast('Sucesso!', 'O voluntário foi cadastrado com sucesso!')
       })
       .catch(({ response }) => {
         handleErrorToast(

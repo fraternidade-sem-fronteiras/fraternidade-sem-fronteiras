@@ -10,11 +10,13 @@ export default class extends BaseSchema {
         .notNullable()
         .references('name')
         .inTable('roles')
+        .onDelete('CASCADE')
       table
         .string('permission_name')
         .notNullable()
         .references('name')
         .inTable('permissions')
+        .onDelete('CASCADE')
     })
   }
 

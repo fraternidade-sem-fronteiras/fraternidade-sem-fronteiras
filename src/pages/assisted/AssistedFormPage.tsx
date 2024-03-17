@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import vine from '@vinejs/vine'
 import vineResolver from '@/utils/vine.resolver'
 import axios from '@/utils/axios.instance'
@@ -22,12 +22,16 @@ import {
   NumberInputField,
   Select,
   Switch,
+  Text,
   Textarea,
 } from '@chakra-ui/react'
 
 import { TextoSublinhado } from '@/components/TextoSublinhado'
 import { Infer } from '@vinejs/vine/types'
 import useToast from '@/hooks/toast.hook'
+import { useUser } from '@/hooks/user.hook'
+import { hasPermission } from '@/entities/volunteer.entity'
+import InsufficientPermissionException from '@/exceptions/insufficient_permission.exception'
 
 const formSchema = vine.object({
   name: vine.string().minLength(3).maxLength(64),
@@ -110,19 +114,21 @@ export default function AssistedFormPage() {
   const [sexuality, setSexuality] = React.useState<string[]>([])
   const [degrees, setDegrees] = React.useState<string[]>([])
 
-  React.useEffect(() => {
-    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/paises')
-      .then((response) => response.json())
-      .then((response) => setCountries(response.map((pais: Record<string, any>) => pais.nome)))
+  const { volunteer } = useUser()
+  
+  if (hasPermission(volunteer, 'CREATE_ASSISTED')) throw new InsufficientPermissionException()
 
-    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
-      .then((response) => response.json())
-      .then((data) => {
-        setStates(data.map((estado: Record<string, any>) => estado.sigla))
-        setCities([])
-        setValue('state', '')
-        setValue('city', '')
-      })
+  useEffect(() => {
+    axios
+      .get('https://servicodados.ibge.gov.br/api/v1/localidades/paises')
+      .then(({ data }) => setCountries(data.map((pais: Record<string, any>) => pais.nome)))
+
+    axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(({ data }) => {
+      setStates(data.map((estado: Record<string, any>) => estado.sigla))
+      setCities([])
+      setValue('state', '')
+      setValue('city', '')
+    })
 
     setRaces(['Branco', 'Preto/Negro', 'Amarelo', 'Vermelho/Índigena', 'Outro'])
     setGenders(['Homem Cisgênero', 'Mulher Cisgênero'])

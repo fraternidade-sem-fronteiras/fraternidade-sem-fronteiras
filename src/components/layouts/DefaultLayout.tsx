@@ -1,5 +1,5 @@
 import { useOutlet } from 'react-router-dom'
-import NotFound from '../errors/dashboard/NotFound.jsx'
+import NotFound from '../errors/dashboard/NotFoundError.jsx'
 
 export default function DefaultLayout() {
   const outlet = useOutlet()

@@ -13,9 +13,10 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
 import DefaultLayout from './components/layouts/DefaultLayout.jsx'
 import EditVolunteerPage from './pages/volunteer/EditVolunteerPage.jsx'
+import ErrorBoundary from './components/errors/ErrorBoundary.jsx'
 
 const AssistedFormPage = lazy(() => import('./pages/assisted/AssistedFormPage.jsx'))
-const NotFound = lazy(() => import('./components/errors/NotFound.jsx'))
+const NotFound = lazy(() => import('./components/errors/NotFoundError.jsx'))
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <DashboardLayout />,
+            errorElement: <ErrorBoundary />,
             children: [
               {
                 path: 'assistido',
