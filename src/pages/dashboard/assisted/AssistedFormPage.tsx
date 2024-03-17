@@ -115,8 +115,8 @@ export default function AssistedFormPage() {
   const [degrees, setDegrees] = React.useState<string[]>([])
 
   const { volunteer } = useUser()
-  
-  if (hasPermission(volunteer, 'CREATE_ASSISTED')) throw new InsufficientPermissionException()
+
+  if (!hasPermission(volunteer, 'CREATE_ASSISTED')) throw new InsufficientPermissionException()
 
   useEffect(() => {
     axios

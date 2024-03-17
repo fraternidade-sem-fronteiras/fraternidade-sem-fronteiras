@@ -1,22 +1,24 @@
-import PrivateRouteLayout from './components/layouts/PrivateRouteLayout.jsx'
-import LoginPage from './pages/LoginPage.jsx'
-import NavigationPage from './pages/NavigationPage.jsx'
-import SearchVolunteerPage from './pages/volunteer/SearchVolunteerPage.jsx'
-import AssistedProfilePage from './pages/assisted/AssistedProfilePage.jsx'
-import AssistedStackPage from './pages/assisted/AssistedStackPage.jsx'
-import SearchAssistedPage from './pages/assisted/SearchAssistedPage.jsx'
-import DashboardLayout from './components/layouts/DashboardLayout.jsx'
-import VolunteerProfilePage from './pages/volunteer/VolunteerProfilePage.jsx'
-import RegisterVolunteerPage from './pages/volunteer/RegisterVolunteerPage.jsx'
+import PrivateRouteLayout from '@/components/layouts/PrivateRouteLayout'
+import LoginPage from '@/pages/LoginPage'
+import NavigationPage from '@/pages/NavigationPage'
+import SearchVolunteerPage from '@/pages/dashboard/volunteer/SearchVolunteerPage'
+import AssistedProfilePage from '@/pages/dashboard/assisted/AssistedProfilePage'
+import AssistedStackPage from '@/pages/dashboard/assisted/AssistedStackPage'
+import SearchAssistedPage from '@/pages/dashboard/assisted/SearchAssistedPage'
+import DashboardLayout from '@/components/layouts/DashboardLayout'
+import VolunteerProfilePage from '@/pages/dashboard/volunteer/VolunteerProfilePage'
+import RegisterVolunteerPage from '@/pages/dashboard/volunteer/RegisterVolunteerPage'
+import CreateRolePage from '@/pages/dashboard/roles/CreateRolePage'
+import ListRolePage from '@/pages/dashboard/roles/ListRolePage'
 
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
-import DefaultLayout from './components/layouts/DefaultLayout.jsx'
-import EditVolunteerPage from './pages/volunteer/EditVolunteerPage.jsx'
-import ErrorBoundary from './components/errors/ErrorBoundary.jsx'
+import DefaultLayout from '@/components/layouts/DefaultLayout'
+import EditVolunteerPage from '@/pages/dashboard/volunteer/EditVolunteerPage'
+import ErrorBoundary from '@/components/errors/ErrorBoundary'
 
-const AssistedFormPage = lazy(() => import('./pages/assisted/AssistedFormPage.jsx'))
-const NotFound = lazy(() => import('./components/errors/NotFoundError.jsx'))
+const AssistedFormPage = lazy(() => import('@/pages/dashboard/assisted/AssistedFormPage'))
+const NotFound = lazy(() => import('@/components/errors/NotFoundError'))
 
 const router = createBrowserRouter([
   {
@@ -25,11 +27,11 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <PrivateRouteLayout />,
+        errorElement: <ErrorBoundary />,
         children: [
           {
             path: '',
             element: <DashboardLayout />,
-            errorElement: <ErrorBoundary />,
             children: [
               {
                 path: 'assistido',
@@ -76,6 +78,20 @@ const router = createBrowserRouter([
                   {
                     path: 'cadastrar',
                     element: <RegisterVolunteerPage />,
+                  },
+                ],
+              },
+              {
+                path: 'cargo',
+                element: <DefaultLayout />,
+                children: [
+                  {
+                    path: 'cadastrar',
+                    element: <CreateRolePage />,
+                  },
+                  {
+                    path: '',
+                    element: <ListRolePage />,
                   },
                 ],
               },

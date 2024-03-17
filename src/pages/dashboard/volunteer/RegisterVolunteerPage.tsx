@@ -54,10 +54,10 @@ export default function RegisterVolunteerPage() {
 
   const [roles, setRoles] = useState<Role[]>([])
   const { volunteer } = useUser()
+  
+  if (!hasPermission(volunteer, 'CREATE_VOLUNTEER')) throw new InsufficientPermissionException()
 
   useEffect(() => {
-    if (!hasPermission(volunteer, 'CREATE_VOLUNTEER')) throw new InsufficientPermissionException()
-
     axios
       .get('/roles')
       .then(({ data }) => {
