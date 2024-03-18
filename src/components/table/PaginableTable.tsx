@@ -95,13 +95,23 @@ export default function PaginableTable<T>({
         <TableCaption>
           <Flex alignItems="center" justifyContent={'flex-end'} gap={2}>
             <Tooltip label="Primeira Página">
-              <Button isDisabled={currentPage == 1} onClick={handleFirstPage}>
+              <Button
+                colorScheme="white"
+                color="black"
+                isDisabled={currentPage == 1}
+                onClick={handleFirstPage}
+              >
                 {'«'}
               </Button>
             </Tooltip>
 
             <Tooltip label="Página anterior">
-              <Button isDisabled={currentPage == 1} onClick={handlePreviousPage}>
+              <Button
+                colorScheme="white"
+                color="black"
+                isDisabled={currentPage == 1}
+                onClick={handlePreviousPage}
+              >
                 {'<'}
               </Button>
             </Tooltip>
@@ -117,13 +127,23 @@ export default function PaginableTable<T>({
             </Select>
 
             <Tooltip label="Próxima página">
-              <Button isDisabled={currentPage >= currentMaxPage} onClick={handleNextPage}>
+              <Button
+                colorScheme="white"
+                color="black"
+                isDisabled={currentPage >= currentMaxPage}
+                onClick={handleNextPage}
+              >
                 {'>'}
               </Button>
             </Tooltip>
 
             <Tooltip label="Última página">
-              <Button isDisabled={currentPage >= currentMaxPage} onClick={handleLastPage}>
+              <Button
+                colorScheme="white"
+                color="black"
+                isDisabled={currentPage >= currentMaxPage}
+                onClick={handleLastPage}
+              >
                 {'»'}
               </Button>
             </Tooltip>
