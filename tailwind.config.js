@@ -11,7 +11,7 @@ export default {
       {
         light: {
           ...require('daisyui/src/theming/themes')['[data-theme=light]'],
-          'backgroundColor': '#ffffff',
+          'backgroundColor': '#FFFFFF',
           'primary': '#9D2D88',
           'base-100': '#e5e7eb',
           'secondary': '#9D2D88',

@@ -1,3 +1,4 @@
+import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import AssistedService from '#services/assisted_service'
 import { createAssistedValidator } from '#validators/assisted'
 import { inject } from '@adonisjs/core'
@@ -8,39 +9,23 @@ export default class AssistedsController {
   constructor(readonly assistedService: AssistedService) {}
 
   public async index({ request, response }: HttpContext) {
-    const search = request.input('search')
-      ? decodeURIComponent((request.input('search') + '').replace(/\+/g, '%20'))
-      : null
-    const page = request.input('page') ?? 1
-    const perPage = request.input('perPage') ?? 20
+    const search = decodeURI(request.input('search', ''))
+    const page = request.input('page', 1)
+    const perPage = request.input('perPage', 10)
 
-    try {
-      return response.json(await this.assistedService.getAssisteds(page, perPage, search))
-    } catch (error) {
-      if (error instanceof Error) {
-        return response.status(404).json({ message: error.message })
-      }
-
-      throw error
-    }
+    const assisteds = await this.assistedService.getAssisteds(page, perPage, search)
+    return response.json(assisteds)
   }
 
-  public async show({ response, params }: HttpContext) {
-    const { search } = params
+  public async show({ response, request }: HttpContext) {
+    const search = decodeURI(request.param('search', ''))
 
-    try {
-      return response.json(
-        await this.assistedService.getAssisted(
-          decodeURIComponent((search + '').replace(/\+/g, '%20'))
-        )
-      )
-    } catch (error) {
-      if (error instanceof Error) {
-        return response.status(404).json({ message: error.message })
-      }
+    const assisted = await this.assistedService.getAssisted(search)
 
-      throw error
-    }
+    if (!assisted)
+      throw new EntityNotFoundException('O assistido "' + search + '" não foi encontrado!')
+
+    return response.json(assisted)
   }
 
   public async store({ request, response }: HttpContext) {

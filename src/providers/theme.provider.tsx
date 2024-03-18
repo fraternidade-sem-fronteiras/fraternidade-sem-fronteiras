@@ -1,12 +1,16 @@
 import { useUser } from '@/hooks/user.hook'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
+import { light, dark } from '@/themes/chakra/chakra.theme'
 
 export default function ThemeProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-  const { theme } = useUser()
+  const { theme: currentTheme } = useUser()
+
+  const theme = currentTheme === 'light' ? light : dark
 
   return (
-    <div data-theme={theme}>
-      <ChakraProvider>{children}</ChakraProvider>
+    <div data-theme={currentTheme}>
+      <ColorModeScript initialColorMode={'light'} />
+      <ChakraProvider theme={theme}>{children}</ChakraProvider>
     </div>
   )
 }

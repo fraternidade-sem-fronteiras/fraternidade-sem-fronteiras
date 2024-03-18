@@ -29,13 +29,49 @@ const NavigationPage = lazy(() => import('@/pages/NavigationPage'))
 
 const NotFound = lazy(() => import('@/components/errors/NotFoundError'))
 
+const permissions = [
+  {
+    path: 'dashboard',
+    children: [
+      {
+        path: 'assistido',
+        children: [
+          {
+            path: 'cadastrar',
+            permission: ['CREATE_ASSISTED'],
+          },
+        ],
+      },
+      {
+        path: 'voluntario',
+        children: [
+          {
+            path: 'cadastrar',
+            permission: ['CREATE_VOLUNTEER'],
+          },
+        ],
+      },
+      {
+        path: 'cargo',
+        permission: ['CREATE_ROLE', 'DELETE_ROLE', 'EDIT_ROLE', 'LIST_ROLE'],
+        children: [
+          {
+            path: '*/editar',
+            permission: ['CREATE_ROLE'],
+          },
+        ],
+      },
+    ],
+  },
+]
+
 const router = createBrowserRouter([
   {
     path: '/',
     children: [
       {
         path: 'dashboard',
-        element: <PrivateRouteLayout />,
+        element: <PrivateRouteLayout permissions={permissions} />,
         errorElement: <ErrorBoundary />,
         children: [
           {
@@ -59,12 +95,12 @@ const router = createBrowserRouter([
                     element: <StackAssistedPage />,
                   },
                   {
-                    path: 'procurar',
-                    element: <ListAssistedPage />,
-                  },
-                  {
                     path: 'cadastrar',
                     element: <CreateAssistedPage />,
+                  },
+                  {
+                    path: '',
+                    element: <ListAssistedPage />,
                   },
                 ],
               },
@@ -72,10 +108,6 @@ const router = createBrowserRouter([
                 path: 'voluntario',
                 element: <DefaultLayout />,
                 children: [
-                  {
-                    path: 'procurar',
-                    element: <ListVolunteerPage />,
-                  },
                   {
                     path: ':id/perfil',
                     element: <ProfileVolunteerPage />,
@@ -87,6 +119,10 @@ const router = createBrowserRouter([
                   {
                     path: 'cadastrar',
                     element: <CreateVolunteerPage />,
+                  },
+                  {
+                    path: '',
+                    element: <ListVolunteerPage />,
                   },
                 ],
               },

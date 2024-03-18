@@ -33,7 +33,7 @@ export const filtersVolunteerValidator = vine.compile(
   vine.object({
     page: vine.number(),
     limit: vine.number(),
-    orderBy: vine.enum(['id', 'name', 'email', 'level_id']),
+    orderBy: vine.enum(['id', 'name', 'email']),
     order: vine.enum(['asc', 'desc']),
   })
 )

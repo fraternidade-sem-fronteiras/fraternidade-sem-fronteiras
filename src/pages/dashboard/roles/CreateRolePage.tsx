@@ -42,6 +42,12 @@ export default function CreateRolePage() {
 
   const navigate = useNavigate()
 
+  useEffect(() => {
+    axios.get('/permissions').then(({ data }) => {
+      setPermissions(data)
+    })
+  }, [])
+
   const categories = permissions
     .reduce((acc, permission) => {
       const split = permission.split('_')
@@ -63,12 +69,6 @@ export default function CreateRolePage() {
   const rest = permissions.filter(
     (permission) => !categories.some((category) => category.permissions.includes(permission))
   )
-
-  useEffect(() => {
-    axios.get('/permissions').then(({ data }) => {
-      setPermissions(data)
-    })
-  }, [])
 
   const onSubmit = (data: FormProps) => {
     axios

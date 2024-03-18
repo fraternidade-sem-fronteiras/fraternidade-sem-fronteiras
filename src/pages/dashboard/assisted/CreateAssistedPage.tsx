@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import vine from '@vinejs/vine'
 import vineResolver from '@/utils/vine.resolver'
 import axios from '@/utils/axios.instance'
+import useToast from '@/hooks/toast.hook'
 import { useForm } from 'react-hook-form'
 import {
   AbsoluteCenter,
@@ -27,10 +28,6 @@ import {
 
 import { TextoSublinhado } from '@/components/TextoSublinhado'
 import { Infer } from '@vinejs/vine/types'
-import useToast from '@/hooks/toast.hook'
-import { useUser } from '@/hooks/user.hook'
-import { hasPermission } from '@/entities/volunteer.entity'
-import InsufficientPermissionException from '@/exceptions/insufficient_permission.exception'
 
 const formSchema = vine.object({
   name: vine.string().minLength(3).maxLength(64),
@@ -46,7 +43,7 @@ const formSchema = vine.object({
   city: vine.string().optional().requiredWhen('country', '=', 'Brasil'),
   sexuality: vine.string().minLength(1),
 
-  race: vine.string().minLength(1),
+  ethnicy: vine.string().minLength(1),
   gender: vine.string().minLength(1),
 
   cpf: vine
@@ -76,7 +73,6 @@ export default function CreateAssistedPage() {
     handleSubmit,
     register,
     setValue,
-    reset,
     formState: { errors },
   } = useForm<FormProps>({
     resolver: vineResolver(formSchema, {
@@ -113,20 +109,13 @@ export default function CreateAssistedPage() {
   const [sexuality, setSexuality] = React.useState<string[]>([])
   const [degrees, setDegrees] = React.useState<string[]>([])
 
-  const { volunteer } = useUser()
-
-  if (!hasPermission(volunteer, 'CREATE_ASSISTED')) throw new InsufficientPermissionException()
-
   useEffect(() => {
-    axios
-      .get('https://servicodados.ibge.gov.br/api/v1/localidades/paises')
-      .then(({ data }) => setCountries(data.map((pais: Record<string, any>) => pais.nome)))
-
-    axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(({ data }) => {
-      setStates(data.map((estado: Record<string, any>) => estado.sigla))
-      setCities([])
-      setValue('state', '')
-      setValue('city', '')
+    Promise.all([
+      axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/paises'),
+      axios.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados'),
+    ]).then(([countries, states]) => {
+      setCountries(countries.data.map((pais: Record<string, any>) => pais.nome))
+      setStates(states.data.map((estado: Record<string, any>) => estado.sigla))
     })
 
     setRaces(['Branco', 'Preto/Negro', 'Amarelo', 'Vermelho/Índigena', 'Outro'])
@@ -189,7 +178,6 @@ export default function CreateAssistedPage() {
   }
 
   const handleChangeRg = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // (^\d{1,2}).?(\d{3}).?(\d{3})-?(\d{1}|X|x$)
     setValue(
       'rg',
       event.target.value
@@ -207,7 +195,6 @@ export default function CreateAssistedPage() {
       .post('/assisteds', data)
       .then(() => {
         handleToast('Assistido cadastrado com sucesso', 'O assistido foi cadastrado com sucesso.')
-        reset()
       })
       .catch(({ response }) => {
         if (response) {
@@ -309,9 +296,9 @@ export default function CreateAssistedPage() {
 
         <Grid templateColumns="250px 1fr 1fr" gap={'1rem'} marginTop={'1rem'}>
           <GridItem>
-            <FormControl isInvalid={isInvalid('race')}>
+            <FormControl isInvalid={isInvalid('ethnicy')}>
               <FormLabel>Etnia</FormLabel>
-              <Select defaultValue={''} {...register('race')}>
+              <Select defaultValue={''} {...register('ethnicy')}>
                 <option value={''} label="Selecione a etnia" disabled>
                   Selecione a etnia
                 </option>
@@ -321,7 +308,7 @@ export default function CreateAssistedPage() {
                   </option>
                 ))}
               </Select>
-              <FormErrorMessage>{errors.race?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.ethnicy?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 

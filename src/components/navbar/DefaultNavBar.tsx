@@ -1,13 +1,24 @@
 import LogoutModal from '../LogoutModal.jsx'
 import { Link } from 'react-router-dom'
-import { Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from '@chakra-ui/react'
+import {
+  Avatar,
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react'
+import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 import { useUser } from '@/hooks/user.hook'
-import { hasAtLeastOnePermission, hasPermission } from '@/entities/volunteer.entity'
 
 export default function DefaultNavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { volunteer } = useUser()
+  const { hasPermission, hasAtLeastOnePermission, toggleColorMode, theme } = useUser()
 
   return (
     <div className="navbar bg-base-100" style={{ backgroundColor: '#4a7494' }}>
@@ -23,57 +34,94 @@ export default function DefaultNavBar() {
       </div>
 
       <Flex justifyContent={'space-between'} alignItems={'center'} gap={'40px'}>
-        {hasAtLeastOnePermission(volunteer!, ['CREATE_VOLUNTEER', 'CREATE_ASSISTED']) && (
+        {hasAtLeastOnePermission(['CREATE_VOLUNTEER', 'DELETE_VOLUNTEER']) && (
           <Menu>
             <MenuButton>
-              <Text color={'white'}>Adicionar</Text>
+              <Text color={'white'}>Voluntários</Text>
             </MenuButton>
 
             <MenuList>
-              {hasPermission(volunteer!, ['CREATE_VOLUNTEER']) && (
-                <MenuItem>
-                  <Link to="/dashboard/voluntario/cadastrar">Voluntários</Link>
-                </MenuItem>
-              )}
+              <MenuItem>
+                <Link to="/dashboard/voluntario/">Listar voluntários</Link>
+              </MenuItem>
 
-              {hasPermission(volunteer!, ['CREATE_ASSISTED']) && (
+              {hasPermission(['CREATE_VOLUNTEER']) && (
                 <MenuItem>
-                  <Link to="/dashboard/assistido/cadastrar">Assistidos</Link>
+                  <Link to="/dashboard/voluntario/cadastrar">Cadastrar voluntário</Link>
                 </MenuItem>
               )}
             </MenuList>
           </Menu>
         )}
 
-        <Menu>
-          <MenuButton>
-            <Text color={'white'}>Buscar</Text>
-          </MenuButton>
+        {hasAtLeastOnePermission(['CREATE_ASSISTED', 'DELETE_ASSISTED']) && (
+          <Menu>
+            <MenuButton>
+              <Text color={'white'}>Assistidos</Text>
+            </MenuButton>
 
-          <MenuList>
-            <MenuItem>
-              <Link to="/dashboard/voluntario/procurar">Voluntários</Link>
-            </MenuItem>
+            <MenuList>
+              <MenuItem>
+                <Link to="/dashboard/assistido/">Listar assistidos</Link>
+              </MenuItem>
 
-            <MenuItem>
-              <Link to="/dashboard/assistido/procurar">Assistidos</Link>
-            </MenuItem>
-          </MenuList>
-        </Menu>
+              {hasPermission(['CREATE_VOLUNTEER']) && (
+                <MenuItem>
+                  <Link to="/dashboard/assistido/cadastrar">Cadastrar assistido</Link>
+                </MenuItem>
+              )}
+            </MenuList>
+          </Menu>
+        )}
 
-        <Link to="/dashboard/relatorio">
-          <Text color={'white'}>Relatório</Text>
-        </Link>
+        {hasAtLeastOnePermission(['CREATE_ROLE', 'EDIT_ROLE', 'DELETE_ROLE']) && (
+          <Menu>
+            <MenuButton>
+              <Text color={'white'}>Cargos</Text>
+            </MenuButton>
 
-        <Link to="/dashboard/fila">
-          <Text color={'white'}>Fila</Text>
-        </Link>
+            <MenuList>
+              <MenuItem>
+                <Link to="/dashboard/cargo">Listar cargos</Link>
+              </MenuItem>
+
+              {hasPermission(['CREATE_ASSISTED']) && (
+                <MenuItem>
+                  <Link to="/dashboard/cargo/cadastrar">Cadastrar cargo</Link>
+                </MenuItem>
+              )}
+            </MenuList>
+          </Menu>
+        )}
+
+        {hasPermission('VIEW_REPORT') && (
+          <Link to="/dashboard/relatorio">
+            <Text color={'white'}>Relatório</Text>
+          </Link>
+        )}
+
+        {hasPermission('MANAGE_ASSISTED') && (
+          <Link to="/dashboard/fila">
+            <Text color={'white'}>Fila</Text>
+          </Link>
+        )}
       </Flex>
 
       <div className="navbar-end">
-        <button className="btn btn-secondary btn-sm" id="sair" onClick={onOpen}>
-          Sair
-        </button>
+        <Button colorScheme="" onClick={toggleColorMode}>
+          {theme === 'dark' ? <MoonIcon /> : <SunIcon />}
+        </Button>
+        <Menu>
+          <MenuButton as={Button} rounded={'full'} variant={'link'} cursor={'pointer'} minW={0}>
+            <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+          </MenuButton>
+          <MenuList>
+            <MenuItem>Configurações</MenuItem>
+            <MenuItem>Configurações</MenuItem>
+            <MenuDivider />
+            <MenuItem onClick={onOpen}>Sair da conta</MenuItem>
+          </MenuList>
+        </Menu>
 
         <LogoutModal isOpen={isOpen} onClose={onClose} />
       </div>

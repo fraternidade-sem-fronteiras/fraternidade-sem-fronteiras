@@ -1,8 +1,10 @@
 import vine from '@vinejs/vine'
 import vineResolver from '@/utils/vine.resolver'
+import useToast from '@/hooks/toast.hook'
+import axios from '@/utils/axios.instance'
+import Role from '@/entities/role.entity'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useUser } from '@/hooks/user.hook'
 import { TextoSublinhado } from '@/components/TextoSublinhado'
 import {
   Button,
@@ -19,11 +21,6 @@ import {
   Stack,
 } from '@chakra-ui/react'
 import { Infer } from '@vinejs/vine/types'
-import useToast from '@/hooks/toast.hook'
-import axios from '@/utils/axios.instance'
-import Role from '@/entities/role.entity'
-import { hasPermission } from '@/entities/volunteer.entity'
-import InsufficientPermissionException from '@/exceptions/insufficient_permission.exception'
 
 const formSchema = vine.object({
   name: vine.string().minLength(3).maxLength(64),
@@ -53,9 +50,6 @@ export default function CreateVolunteerPage() {
   })
 
   const [roles, setRoles] = useState<Role[]>([])
-  const { volunteer } = useUser()
-
-  if (!hasPermission(volunteer, 'CREATE_VOLUNTEER')) throw new InsufficientPermissionException()
 
   useEffect(() => {
     axios

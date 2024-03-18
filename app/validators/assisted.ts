@@ -40,30 +40,23 @@ export const createAssistedValidator = vine.compile(
       .maxLength(100)
       .alphaNumeric({ allowSpaces: true })
       .optional(),
-    country: vine
-      .string()
-      .trim()
-      .escape()
-      .minLength(3)
-      .maxLength(100)
-      .alphaNumeric({ allowSpaces: true })
-      .optional(),
+    country: vine.string().trim().escape().minLength(2).maxLength(100).optional(),
     state: vine
       .string()
       .trim()
       .escape()
-      .minLength(3)
+      .minLength(2)
       .maxLength(100)
-      .alphaNumeric({ allowSpaces: true })
-      .optional(),
+      .optional()
+      .requiredWhen('country', '=', 'Brasil'),
     city: vine
       .string()
       .trim()
       .escape()
-      .minLength(3)
+      .minLength(2)
       .maxLength(100)
-      .alphaNumeric({ allowSpaces: true })
-      .optional(),
+      .optional()
+      .requiredWhen('country', '=', 'Brasil'),
     maritalStatusId: vine.number().optional(),
     cpf: vine
       .string()

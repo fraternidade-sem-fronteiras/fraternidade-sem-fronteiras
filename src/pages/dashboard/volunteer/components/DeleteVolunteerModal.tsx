@@ -8,6 +8,7 @@ import {
   ModalBody,
   Button,
   useDisclosure,
+  Text,
 } from '@chakra-ui/react'
 import { ReactElement, cloneElement } from 'react'
 
@@ -33,10 +34,9 @@ export default function DeleteVolunteerModal({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Excluir voluntário {volunteer.name}</ModalHeader>
-          <ModalBody>
-            <p>Você realmente deseja excluir permanentemente esse voluntário?</p>
-            <p className="text-red-500">Essa ação não poderá ser desfeita</p>
-            <br />
+          <ModalBody className="my-4">
+            <Text>Você realmente deseja excluir permanentemente esse voluntário?</Text>
+            <Text color="red">Essa ação não poderá ser desfeita</Text>
           </ModalBody>
 
           <ModalFooter>

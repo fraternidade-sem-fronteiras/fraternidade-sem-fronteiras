@@ -1,21 +1,25 @@
-import React, { useCallback } from 'react'
+import React, { ReactNode, useCallback, useLayoutEffect, useState } from 'react'
 import UserContext from '@/context/user.context'
 import axios from '@/utils/axios.instance'
 import useToast from '@/hooks/toast.hook'
 import { useEnv } from '@/hooks/env.hook'
 import { StoreableVolunteer } from '@/entities/volunteer.entity'
 import { deepEqual } from '@/utils/utils'
+import {
+  hasPermission as hasRolePermission,
+  hasAtLeastOnePermission as hasRoleAtLeastOnePermission,
+} from '@/entities/volunteer.entity'
 
 interface UserProviderProps {
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderProps) => {
   const { get } = useEnv()
-  const [theme, setTheme] = React.useState<'light' | 'dark'>(
+  const [theme, setTheme] = useState<'light' | 'dark'>(
     () => (localStorage.getItem('theme') as 'light' | 'dark' | null) ?? 'light'
   )
-  const [volunteer, setVolunteer] = React.useState<StoreableVolunteer | null>(() => {
+  const [volunteer, setVolunteer] = useState<StoreableVolunteer | null>(() => {
     const item = localStorage.getItem('volunteer')
     return item ? JSON.parse(item) : null
   })
@@ -24,7 +28,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
 
   const { handleErrorToast } = useToast()
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     axios.defaults.baseURL = get('API_URL')
 
     if (volunteer) {
@@ -66,7 +70,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
     }
   }, [])
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     const requestInterceptor = axios.interceptors.request.use((config) => {
       if (volunteer) config.headers.Authorization = `Bearer ${volunteer.token ?? 'unknown'}`
       return config
@@ -77,62 +81,73 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
     }
   }, [volunteer])
 
-  React.useLayoutEffect(() => {
-    const changeTheme = (event: KeyboardEvent) => {
-      if (event.key?.toLowerCase() === 't') {
-        const newTheme = theme === 'light' ? 'dark' : 'light'
-        setTheme(newTheme)
-        localStorage.setItem('theme', newTheme)
-        console.log('Theme changed to', newTheme)
-      }
-    }
+  const hasPermission = useCallback(
+    (permission: string | string[]): boolean => hasRolePermission(volunteer, permission),
+    [volunteer]
+  )
 
-    document.addEventListener('keydown', changeTheme)
+  const hasAtLeastOnePermission = useCallback(
+    (permissions: string[]): boolean => hasRoleAtLeastOnePermission(volunteer, permissions),
+    [volunteer]
+  )
 
-    return () => {
-      document.removeEventListener('keydown', changeTheme)
-    }
-  }, [theme])
+  const createSession = useCallback(
+    async (email: string, password: string): Promise<StoreableVolunteer> => {
+      return new Promise<StoreableVolunteer>((resolve, reject) => {
+        axios
+          .post('volunteers/login', { email, password })
+          .then(({ data }) => {
+            const storeableVolunteer: StoreableVolunteer = {
+              ...data.volunteer,
+              token: data.token,
+            }
 
-  const createSession = React.useCallback(
-    async (
-      email: string,
-      password: string
-    ): Promise<StoreableVolunteer & { registered: true | undefined }> => {
-      return new Promise<StoreableVolunteer & { registered: true | undefined }>(
-        (resolve, reject) => {
-          axios
-            .post('volunteers/login', { email, password })
-            .then(({ data }) => {
-              const storeableVolunteer: StoreableVolunteer = {
-                ...data.volunteer,
-                token: data.token,
-              }
-
-              localStorage.setItem('volunteer', JSON.stringify(storeableVolunteer))
-              setVolunteer(storeableVolunteer)
-              resolve({ ...storeableVolunteer, registered: data.registered })
-            })
-            .catch(reject)
-        }
-      )
+            localStorage.setItem('volunteer', JSON.stringify(storeableVolunteer))
+            setVolunteer(storeableVolunteer)
+            resolve({ ...storeableVolunteer, registered: data.registered })
+          })
+          .catch(reject)
+      })
     },
     []
   )
 
-  const forceFinishSession = useCallback(async () => {
+  const forceFinishSession = useCallback(() => {
     localStorage.removeItem('volunteer')
     setVolunteer(null)
   }, [])
 
   const finishSession = useCallback(() => {
-    forceFinishSession()
-    return Promise.resolve()
+    return new Promise<void>((resolve) => {
+      axios.post('volunteers/logout').finally(() => {
+        forceFinishSession()
+        resolve()
+      })
+    })
   }, [])
+
+  const toggleColorMode = useCallback(() => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    localStorage.setItem('theme', newTheme)
+    setTheme(newTheme)
+  }, [theme])
 
   return (
     <UserContext.Provider
-      value={{ theme, isLoggedIn, volunteer, createSession, finishSession, forceFinishSession }}
+      value={{
+        theme,
+        isLoggedIn,
+        volunteer,
+
+        hasPermission,
+        hasAtLeastOnePermission,
+
+        createSession,
+        finishSession,
+        forceFinishSession,
+
+        toggleColorMode,
+      }}
     >
       {children}
     </UserContext.Provider>

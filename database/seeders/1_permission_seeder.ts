@@ -16,9 +16,12 @@ export default class extends BaseSeeder {
       'DELETE_PERMISSION',
       'LIST_PERMISSION',
 
+      'MANAGE_ASSISTED',
       'CREATE_ASSISTED',
       'DELETE_ASSISTED',
       'EDIT_ASSISTED',
+
+      'VIEW_REPORT',
 
       'ALL',
     ]
