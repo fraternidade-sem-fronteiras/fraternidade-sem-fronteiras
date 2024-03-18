@@ -8,7 +8,7 @@ export default function ThemeProvider({ children }: Readonly<{ children: React.R
   const theme = currentTheme === 'light' ? light : dark
 
   return (
-    <div data-theme={currentTheme}>
+    <div data-theme={currentTheme} style={{ minHeight: '100vh' }}>
       <ColorModeScript initialColorMode={'light'} />
       <ChakraProvider theme={theme}>{children}</ChakraProvider>
     </div>
