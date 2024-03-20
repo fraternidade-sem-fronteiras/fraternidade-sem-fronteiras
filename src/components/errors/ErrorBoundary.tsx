@@ -1,7 +1,9 @@
-import InsufficientPermissionException from '@/exceptions/insufficient_permission.exception'
 import InsufficientePermissionError from './dashboard/InsufficientePermissionError.jsx'
-import UnregisteredException from '@/exceptions/insufficient_permission.exception'
 import UnregisteredError from './dashboard/UnregisteredError.jsx'
+
+import InsufficientPermissionException from '@/exceptions/insufficient_permission.exception'
+import UnregisteredException from '@/exceptions/unregistered.exception'
+
 import ServerError from './ServerError.jsx'
 import { useRouteError } from 'react-router-dom'
 

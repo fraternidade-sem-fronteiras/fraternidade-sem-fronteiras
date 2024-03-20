@@ -61,13 +61,17 @@ export default function PrivateRouteLayout({ permissions }: Readonly<PrivateRout
   const { pathname } = useLocation()
 
   useEffect(() => {
-    if (!volunteer?.registered) throw new UnregisteredException()
+    if (volunteer) {
+      if (!volunteer.registered) throw new UnregisteredException()
 
-    const routeNeededPermissions = getNeededPermissions(pathname, permissions)
+      const routeNeededPermissions = getNeededPermissions(pathname, permissions)
 
-    const neededPermissions = routeNeededPermissions.find((perm) => !hasAtLeastOnePermission(perm))
+      const neededPermissions = routeNeededPermissions.find(
+        (perm) => !hasAtLeastOnePermission(perm)
+      )
 
-    if (neededPermissions) throw new InsufficientPermissionException(neededPermissions)
+      if (neededPermissions) throw new InsufficientPermissionException(neededPermissions)
+    }
   }, [])
 
   if (isLoggedIn) {

@@ -4,6 +4,7 @@
     "rootDir": "./",
     "outDir": "./build",
     "lib": ["DOM"],
+    "esModuleInterop": true,
 
     "jsx": "preserve",
 
