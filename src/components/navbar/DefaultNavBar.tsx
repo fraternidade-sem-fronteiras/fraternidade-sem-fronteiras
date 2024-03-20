@@ -67,7 +67,7 @@ export default function DefaultNavBar() {
                 <Link to="/dashboard/assistido/">Listar assistidos</Link>
               </MenuItem>
 
-              {hasPermission(['CREATE_VOLUNTEER']) && (
+              {hasPermission(['CREATE_ASSISTED']) && (
                 <MenuItem>
                   <Link to="/dashboard/assistido/cadastrar">Cadastrar assistido</Link>
                 </MenuItem>

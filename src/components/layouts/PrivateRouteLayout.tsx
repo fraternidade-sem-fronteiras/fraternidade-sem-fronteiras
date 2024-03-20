@@ -72,7 +72,7 @@ export default function PrivateRouteLayout({ permissions }: Readonly<PrivateRout
 
       if (neededPermissions) throw new InsufficientPermissionException(neededPermissions)
     }
-  }, [])
+  }, [pathname])
 
   if (isLoggedIn) {
     return <Outlet />
