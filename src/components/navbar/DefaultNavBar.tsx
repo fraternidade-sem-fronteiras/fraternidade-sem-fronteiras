@@ -18,7 +18,9 @@ import { useUser } from '@/hooks/user.hook'
 export default function DefaultNavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { hasPermission, hasAtLeastOnePermission, toggleColorMode, theme } = useUser()
+  const { hasPermission, hasAtLeastOnePermission, volunteer, toggleColorMode, theme } = useUser()
+
+  const avatarUrl = volunteer?.avatarUrl || 'https://bit.ly/dan-abramov'
 
   return (
     <div className="navbar bg-base-100" style={{ backgroundColor: '#4a7494' }}>
@@ -113,7 +115,7 @@ export default function DefaultNavBar() {
         </Button>
         <Menu>
           <MenuButton as={Button} rounded={'full'} variant={'link'} cursor={'pointer'} minW={0}>
-            <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+            <Avatar name={volunteer?.name} src={avatarUrl} />
           </MenuButton>
           <MenuList>
             <MenuItem>Configurações</MenuItem>

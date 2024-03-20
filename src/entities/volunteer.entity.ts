@@ -9,6 +9,8 @@ export default interface Volunteer {
   name: string
   email: string
 
+  avatarUrl?: string
+
   roles: Role[]
   createdAt: Date
 

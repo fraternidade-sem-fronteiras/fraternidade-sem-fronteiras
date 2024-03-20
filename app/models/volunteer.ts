@@ -15,6 +15,9 @@ export default class Volunteer extends BaseModel {
   @column()
   declare email: string
 
+  @column()
+  declare avatarUrl?: string
+
   @column({ serializeAs: null })
   declare password: string
 
