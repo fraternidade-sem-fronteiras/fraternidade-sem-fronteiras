@@ -28,7 +28,7 @@ export default function NavigationPage() {
               Adicionar assistido
             </Link>
             <Link
-              to="/dashboard/assistido/listar"
+              to="/dashboard/assistido/"
               className="btn btn-primary"
               style={{ width: '100%' }}
             >
@@ -42,7 +42,7 @@ export default function NavigationPage() {
               Adicionar voluntário
             </Link>
             <Link
-              to="/dashboard/voluntario/listar"
+              to="/dashboard/voluntario/"
               className="btn btn-secondary"
               style={{ width: '100%' }}
             >
