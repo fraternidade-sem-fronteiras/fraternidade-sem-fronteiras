@@ -1,10 +1,25 @@
-import Role from '@/entities/role.entity'
-import useToast from '@/hooks/toast.hook'
-import axios from '@/utils/axios.instance'
-import { Button, Center } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Button, Center, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import axios from '@/utils/axios.instance'
 import DeleteRoleModal from './components/DeleteRoleModal.jsx'
+import useToast from '@/hooks/toast.hook'
+import Role from '@/entities/role.entity'
+import { TextoSublinhado } from '@/components/TextoSublinhado'
+
+import {
+  Checkbox,
+  CheckboxGroup,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Grid,
+  GridItem,
+  Input,
+  Stack,
+} from '@chakra-ui/react'
+import { Infer } from '@vinejs/vine/types'
 
 export default function ListRolePage() {
   const { handleToast } = useToast()
@@ -34,33 +49,48 @@ export default function ListRolePage() {
   }
 
   return (
-    <Center flexDirection={'column'} textAlign={'center'}>
-      {roles.map((role) => (
-        <div key={role.name} style={{ padding: '10px' }}>
-          <h1>{role.name}</h1>
-          {role.permissions.length ? (
-            <ul>
-              {role.permissions.map((permission) => (
-                <li key={permission}>{permission}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>Sem nenhuma permissão atualmente</p>
-          )}
-          <Link to={role.name + '/editar'}>
-            <Button colorScheme="blue">Editar permissões</Button>
-          </Link>
+    
+    <Center flexDirection={'column'} >
+       <Flex  padding={'2rem'} width={'100%'}></Flex>
+       <TextoSublinhado>Lista de cargos</TextoSublinhado >
+      <TableContainer>
+        <Table variant='simple'marginTop={'3rem'}>
 
-          <Link to={role.name + '/listar-usuarios'}>
-            <Button colorScheme="pink">Listar usuários</Button>
-          </Link>
-
-          <DeleteRoleModal role={role} handleDeleteRole={() => deleteRole(role)}>
-            <Button colorScheme="red">Excluir permissão</Button>
-          </DeleteRoleModal>
-        </div>
-      ))}
-      <Button marginTop={'3rem'}>
+          <Thead>
+            <Tr>
+              <Th>Cargos</Th>
+              <Th>Permissões</Th>
+              <Th>Editar</Th>
+              <Th>Listar</Th>
+              <Th>Excluir</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {roles.map((role) => (
+              <Tr key={role.name}>
+                <Td>{role.name}</Td>
+                <Td>{role.permissions}</Td>
+                <Td>
+                  <Link to={role.name + '/editar'}>
+                    <Button backgroundColor="#5CC0CD" _hover={{ backgroundColor: "#48a7b2" }}>Editar permissões</Button>
+                  </Link>
+                </Td>
+                <Td>
+                  <Link to={role.name + '/listar-usuarios'}>
+                    <Button colorScheme="pink">Listar usuários</Button>
+                  </Link>
+                </Td>
+                <Td>
+                  <DeleteRoleModal role={role} handleDeleteRole={() => deleteRole(role)}>
+                    <Button backgroundColor="#E61653" _hover={{ backgroundColor: "#B80C3F" }}>Excluir permissão</Button>
+                  </DeleteRoleModal>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+      <Button marginTop={'3rem'} marginBottom={'3rem'}>
         <Link to="cadastrar">Criar novo cargo</Link>
       </Button>
     </Center>

@@ -136,7 +136,7 @@ export default function CreateVolunteerPage() {
         </Grid>
 
         <Center paddingTop={'50px'}>
-          <Button type="submit" width={'40%'} colorScheme="blue">
+          <Button type="submit" width={'40%'} backgroundColor="#5CC0CD" _hover={{ backgroundColor: "#48a7b2" }} color="black">
             Enviar
           </Button>
         </Center>

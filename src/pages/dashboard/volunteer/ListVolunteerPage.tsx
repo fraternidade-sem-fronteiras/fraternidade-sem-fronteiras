@@ -190,7 +190,7 @@ export default function ListVolunteerPage() {
         <Input placeholder={'Digite o nome'} width={'16rem'} onChange={handleSearch} />
 
         <Menu closeOnSelect={false}>
-          <MenuButton as={Button} colorScheme={'blue'}>
+          <MenuButton as={Button} backgroundColor="#5CC0CD" _hover={{ backgroundColor: "#48a7b2" }}>
             Filtros
           </MenuButton>
           <MenuList minWidth="240px">
