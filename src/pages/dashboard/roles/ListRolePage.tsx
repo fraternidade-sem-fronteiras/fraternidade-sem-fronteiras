@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Center, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { Button, Center, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import axios from '@/utils/axios.instance'
 import DeleteRoleModal from './components/DeleteRoleModal.jsx'
 import useToast from '@/hooks/toast.hook'
@@ -8,18 +8,9 @@ import Role from '@/entities/role.entity'
 import { TextoSublinhado } from '@/components/TextoSublinhado'
 
 import {
-  Checkbox,
-  CheckboxGroup,
   Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Grid,
-  GridItem,
-  Input,
-  Stack,
+  
 } from '@chakra-ui/react'
-import { Infer } from '@vinejs/vine/types'
 
 export default function ListRolePage() {
   const { handleToast } = useToast()
