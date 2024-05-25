@@ -7,15 +7,10 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.string('name').notNullable()
+      table.string('avatar_url')
       table.string('email').notNullable().unique()
       table.string('password')
-      table
-        .integer('level_id')
-        .defaultTo(1)
-        .notNullable()
-        .unsigned()
-        .references('id')
-        .inTable('levels')
+      table.boolean('registered').defaultTo(false)
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

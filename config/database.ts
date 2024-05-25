@@ -1,4 +1,4 @@
-import env from '#start/env'
+import env from '../start/env.js'
 import { defineConfig } from '@adonisjs/lucid'
 
 const dbConfig = defineConfig({
@@ -18,6 +18,9 @@ const dbConfig = defineConfig({
         naturalSort: true,
         paths: ['database/migrations'],
       },
+      seeders: {
+        paths: ['database/seeders'],
+      },
       healthCheck: false,
       debug: false,
     },
@@ -29,11 +32,14 @@ const dbConfig = defineConfig({
         user: env.get('DB_USER'),
         password: env.get('DB_PASSWORD'),
         database: env.get('DB_DATABASE'),
-        ssl: true,
+        ssl: env.get('DB_SSL'),
       },
       migrations: {
         naturalSort: true,
         paths: ['database/migrations'],
+      },
+      seeders: {
+        paths: ['database/seeders'],
       },
       healthCheck: false,
       debug: false,

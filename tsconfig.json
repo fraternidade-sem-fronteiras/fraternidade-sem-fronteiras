@@ -4,11 +4,12 @@
     "rootDir": "./",
     "outDir": "./build",
     "lib": ["DOM"],
+    "esModuleInterop": true,
 
     "jsx": "preserve",
 
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*.js"],
       "#resources/*": ["./resources/*"],
       "#controllers/*": ["./app/controllers/*.js"],
       "#exceptions/*": ["./app/exceptions/*.js"],

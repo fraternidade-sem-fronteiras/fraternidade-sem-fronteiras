@@ -1,6 +1,7 @@
 // fiz esse regex pra testar se é cpf, mas não sei se é o melhor jeito
 // eu fiz todos, menos o primeiro, tendo a possiblidade de ser de 0,3 para que não houvesse problemas
 
+import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import Assisted from '#models/assisted'
 
 // com o search sem ser um cpf
@@ -13,16 +14,8 @@ export default class AssistedService {
    * @returns
    */
 
-  async createAssisted(name: string): Promise<Assisted> {
-    const assisted = await Assisted.query().where('name', name).orWhere('social_name', name).first()
-
-    if (assisted) {
-      throw new Error('Assisted already exists')
-    }
-
-    return Assisted.create({
-      name: name,
-    })
+  async createAssisted(data: Partial<Assisted> & { name: string }): Promise<Assisted> {
+    return await Assisted.create(data)
   }
 
   /**
@@ -32,7 +25,9 @@ export default class AssistedService {
    */
 
   async deleteAssisted(id: number) {
-    const assisted = await Assisted.query().where('id', id).firstOrFail()
+    const assisted = await Assisted.query().where('id', id).first()
+
+    if (!assisted) throw new EntityNotFoundException('O assistido ' + id + ' não foi encontrado!')
 
     await assisted.delete()
   }
@@ -60,7 +55,9 @@ export default class AssistedService {
       }
     }
 
-    return await Assisted.query().paginate(page, perPage)
+    const assisteds = await Assisted.query().paginate(page, perPage)
+
+    return assisteds.all()
   }
 
   /**

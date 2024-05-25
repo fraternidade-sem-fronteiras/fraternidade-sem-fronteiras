@@ -1,5 +1,5 @@
 import edge from 'edge.js'
-import env from '#start/env'
+import env from './env.js'
 
 /**
  * Define a global property

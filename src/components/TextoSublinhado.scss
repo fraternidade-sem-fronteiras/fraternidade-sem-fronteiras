@@ -1,0 +1,15 @@
+.texto-sublinhado {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.texto-sublinhado::after {
+  content: '';
+  display: block;
+  width: 21rem;
+  height: 0.4rem;
+  background-color: #9d2d88;
+  margin: 0 auto;
+  position: absolute;
+  border-radius: 10px;
+}

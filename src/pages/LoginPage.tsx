@@ -1,16 +1,28 @@
 import React from 'react'
-import vineResolver from '../utils/vine.resolver.js'
-import useUser from '../hooks/useUser.js'
-import { useForm } from 'react-hook-form'
-import { useToast } from '@chakra-ui/react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
-
-import './styles/Login.scss'
+import vineResolver from '@/utils/vine.resolver'
 import vine from '@vinejs/vine'
+import { useForm } from 'react-hook-form'
+import { useUser } from '@/hooks/user.hook'
+import {
+  Button,
+  Center,
+  Checkbox,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  HStack,
+  Image,
+  Input,
+  InputGroup,
+  InputRightAddon,
+  Text,
+} from '@chakra-ui/react'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import useToast from '@/hooks/toast.hook'
 
 const loginUserFormSchema = vine.object({
-  email: vine.string().minLength(3).maxLength(64),
-  password: vine.string().minLength(1).maxLength(32),
+  email: vine.string().minLength(3).maxLength(64).email(),
+  password: vine.string().minLength(1),
 
   rememberMe: vine.boolean(),
 })
@@ -27,20 +39,26 @@ export default function LoginPage() {
     getValues,
     handleSubmit,
     register,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm<LoginProps>({
-    resolver: vineResolver(loginUserFormSchema),
+    resolver: vineResolver(loginUserFormSchema, {
+      'email.minLength': 'O email é obrigatório',
+      'email.maxLength': 'O email deve ter no máximo 64 caracteres',
+      'email.email': 'O email deve ser um email válido',
+      'password.minLength': 'A senha é obrigatória',
+    }),
   })
 
+  const [isShowingPassword, setIsShowingPassword] = React.useState(false)
   const { createSession, isLoggedIn } = useUser()
   const { redirect } = useParams()
 
   const navigate = useNavigate()
   const location = useLocation()
-  const toast = useToast()
+  const { handleToast, handleErrorToast } = useToast()
 
   React.useEffect(() => {
-    if (isLoggedIn) navigate(redirect ?? '/dashboard/')
+    if (isLoggedIn) navigate(redirect ?? '/dashboard/navegar')
   }, [])
 
   /**
@@ -48,100 +66,93 @@ export default function LoginPage() {
    *
    */
 
+  const handleShowPassword = () => {
+    setIsShowingPassword((prevState) => !prevState)
+  }
+
   const onSubmit = () => {
-    toast.promise(
-      createSession(getValues('email'), getValues('password')).then(() =>
-        navigate(location.pathname == '/' ? redirect ?? '/dashboard/' : location.pathname)
-      ),
-      {
-        success: {
-          title: 'Logado com sucesso!',
-          description: 'Seja bem-vindo de volta!',
-          position: 'top-right',
-          duration: 1000,
-        },
-        error: {
-          title: 'Logando',
-          description: 'Não foi possível fazer o login, tente novamente mais tarde.',
-          position: 'top-right',
-          duration: 4000,
-        },
-        loading: {
-          title: 'Logando',
-          description: 'Seu login está sendo processado...',
-          position: 'top-right',
-          duration: 10000,
-        },
-      }
-    )
+    return new Promise<void>((resolve, reject) => {
+      createSession(getValues('email'), getValues('password'))
+        .then(({ registered }) => {
+          if (registered) {
+            handleToast(
+              'Conta registrada!',
+              'Sua conta foi ativa e a senha registrada, seja bem vindo!'
+            )
+          }
+
+          navigate(
+            location.pathname == '/' || location.pathname == '/login'
+              ? redirect ?? '/dashboard/navegar'
+              : location.pathname
+          )
+          resolve()
+        })
+        .catch(() => {
+          handleErrorToast('Logando', 'Não foi possível fazer o login, tente novamente mais tarde.')
+          reject()
+        })
+    })
   }
 
   return (
-    <div className="hero min-h-screen bg-base-200">
-      <div className="hero-content flex-col lg:flex-row-reverse">
-        <div className="text-center">
-          <picture>
-            <img
-              className="fsf-logo"
-              src="https://www.fraternidadesemfronteiras.org.br/wp-content/uploads/2021/07/LOGO.png"
-              style={{ width: '30%', height: '30%' }}
-            />
-          </picture>
+    <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <div className="text-center">
+        <Center>
+          <Image
+            boxSize={'150px'}
+            src="https://www.fraternidadesemfronteiras.org.br/wp-content/uploads/2021/07/LOGO.png"
+          />
+        </Center>
 
-          <h1 className="font-bold">Entrar</h1>
-          <p className="py-1">Por favor, faça o login para continuar.</p>
-        </div>
-        <div
-          className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100 card-body"
-          style={{ height: '80%' }}
-        >
-          <div className="form-control" style={{ padding: 0 }}>
-            <label className="label">
-              <span className="label-text">Email</span>
-            </label>
-            <input
-              className="input input-bordered"
-              type="text"
-              placeholder="exemplo@email.com"
-              {...register('email', {
-                required: 'O campo de email é obrigatório.',
-              })}
-            />
-            <label className="label">
-              <span className="label-text">Senha</span>
-            </label>
-            <input
-              className="input input-bordered"
-              type="text"
-              placeholder="Senha"
-              {...register('password', {
-                required: 'O campo de email é obrigatório.',
-              })}
-            />
-            <label className="label">
-              <a href="#" className="label-text-alt link link-hover">
-                Esqueci minha senha!
-              </a>
-            </label>
-            <label className="cursor-pointer label">
-              <span className="label-text">Lembre-me</span>
-              <input
-                type="checkbox"
-                className="toggle toggle-primary"
-                {...register('rememberMe', {
-                  required: 'O campo de email é obrigatório.',
-                })}
-              />
-            </label>
-            <button
-              className="btn btn-primary"
-              onClick={handleSubmit(onSubmit)}
-              disabled={isSubmitting}
-              style={{ width: '100%' }}
+        <Text fontSize={'xl'} as={'b'}>
+          Faça login para continuar
+        </Text>
+      </div>
+
+      <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 bg-base-100">
+        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <FormControl>
+              <FormLabel>Seu email</FormLabel>
+              <Input type="email" placeholder="Seu email" {...register('email')} />
+              <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Sua senha</FormLabel>
+              <InputGroup>
+                <Input
+                  type={isShowingPassword ? 'text' : 'password'}
+                  placeholder="Sua senha"
+                  {...register('password')}
+                />
+                <InputRightAddon onClick={handleShowPassword}>
+                  {isShowingPassword ? 'O' : 'o'}
+                </InputRightAddon>
+              </InputGroup>
+              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+            </FormControl>
+
+            <HStack justify="space-between">
+              <Checkbox defaultChecked {...register('rememberMe')}>
+                Manter sessão
+              </Checkbox>
+              <Link to="/forgot-password">
+                <Text fontSize="sm">Esqueceu a senha?</Text>
+              </Link>
+            </HStack>
+
+            <Button
+              type="submit"
+              width="100%"
+              colorScheme="blue"
+              isLoading={isSubmitting}
+              isDisabled={isSubmitting}
             >
-              Entrar
-            </button>
-          </div>
+              Logar
+            </Button>
+          </form>
         </div>
       </div>
     </div>

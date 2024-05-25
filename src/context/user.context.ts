@@ -7,9 +7,14 @@ export interface UserContextProps {
   isLoggedIn: boolean
   volunteer: StoreableVolunteer | null
 
+  hasPermission: (permission: string | string[]) => boolean
+  hasAtLeastOnePermission: (permissions: string[]) => boolean
+
   createSession: (email: string, password: string) => Promise<StoreableVolunteer>
   finishSession: () => Promise<void>
   forceFinishSession: () => void
+
+  toggleColorMode: () => void
 }
 
 const UserContext = React.createContext<UserContextProps | null>(null)
