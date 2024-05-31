@@ -1,12 +1,13 @@
 import Gender from './gender.js'
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column, hasOne } from '@adonisjs/lucid/orm'
 import type { HasOne } from '@adonisjs/lucid/types/relations'
 import MaritalStatus from './marital_status.js'
+import { randomUUID } from 'crypto'
 
 export default class Assisted extends BaseModel {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
 
   @column()
   declare name: string
@@ -33,7 +34,7 @@ export default class Assisted extends BaseModel {
    * Gênero (Chave estrangeira de Gender)
    */
   @column()
-  declare genderId: number | null
+  declare genderId: string | null
 
   /**
    * Nome do pai
@@ -184,4 +185,9 @@ export default class Assisted extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @beforeCreate()
+  public static async createUniqueId(assisted: Assisted) {
+    assisted.id = randomUUID()
+  }
 }

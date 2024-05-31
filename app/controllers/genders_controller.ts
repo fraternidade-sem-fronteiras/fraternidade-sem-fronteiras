@@ -1,4 +1,5 @@
 import GenderService from '#services/gender_service'
+import { createGenderValidator } from '#validators/gender'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -28,20 +29,20 @@ export default class GendersController {
   /**
    * Criar novo Gender no servidor
    */
-  public async store({ }: HttpContext) {
-    // try {
-    //   // valida as informações pelo Validator
-    //   let payload = await request.validate(GenderValidator)
+  public async store({ request, response }: HttpContext) {
+    try {
+      // valida as informações pelo Validator
+      let payload = await createGenderValidator.validate(request.all())
 
-    //   // cria um Gender pelo Service
-    //   let gender = await this.genderService.createGender(payload.name)
+      // cria um Gender pelo Service
+      let gender = await this.genderService.createGender(payload.name)
 
-    //   // retorna o Gender
-    //   return response.status(201).json(gender)
-    // } catch (error) {
-    //   // retorna a mensagem de erro, caso alguma instrução do try dê problema
-    //   return response.status(409).json({ ...error })
-    // }
+      // retorna o Gender
+      return response.status(201).json(gender)
+    } catch (error) {
+      // retorna a mensagem de erro, caso alguma instrução do try dê problema
+      return response.status(409).json({ ...error })
+    }
   }
 
   /**
@@ -85,17 +86,14 @@ export default class GendersController {
   /**
    * Atualiza Gender específico no servidor
    */
-  public async update({ }: HttpContext) {
+  public async update({}: HttpContext) {
     // // desestrutura o id do Gender da requisição
     // const { id } = params
-
     // try {
     //   // valida as informações pelo Validator
     //   let payload = await request.validate(GenderValidator)
-
     //   // atualiza as informações pelo Service
     //   let data = await this.genderService.updateGender(id, payload.name)
-
     //   // retorna as atualizações realizadas
     //   return response.json({ ...data })
     // } catch (error) {
@@ -122,7 +120,7 @@ export default class GendersController {
       if (error instanceof Error) {
         return response.status(404).json({ message: error.message })
       }
-      
+
       throw error
     }
   }

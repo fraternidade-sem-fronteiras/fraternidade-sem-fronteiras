@@ -41,31 +41,22 @@ export default class DrugsController {
     }
   }
 
-  public async create({ request, response }: HttpContext) {
-    try {
-      // valida as informações pelo Validator
-      let payload = await createDrugValidator.validate(request.all())
+  public async store({ request, response }: HttpContext) {
+    // valida as informações pelo Validator
+    let payload = await createDrugValidator.validate(request.all())
 
-      // cria um Drug pelo Service
-      let drug = await this.drugService.createDrug(payload.name)
+    // cria um Drug pelo Service
+    let drug = await this.drugService.createDrug(payload.name)
 
-      // retorna o Drug
-      return response.status(201).json(drug)
-    } catch (error) {
-      // retorna a mensagem de erro, caso alguma instrução do try dê problema
-      if (error instanceof Error) {
-        return response.status(409).json({ message: error.message })
-      }
-
-      throw error
-    }
+    // retorna o Drug
+    return response.status(201).json(drug)
   }
 
   public async destroy({ request, response }: HttpContext) {
     const { id } = request.params()
 
     try {
-      await this.drugService.deleteDrug(id)
+      await this.drugService.deleteDrugById(id)
 
       return response.status(200).json({ message: 'Drug deleted successfully' })
     } catch (error) {

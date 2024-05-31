@@ -1,0 +1,304 @@
+{
+	"info": {
+		"_postman_id": "04554b9c-92cd-4578-a163-1d3156f08b6f",
+		"name": "Fraternidade Sem Fronteira - Documentação",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31548465"
+	},
+	"item": [
+		{
+			"name": "Voluntários",
+			"item": [
+				{
+					"name": "Criar sessão (autenticar)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@fsf.com\",\r\n    \"password\": \"admin@fsf.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/volunteers/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Perfil da sessão atual",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/volunteers/profile"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar voluntários",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/volunteers/"
+					},
+					"response": []
+				},
+				{
+					"name": "Informações do voluntário pelo Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/volunteers/92c7ee69-deb3-40c0-b7f5-fee556f8e178"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar voluntário",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Allan Marcelino\",\r\n    \"email\": \"allan@fsf.com\",\r\n    \"roles\": []\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/volunteers/"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar voluntário",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Allan Marcelino\",\r\n    \"email\": \"allan@fsf.com\",\r\n    \"roles\": []\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/volunteers/87458e95-c548-49a5-a434-41681fb09490"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar voluntário pelo Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Allan Marcelino\",\r\n    \"email\": \"allan@fsf.com\",\r\n    \"roles\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/volunteers/caf7366a-90a8-436c-9dc8-b5012cc779b7"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gênero",
+			"item": [
+				{
+					"name": "Listar genêros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/genders/"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar gênero",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/genders/"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar gênero",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/genders/82c6ddbd-64ed-4914-af6c-ec474d105656"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Drogas",
+			"item": [
+				{
+					"name": "Listar drogas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/drugs/"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar droga",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/drugs/"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar droga",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/drugs/82c6ddbd-64ed-4914-af6c-ec474d105656"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cargos",
+			"item": [
+				{
+					"name": "Listar cargos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/roles/"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar cargo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Moderador\",\r\n    \"permissions\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/roles/"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar droga",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/roles/f94c5f0a-8a04-425e-9d00-6dce847cf0fc"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "{{token}}"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNjNjMzMjViLTNlYzgtNGUxYy1iMGI3LTQ5MjM3NDE4NzA1ZiIsImV4cGlyZXNBdCI6MTcxNzczOTI3OTU1OSwiaWF0IjoxNzE3MTM0NDc5LCJleHAiOjIzMjE5MzQ0Nzl9.PH2lYQ0f7IaccB2lWYY_xgiHzFOYj_-o03WQKbf-cyg",
+			"type": "string"
+		}
+	]
+}

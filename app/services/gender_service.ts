@@ -5,6 +5,7 @@
  * Talvez seja necessário que não permitir exclusão de um Gender, pois o idGender é usado em Assisted
  */
 
+import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import Gender from '#models/gender'
 
 export default class GenderService {
@@ -33,7 +34,7 @@ export default class GenderService {
    * @param id
    * @returns Gender | null
    */
-  async getGenderById(id: number): Promise<Gender | null> {
+  async getGenderById(id: string): Promise<Gender | null> {
     const gender = await Gender.findBy('id', id)
 
     return gender
@@ -56,7 +57,7 @@ export default class GenderService {
    * @param name
    * @returns
    */
-  async updateGender(id: number, name: string): Promise<any> {
+  async updateGender(id: string, name: string): Promise<any> {
     let gender = await Gender.findByOrFail('id', id)
 
     let oldValueName = gender.name
@@ -79,11 +80,11 @@ export default class GenderService {
    * Deleta o Gender do banco
    * @param id
    */
-  async deleteGender(id: number) {
+  async deleteGender(id: string) {
     let gender = await Gender.findBy('id', id)
 
     if (!gender) {
-      throw new Error('Gênero não encontrado')
+      throw new EntityNotFoundException('O gênero de id ' + id + ' não foi encontrado!')
     }
 
     await gender.delete()

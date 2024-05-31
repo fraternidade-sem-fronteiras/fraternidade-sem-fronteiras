@@ -5,6 +5,6 @@ export const createChildValidator = vine.compile(
     name: vine.string().trim().escape().minLength(3).maxLength(100).alphaNumeric(),
     birthDate: vine.date(),
     livingWith: vine.string().trim().escape().minLength(3).maxLength(100).alphaNumeric(),
-    assistedId: vine.number(),
+    assistedId: vine.string(),
   })
 )

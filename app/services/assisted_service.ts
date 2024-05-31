@@ -3,6 +3,7 @@
 
 import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import Assisted from '#models/assisted'
+import { PageResult } from '../utils/pageable.js'
 
 // com o search sem ser um cpf
 const cpfRegex = /[0-9]{2,3}([\.]?)[0-9]{0,3}([\.]?)[0-9]{0,3}([-]?)[0-9]{0,2}/
@@ -24,7 +25,7 @@ export default class AssistedService {
    * @param id O id do assistido a ser deletado
    */
 
-  async deleteAssisted(id: number) {
+  async deleteAssisted(id: string) {
     const assisted = await Assisted.query().where('id', id).first()
 
     if (!assisted) throw new EntityNotFoundException('O assistido ' + id + ' não foi encontrado!')
@@ -55,9 +56,15 @@ export default class AssistedService {
       }
     }
 
-    const assisteds = await Assisted.query().paginate(page, perPage)
+    const assistedsPagination = await Assisted.query().paginate(page, perPage)
+    const assisteds = assistedsPagination.all()
 
-    return assisteds.all()
+    return PageResult.toResult(assisteds, {
+      currentPage: page,
+      itemsPerPage: perPage,
+      totalPages: assistedsPagination.lastPage,
+      totalItems: assistedsPagination.total,
+    })
   }
 
   /**
@@ -87,7 +94,7 @@ export default class AssistedService {
    * @returns
    */
 
-  async registerAssisted(id: number, name: string, ethnicy: string) {
+  async registerAssisted(id: string, name: string, ethnicy: string) {
     const assisted = await this.getAssistedById(id)
 
     assisted.merge({
@@ -99,7 +106,7 @@ export default class AssistedService {
     return assisted
   }
 
-  async getAssistedById(id: number): Promise<Assisted> {
+  async getAssistedById(id: string): Promise<Assisted> {
     return await Assisted.findByOrFail('id', id)
   }
 

@@ -5,12 +5,12 @@ export default class extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id').primary()
+      table.uuid('id').primary()
       table.string('name').notNullable()
       table.string('social_name')
       table.date('date_birth')
       table.string('ethnicy')
-      table.integer('gender_id').unsigned().references('id').inTable('genders')
+      table.uuid('gender_id').references('id').inTable('genders')
       table.string('father')
       table.string('mother')
       table.string('country')

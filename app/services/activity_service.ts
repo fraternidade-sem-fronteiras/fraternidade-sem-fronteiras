@@ -34,7 +34,7 @@ export default class ActivityService {
    * @param id
    * @returns Activity | null
    */
-  async getActivityById(id: number): Promise<Activity | null> {
+  async getActivityById(id: string): Promise<Activity | null> {
     const obj = await Activity.findBy('id', id)
 
     return obj
@@ -57,7 +57,7 @@ export default class ActivityService {
    * @param name
    * @returns
    */
-  async updateActivity(id: number, name: string): Promise<any> {
+  async updateActivity(id: string, name: string): Promise<any> {
     let obj = await Activity.findByOrFail('id', id)
 
     let oldValueName = obj.name
@@ -82,7 +82,7 @@ export default class ActivityService {
    * coisas. Caso se exclua uma Activity de uma Visit, por exemplo, a informação da atividade será perdida.
    * @param id
    */
-  async deleteActivity(id: number) {
+  async deleteActivity(id: string) {
     let obj = await Activity.findBy('id', id)
 
     if (!obj) {

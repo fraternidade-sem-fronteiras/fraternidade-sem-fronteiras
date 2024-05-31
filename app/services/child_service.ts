@@ -1,3 +1,5 @@
+import EntityNotFoundException from '#exceptions/entity_not_found_exception'
+import Assisted from '#models/assisted'
 import Child from '#models/child'
 
 export default class ChildService {
@@ -12,19 +14,23 @@ export default class ChildService {
    */
 
   async createChild(
-    assistedId: number,
+    assistedId: string,
     name: string,
     birthDate: Date,
     livingWith: string
   ): Promise<Child> {
-    const child = new Child()
+    const assisted = await Assisted.query().where('id', assistedId).first()
 
-    child.assistedId = assistedId
-    child.name = name
-    child.birthDate = birthDate
-    child.livingWith = livingWith
+    if (!assisted) {
+      throw new EntityNotFoundException('O assistido de id ' + assistedId + ' não foi encontrado!')
+    }
 
-    await child.save()
+    const child = await Child.create({
+      assistedId,
+      name,
+      birthDate,
+      livingWith,
+    })
 
     return child
   }
@@ -36,11 +42,11 @@ export default class ChildService {
    * @returns
    */
 
-  async getChildsById(assistedId: number): Promise<Child[]> {
+  async getChildsById(assistedId: string): Promise<Child[]> {
     return await Child.query().where('assisted_id', assistedId)
   }
 
-  async getChildByName(assistedId: number, name: string) {
+  async getChildByName(assistedId: string, name: string) {
     return await Child.query().where('assisted_id', assistedId).where('name', name).firstOrFail()
   }
 

@@ -45,16 +45,14 @@ export default class VolunteersController {
      * Busca os voluntários no banco de dados
      */
 
-    const volunteers = await this.volunteersService.getVolunteers(page, limit, orderBy, order)
+    const volunteersPaginated = await this.volunteersService.getVolunteers(
+      page,
+      limit,
+      orderBy,
+      order
+    )
 
-    if (volunteers.length === 0) {
-      return response.status(404).json({ message: 'Nenhum voluntário encontrado.' })
-    }
-
-    /**
-     * Retorna os voluntários
-     */
-    return response.json(volunteers)
+    return response.json(volunteersPaginated)
   }
 
   async store({ request, response }: HttpContext) {

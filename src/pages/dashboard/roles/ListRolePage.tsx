@@ -23,7 +23,7 @@ export default function ListRolePage() {
 
   const deleteRole = (role: Role) => {
     axios
-      .delete(`/roles/${role.name}`)
+      .delete(`/roles/${role.id}`)
       .then(() => {
         setRoles(roles.filter((r) => r.name !== role.name))
         handleToast('Sucesso!', 'O cargo ' + role.name + ' foi excluído com sucesso!')
@@ -47,11 +47,11 @@ export default function ListRolePage() {
           ) : (
             <p>Sem nenhuma permissão atualmente</p>
           )}
-          <Link to={role.name + '/editar'}>
+          <Link to={role.id + '/editar'} state={role}>
             <Button colorScheme="blue">Editar permissões</Button>
           </Link>
 
-          <Link to={role.name + '/listar-usuarios'}>
+          <Link to={role.id + '/listar-usuarios'} state={role}>
             <Button colorScheme="pink">Listar usuários</Button>
           </Link>
 

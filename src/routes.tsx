@@ -87,7 +87,7 @@ const router = createBrowserRouter([
                     element: <ProfileAssistedPage />,
                   },
                   {
-                    path: ':userName/perfil',
+                    path: ':id/perfil',
                     element: <ProfileAssistedPage />,
                   },
                   {
@@ -135,11 +135,11 @@ const router = createBrowserRouter([
                     element: <CreateRolePage />,
                   },
                   {
-                    path: ':roleName/editar',
+                    path: ':roleId/editar',
                     element: <EditRolePage />,
                   },
                   {
-                    path: ':roleName/listar-usuarios',
+                    path: ':roleId/listar-usuarios',
                     element: <EditRolePage />,
                   },
                   {

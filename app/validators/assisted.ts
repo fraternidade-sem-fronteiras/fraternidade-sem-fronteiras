@@ -23,7 +23,7 @@ export const createAssistedValidator = vine.compile(
       .optional()
       .transform((value) => DateTime.fromISO(value.toISOString())),
     ethnicy: vine.string().trim().escape().minLength(3).maxLength(100).alphaNumeric().optional(),
-    genderId: vine.number().optional(),
+    genderId: vine.string().optional(),
     father: vine
       .string()
       .trim()

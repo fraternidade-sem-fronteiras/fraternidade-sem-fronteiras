@@ -1,13 +1,21 @@
+import EntityNotFoundException from '#exceptions/entity_not_found_exception'
+import Assisted from '#models/assisted'
 import DrugAssisted from '#models/drug_assisted'
 import { DateTime } from 'luxon'
 
 export default class DrugAssistedService {
   async createDrugAssisted(
-    assistedId: number,
-    drugId: number,
+    assistedId: string,
+    drugId: string,
     startTime: Date | undefined | null,
     frequency: number
   ): Promise<DrugAssisted> {
+    const assisted = await Assisted.query().where('id', assistedId).first()
+
+    if (!assisted) {
+      throw new EntityNotFoundException('O assistido de id ' + assistedId + ' não foi encontrado!')
+    }
+
     return DrugAssisted.create({
       assistedId: assistedId,
       drugId: drugId,
