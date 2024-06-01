@@ -68,15 +68,15 @@ export default function ListVolunteerPage() {
           },
         })
         .then(({ data }) => {
-          if (data.length == 0) {
+          if (data.data.length == 0) {
             return
           }
 
           const newArray = volunteers.filter(
-            (volunteer) => !data.some((v: any) => v.id == volunteer.id)
+            (volunteer) => !data.data.some((v: any) => v.id == volunteer.id)
           )
 
-          newArray.push(...data)
+          newArray.push(...data.data)
           setVolunteers(newArray)
         })
         .catch((error) => handleErrorToast('Erro ao buscar voluntários', error.message))

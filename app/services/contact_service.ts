@@ -13,7 +13,7 @@ export default class ContactService {
    * @returns
    */
   async createContact(
-    assistedId: number,
+    assistedId: string,
     name: string,
     kinship: string,
     phone: string | null,
@@ -48,7 +48,7 @@ export default class ContactService {
    * @param assistedId
    * @returns
    */
-  async getContactsByAssistedId(assistedId: number): Promise<Contact[]> {
+  async getContactsByAssistedId(assistedId: string): Promise<Contact[]> {
     return await Contact.query().where('assistedId', assistedId)
   }
 

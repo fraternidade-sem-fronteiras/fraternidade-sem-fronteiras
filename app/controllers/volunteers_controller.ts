@@ -2,11 +2,8 @@
 
 import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import VolunteerService from '#services/volunteer_service'
-import {
-  createVolunteerValidator,
-  filtersVolunteerValidator,
-  loginVolunteerValidator,
-} from '#validators/volunteer'
+import { filtersValidator, paginationValidator, sortValidator } from '#validators/filter'
+import { createVolunteerValidator, loginVolunteerValidator } from '#validators/volunteer'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 
@@ -32,41 +29,31 @@ export default class VolunteersController {
   }
 
   async index({ request, response }: HttpContext) {
-    const filters = await filtersVolunteerValidator.validate({
+    const pagination = await paginationValidator.validate({
       page: request.input('page', 1),
       limit: request.input('limit', 10),
+    })
+
+    const filters = await sortValidator.validate({
       orderBy: request.input('orderBy', 'id'),
       order: request.input('order', 'asc'),
     })
 
-    const { page, limit, orderBy, order } = filters
+    const { orderBy, order } = filters
+    const { page, limit } = pagination
 
-    /**
-     * Busca os voluntários no banco de dados
-     */
+    const volunteersPaginated = await this.volunteersService.getVolunteers(
+      page,
+      limit,
+      orderBy,
+      order
+    )
 
-    const volunteers = await this.volunteersService.getVolunteers(page, limit, orderBy, order)
-
-    if (volunteers.length === 0) {
-      return response.status(404).json({ message: 'Nenhum voluntário encontrado.' })
-    }
-
-    /**
-     * Retorna os voluntários
-     */
-    return response.json(volunteers)
+    return response.json(volunteersPaginated)
   }
 
   async store({ request, response }: HttpContext) {
-    /**
-     * Valida os dados do formulário
-     */
-
-    let payload = await createVolunteerValidator.validate(request.all())
-
-    /**
-     * Cria um novo voluntário
-     */
+    const payload = await createVolunteerValidator.validate(request.all())
 
     const volunteer = await this.volunteersService.createVolunteer(
       payload.name,
@@ -74,67 +61,22 @@ export default class VolunteersController {
       payload.roles
     )
 
-    /**
-     * Retorna o voluntário criado
-     */
-
     return response.status(201).json(volunteer)
   }
 
   async show({ response, params }: HttpContext) {
-    /**
-     * Desestrutura o id do voluntário da requisição
-     */
-
     const { id } = params
-
-    /**
-     * Busca o voluntário pelo id
-     */
 
     const volunteer = await this.volunteersService.getVolunteer({ id })
 
-    /**
-     * Verifica se o voluntário existe
-     */
-
-    if (!volunteer) throw new EntityNotFoundException('O voluntário de id ' + id + ' não existe.')
-
-    /**
-     * Retorna o voluntário
-     */
+    if (!volunteer)
+      throw new EntityNotFoundException('Volunteer', 'O voluntário de id ' + id + ' não existe.')
 
     return response.json(volunteer)
   }
 
-  /*async update({ request, params, response }: HttpContext) {
-    
-    const { id } = params
-
-    let payload = await updateVolunteerValidator.validate(request.all())
-
-    //const data = await this.volunteersService.updateVolunteer(id, payload)
-
-    //return response.json({ ...data })
-  }*/
-
   async destroy({ params, response }: HttpContext) {
-    /**
-     * Desestrutura o id do voluntário da requisição
-     */
-
-    const { id } = params
-
-    /**
-     * Deleta o voluntário pelo Service
-     */
-
-    await this.volunteersService.deleteVolunteer(id)
-
-    /**
-     * Retorna o status 204 (No Content)
-     */
-
+    await this.volunteersService.deleteVolunteer(params.id)
     return response.status(204)
   }
 }

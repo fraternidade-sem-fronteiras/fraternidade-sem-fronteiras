@@ -10,16 +10,24 @@ export default class RolesController {
 
   async index({ response }: HttpContext) {
     const roles = await this.roleService.getRoles()
-
-    if (!roles.length) throw new EntityNotFoundException('No roles found')
-
     return response.json(roles)
+  }
+
+  async show({ request, response }: HttpContext) {
+    const id = decodeURI(request.param('id'))
+
+    const role = await this.roleService.getRoleById(id)
+
+    if (!role)
+      throw new EntityNotFoundException('Roles', 'O cargo de ID ' + id + ' não foi encontrado!')
+
+    return response.json(role)
   }
 
   async store({ request, response }: HttpContext) {
     const { name, permissions } = await createRoleValidator.validate(request.body())
 
-    const role = await this.roleService.createRole(name, permissions)
+    const role = await this.roleService.createRole(name, permissions, request.all().user!)
 
     return response.json(role)
   }
@@ -27,7 +35,7 @@ export default class RolesController {
   async destroy({ request, response }: HttpContext) {
     const id = decodeURI(request.param('id'))
 
-    await this.roleService.deleteRole(id)
+    await this.roleService.deleteRoleById(id)
 
     return response.status(204)
   }

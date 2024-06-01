@@ -8,7 +8,7 @@ export default class Contact extends BaseModel {
   declare id: number
 
   @column({})
-  declare assistedId: number
+  declare assistedId: string
 
   @column({})
   declare name: string

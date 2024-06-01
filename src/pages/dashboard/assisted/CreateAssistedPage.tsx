@@ -28,6 +28,8 @@ import {
 
 import { TextoSublinhado } from '@/components/TextoSublinhado'
 import { Infer } from '@vinejs/vine/types'
+import { Schooling } from '@/@types/schooling'
+import { Gender } from '@/@types/gender'
 
 const formSchema = vine.object({
   name: vine.string().minLength(3).maxLength(64),
@@ -44,7 +46,7 @@ const formSchema = vine.object({
   sexuality: vine.string().minLength(1),
 
   ethnicy: vine.string().minLength(1),
-  gender: vine.string().minLength(1),
+  genderId: vine.string(),
 
   cpf: vine
     .string()
@@ -59,7 +61,7 @@ const formSchema = vine.object({
 
   ctps: vine.string().minLength(7).maxLength(7),
 
-  schooling: vine.string().minLength(3),
+  schoolingId: vine.string(),
 
   shareData: vine.boolean(),
 })
@@ -105,9 +107,9 @@ export default function CreateAssistedPage() {
   const [cities, setCities] = React.useState<string[]>([])
 
   const [races, setRaces] = React.useState<string[]>([])
-  const [genders, setGenders] = React.useState<string[]>([])
+  const [genders, setGenders] = React.useState<Gender[]>([])
   const [sexuality, setSexuality] = React.useState<string[]>([])
-  const [degrees, setDegrees] = React.useState<string[]>([])
+  const [schoolings, setSchoolings] = React.useState<Schooling[]>([])
 
   useEffect(() => {
     Promise.all([
@@ -118,19 +120,23 @@ export default function CreateAssistedPage() {
       setStates(states.data.map((estado: Record<string, any>) => estado.sigla))
     })
 
+    Promise.all([axios.get('schoolings'), axios.get('genders')]).then(([schoolings, genders]) => {
+      setSchoolings(
+        schoolings.data.map((schooling: Record<string, any>) => ({
+          id: schooling.id,
+          name: schooling.name,
+        }))
+      )
+      setGenders(
+        genders.data.map((gender: Record<string, any>) => ({
+          id: gender.id,
+          name: gender.name,
+        }))
+      )
+    })
+
     setRaces(['Branco', 'Preto/Negro', 'Amarelo', 'Vermelho/Índigena', 'Outro'])
-    setGenders(['Homem Cisgênero', 'Mulher Cisgênero'])
-    setDegrees([
-      'Ensino Fundamental Incompleto',
-      'Ensino Fundamental Completo',
-      'Ensino Médio Incompleto',
-      'Ensino Médio Completo',
-      'Ensino Superior Completo',
-      'Pós-Graduação',
-      'Mestrado',
-      'Doutorado',
-      'Pós-Doutorado',
-    ])
+
     setSexuality(['Heterosexual', 'Homosexual', 'Bissexual', 'Pansexual'])
   }, [])
 
@@ -209,6 +215,7 @@ export default function CreateAssistedPage() {
   }
 
   const isInvalid = (name: keyof FormProps) => {
+    console.log(errors[name])
     return errors[name] !== undefined
   }
 
@@ -246,17 +253,16 @@ export default function CreateAssistedPage() {
           </GridItem>
 
           <GridItem>
-            <FormControl isInvalid={isInvalid('schooling')}>
+            <FormControl isInvalid={isInvalid('schoolingId')}>
               <FormLabel>Escolaridade</FormLabel>
-              <Select defaultValue={1} {...register('schooling')}>
-                <option key={'Sem nenhuma escolaridade'} value={1} disabled>
-                  Sem nenhuma escolaridade
-                </option>
-                {degrees.map((degree) => (
-                  <option key={degree}>{degree}</option>
+              <Select defaultValue={schoolings[0]?.id} {...register('schoolingId')}>
+                {schoolings.map((schooling) => (
+                  <option key={schooling.id} value={schooling.id}>
+                    {schooling.name}
+                  </option>
                 ))}
               </Select>
-              <FormErrorMessage>{errors.schooling?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.schoolingId?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
@@ -313,19 +319,16 @@ export default function CreateAssistedPage() {
           </GridItem>
 
           <GridItem>
-            <FormControl isInvalid={isInvalid('gender')}>
+            <FormControl isInvalid={isInvalid('genderId')}>
               <FormLabel>Identidade de gênero</FormLabel>
-              <Select defaultValue={''} {...register('gender')}>
-                <option value={''} label="Selecione a identidade de gênero" disabled>
-                  Selecione a identidade de gênero
-                </option>
+              <Select defaultValue={genders[0]?.id} {...register('genderId')}>
                 {genders.map((gender) => (
-                  <option key={gender} label={gender}>
-                    {gender}
+                  <option key={gender.id} value={gender.id}>
+                    {gender.name}
                   </option>
                 ))}
               </Select>
-              <FormErrorMessage>{errors.gender?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.genderId?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 

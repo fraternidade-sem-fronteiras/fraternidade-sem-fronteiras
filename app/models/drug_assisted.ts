@@ -9,10 +9,10 @@ export default class DrugAssisted extends BaseModel {
   declare id: number
 
   @column()
-  declare assistedId: number
+  declare assistedId: string
 
   @column()
-  declare drugId: number
+  declare drugId: string
 
   @column()
   declare startTime: DateTime | null

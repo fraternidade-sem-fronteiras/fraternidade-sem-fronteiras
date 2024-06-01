@@ -6,7 +6,7 @@ export default class Child extends BaseModel {
   declare id: number
 
   @column()
-  declare assistedId: number
+  declare assistedId: string
 
   @column()
   declare name: string

@@ -1,13 +1,24 @@
+import EntityNotFoundException from '#exceptions/entity_not_found_exception'
+import Assisted from '#models/assisted'
 import IllnessAssisted from '#models/illness_assisted'
 
 export default class IllnessAssistedService {
   async createIllnessAssisted(
-    assistedId: number,
+    assistedId: string,
     illnessId: number,
     placeMedicalCare: string | null,
     remarks: string | null,
     alreadyTreated: string | null
   ): Promise<IllnessAssisted> {
+    const assisted = await Assisted.query().where('id', assistedId).first()
+
+    if (!assisted) {
+      throw new EntityNotFoundException(
+        'Assisted',
+        'O assistido de id ' + assistedId + ' não foi encontrado!'
+      )
+    }
+
     return await IllnessAssisted.create({
       assistedId,
       illnessId,
@@ -18,7 +29,7 @@ export default class IllnessAssistedService {
   }
 
   async getIllnessAssistedByAssisted(
-    assistedId: number,
+    assistedId: string,
     page: number,
     perPage: number
   ): Promise<IllnessAssisted[]> {
@@ -38,7 +49,7 @@ export default class IllnessAssistedService {
   }
 
   async getIllnessAssistedByAssistedAndIllness(
-    assistedId: number,
+    assistedId: string,
     illnessId: number,
     page: number,
     perPage: number

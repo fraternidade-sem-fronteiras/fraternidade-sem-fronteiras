@@ -2,7 +2,7 @@ import vine from '@vinejs/vine'
 
 export const createContactValidator = vine.compile(
   vine.object({
-    assistedId: vine.number(),
+    assistedId: vine.string(),
     name: vine
       .string()
       .trim()

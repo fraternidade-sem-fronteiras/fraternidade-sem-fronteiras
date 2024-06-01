@@ -17,7 +17,7 @@ export default class Visit extends BaseModel {
    * Id do assistido
    */
   @column({})
-  declare assistedId: number
+  declare assistedId: string
 
   /**
    * Se foi atendido ou não

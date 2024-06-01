@@ -85,8 +85,6 @@ export default function CreateVolunteerPage() {
     return !!errors[name]
   }
 
-  console.log(errors)
-
   return (
     <Flex justifyContent={'center'} alignItems={'center'} padding={'2rem'} width={'100%'}>
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>

@@ -1,10 +1,11 @@
+import Role from '#models/role'
 import RoleVolunteer from '#models/role_volunteer'
 import Volunteer from '#models/volunteer'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 export default class extends BaseSeeder {
   async run() {
-    await Volunteer.createMany([
+    const volunteers = await Volunteer.createMany([
       {
         name: 'Administrador',
         email: 'admin@fsf.com',
@@ -13,10 +14,12 @@ export default class extends BaseSeeder {
       },
     ])
 
+    const roles = await Role.all()
+
     await RoleVolunteer.createMany([
       {
-        roleName: 'Administrador',
-        volunteerId: 1,
+        roleId: roles.find((role) => role.name === 'Administrador')!.id,
+        volunteerId: volunteers[0]!.id,
       },
     ])
   }

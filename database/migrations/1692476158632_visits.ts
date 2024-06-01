@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.dateTime('date_visit', { useTz: true }).notNullable()
-      table.integer('assisted_id').notNullable().unsigned().references('id').inTable('assisteds')
+      table.uuid('assisted_id').notNullable().unsigned().references('id').inTable('assisteds')
       table.boolean('attended').defaultTo(false)
       table.string('description')
 

@@ -5,6 +5,8 @@
  * Talvez seja necessário que não permitir exclusão de um MaritalStatus, pois o idMaritalStatus é usado em Assisted
  */
 
+import ConflictException from '#exceptions/conflict_exception'
+import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import MaritalStatus from '#models/marital_status'
 
 export default class MaritalStatusService {
@@ -14,17 +16,17 @@ export default class MaritalStatusService {
    * @returns MaritalStatus
    */
   async createMaritalStatus(name: string): Promise<MaritalStatus> {
-    let marital_status = await MaritalStatus.findBy('name', name)
+    let maritalStatus = await MaritalStatus.findBy('name', name)
 
-    if (marital_status) {
-      return marital_status
+    if (maritalStatus) {
+      throw new ConflictException('O estado civil já existe')
     }
 
-    marital_status = new MaritalStatus()
-    marital_status.name = name
-    await marital_status.save()
+    maritalStatus = new MaritalStatus()
+    maritalStatus.name = name
+    await maritalStatus.save()
 
-    return marital_status
+    return maritalStatus
   }
 
   /**
@@ -33,10 +35,10 @@ export default class MaritalStatusService {
    * @param id
    * @returns MaritalStatus | null
    */
-  async getMaritalStatusById(id: number): Promise<MaritalStatus | null> {
-    const marital_status = await MaritalStatus.findBy('id', id)
+  async getMaritalStatusById(id: string): Promise<MaritalStatus | null> {
+    const maritalStatus = await MaritalStatus.findBy('id', id)
 
-    return marital_status
+    return maritalStatus
   }
 
   /**
@@ -45,8 +47,8 @@ export default class MaritalStatusService {
    * @returns MaritalStatus[]
    */
   async getMaritalStatuses(): Promise<MaritalStatus[]> {
-    const marital_statuses = await MaritalStatus.all()
-    return marital_statuses
+    const maritalStatuses = await MaritalStatus.all()
+    return maritalStatuses
   }
 
   /**
@@ -56,20 +58,20 @@ export default class MaritalStatusService {
    * @param name
    * @returns
    */
-  async updateMaritalStatus(id: number, name: string): Promise<any> {
-    let marital_status = await MaritalStatus.findByOrFail('id', id)
+  async updateMaritalStatus(id: string, name: string): Promise<any> {
+    let maritalStatus = await MaritalStatus.findByOrFail('id', id)
 
-    let oldValueName = marital_status.name
-    marital_status.name = name
-    await marital_status.save()
+    let oldValueName = maritalStatus.name
+    maritalStatus.name = name
+    await maritalStatus.save()
 
     return {
-      id: marital_status.id,
+      id: maritalStatus.id,
       updated: [
         {
           fieldName: 'name',
           oldValue: oldValueName,
-          newValue: marital_status.name,
+          newValue: maritalStatus.name,
         },
       ],
     }
@@ -79,13 +81,16 @@ export default class MaritalStatusService {
    * Deleta o MaritalStatus do banco
    * @param id
    */
-  async deleteMaritalStatus(id: number) {
-    let marital_status = await MaritalStatus.findBy('id', id)
+  async deleteMaritalStatus(id: string) {
+    const maritalStatus = await MaritalStatus.findBy('id', id)
 
-    if (!marital_status) {
-      throw new Error('Estado Civil não encontrado')
+    if (!maritalStatus) {
+      throw new EntityNotFoundException(
+        'MaritalStatus',
+        'O Estado Civil com id ' + id + ' não foi encontrado!'
+      )
     }
 
-    await marital_status.delete()
+    await maritalStatus.delete()
   }
 }

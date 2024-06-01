@@ -1,3 +1,4 @@
+import ConflictException from '#exceptions/conflict_exception'
 import Drug from '#models/drug'
 
 export default class DrugService {
@@ -12,7 +13,7 @@ export default class DrugService {
     const drug = await Drug.query().where('name', name).first()
 
     if (drug) {
-      throw new Error('Drug already exists')
+      throw new ConflictException('Drug already exists')
     }
 
     return Drug.create({
@@ -54,7 +55,7 @@ export default class DrugService {
    * @param id O id da droga a ser deletada
    */
 
-  async deleteDrug(id: number) {
+  async deleteDrugById(id: string) {
     const drug = await Drug.query().where('id', id).firstOrFail()
 
     await drug.delete()
