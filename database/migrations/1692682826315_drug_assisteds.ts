@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
 
-      table.uuid('assisted_id').unsigned().references('id').inTable('assisteds').onDelete('CASCADE')
+      table.uuid('assisted_id').references('id').inTable('assisteds').onDelete('CASCADE')
       table.uuid('drug_id').references('id').inTable('drugs').onDelete('CASCADE')
 
       table.dateTime('start_time').nullable()

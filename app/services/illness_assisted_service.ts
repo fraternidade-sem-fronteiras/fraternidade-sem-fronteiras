@@ -13,7 +13,10 @@ export default class IllnessAssistedService {
     const assisted = await Assisted.query().where('id', assistedId).first()
 
     if (!assisted) {
-      throw new EntityNotFoundException('O assistido de id ' + assistedId + ' não foi encontrado!')
+      throw new EntityNotFoundException(
+        'Assisted',
+        'O assistido de id ' + assistedId + ' não foi encontrado!'
+      )
     }
 
     return await IllnessAssisted.create({

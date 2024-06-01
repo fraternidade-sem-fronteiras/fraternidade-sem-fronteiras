@@ -40,7 +40,10 @@ export default class VolunteerService {
 
     if (rolesExist.length !== roles.length) {
       const diff = roles.filter((role) => !rolesExist.map((r) => r.id).includes(role))
-      throw new EntityNotFoundException('Os cargos ' + diff.join(', ') + ' não existem...')
+      throw new EntityNotFoundException(
+        'Role',
+        'Os cargos ' + diff.join(', ') + ' não foram encontrados.'
+      )
     }
 
     volunteer
@@ -63,7 +66,7 @@ export default class VolunteerService {
       .where({ email })
       .first()
 
-    if (!volunteer) throw new EntityNotFoundException('Voluntário não encontrado')
+    if (!volunteer) throw new WrongPasswordException()
 
     const realVolunteer: VolunteerDto = VolunteerDto.fromPartial({
       id: volunteer.id,

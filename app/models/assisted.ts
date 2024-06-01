@@ -1,9 +1,10 @@
 import Gender from './gender.js'
 import { DateTime } from 'luxon'
-import { BaseModel, beforeCreate, column, hasOne } from '@adonisjs/lucid/orm'
-import type { HasOne } from '@adonisjs/lucid/types/relations'
+import { BaseModel, beforeCreate, belongsTo, column, hasOne } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import MaritalStatus from './marital_status.js'
 import { randomUUID } from 'crypto'
+import Schooling from './schooling.js'
 
 export default class Assisted extends BaseModel {
   @column({ isPrimary: true })
@@ -35,6 +36,9 @@ export default class Assisted extends BaseModel {
    */
   @column()
   declare genderId: string | null
+
+  @belongsTo(() => Gender)
+  declare gender: BelongsTo<typeof Gender>
 
   /**
    * Nome do pai
@@ -132,11 +136,11 @@ export default class Assisted extends BaseModel {
   @column()
   declare place: string | null
 
-  /**
-   * Escolaridade
-   */
   @column()
-  declare schooling: string | null
+  declare schoolingId: string
+
+  @belongsTo(() => Schooling)
+  declare schooling: BelongsTo<typeof Schooling>
 
   /**
    * Renda
@@ -174,9 +178,6 @@ export default class Assisted extends BaseModel {
   @column()
   declare registered: boolean
 
-  @hasOne(() => Gender)
-  declare gender: HasOne<typeof Gender>
-
   @hasOne(() => MaritalStatus)
   declare maritalSatus: HasOne<typeof MaritalStatus>
 
@@ -189,5 +190,15 @@ export default class Assisted extends BaseModel {
   @beforeCreate()
   public static async createUniqueId(assisted: Assisted) {
     assisted.id = randomUUID()
+
+    if (!assisted.schoolingId) {
+      const defaultSchooling = await Schooling.query().where('default', true).first()
+      assisted.schoolingId = defaultSchooling!.id
+    }
+
+    if (!assisted.genderId) {
+      const defaultGender = await Gender.query().where('default', true).first()
+      assisted.genderId = defaultGender!.id
+    }
   }
 }

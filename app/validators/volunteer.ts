@@ -28,12 +28,3 @@ export const createVolunteerValidator = vine.compile(
     roles: vine.array(vine.string().trim().escape().minLength(3).maxLength(32)),
   })
 )
-
-export const filtersVolunteerValidator = vine.compile(
-  vine.object({
-    page: vine.number(),
-    limit: vine.number(),
-    orderBy: vine.enum(['id', 'name', 'email']),
-    order: vine.enum(['asc', 'desc']),
-  })
-)

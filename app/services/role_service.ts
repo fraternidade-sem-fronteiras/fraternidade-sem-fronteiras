@@ -26,7 +26,8 @@ export default class RoleService {
       .where('id', roleId)
       .first()
 
-    if (!role) throw new EntityNotFoundException('The role with id ' + roleId + ' does not exist')
+    if (!role)
+      throw new EntityNotFoundException('Role', 'O cargo de id ' + roleId + ' não foi encontrado.')
 
     return {
       id: role.id,
@@ -74,7 +75,8 @@ export default class RoleService {
   async deleteRoleById(roleId: string): Promise<void> {
     const role = await Role.findBy('id', roleId)
 
-    if (!role) throw new EntityNotFoundException('The role with id ' + roleId + ' does not exist')
+    if (!role)
+      throw new EntityNotFoundException('Role', 'O cargo de id ' + roleId + ' não foi encontrado.')
 
     await role.delete()
   }
@@ -82,7 +84,8 @@ export default class RoleService {
   async deleteRole(name: string): Promise<void> {
     const role = await Role.findBy('name', name)
 
-    if (!role) throw new EntityNotFoundException('The role with name ' + name + ' does not exist')
+    if (!role)
+      throw new EntityNotFoundException('Role', 'O cargo de nome ' + name + ' não foi encontrado.')
 
     await role.delete()
   }

@@ -3,10 +3,13 @@
 
 import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import Assisted from '#models/assisted'
+import { CreateAssistedDto } from '#validators/assisted'
 import { PageResult } from '../utils/pageable.js'
 
 // com o search sem ser um cpf
 const cpfRegex = /[0-9]{2,3}([\.]?)[0-9]{0,3}([\.]?)[0-9]{0,3}([-]?)[0-9]{0,2}/
+const uuidRegex = /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/
+
 export default class AssistedService {
   /**
    * Criar um novo assistido
@@ -15,8 +18,8 @@ export default class AssistedService {
    * @returns
    */
 
-  async createAssisted(data: Partial<Assisted> & { name: string }): Promise<Assisted> {
-    return await Assisted.create(data)
+  async createAssisted(createAssistedDto: CreateAssistedDto): Promise<Assisted> {
+    return await Assisted.create(createAssistedDto)
   }
 
   /**
@@ -26,9 +29,10 @@ export default class AssistedService {
    */
 
   async deleteAssisted(id: string) {
-    const assisted = await Assisted.query().where('id', id).first()
+    const assisted = await Assisted.query().where('id', id).preload('schooling').first()
 
-    if (!assisted) throw new EntityNotFoundException('O assistido ' + id + ' não foi encontrado!')
+    if (!assisted)
+      throw new EntityNotFoundException('Assisted', 'O assistido ' + id + ' não foi encontrado!')
 
     await assisted.delete()
   }
@@ -43,20 +47,25 @@ export default class AssistedService {
    */
 
   async getAssisteds(page: number, perPage: number, search: string | null) {
+    const query = Assisted.query().preload('schooling').preload('gender')
+
     if (search) {
-      if (cpfRegex.test(search)) {
-        return await Assisted.query()
-          .whereRaw(`BINARY cpf REGEXP '${search}'`)
-          .paginate(page, perPage)
-      } else {
-        return await Assisted.query()
-          .whereRaw(`name REGEXP '^[${search}]'`)
-          .orWhereRaw(`social_name REGEXP '^[${search}]'`)
-          .paginate(page, perPage)
+      console.log(search)
+      if (uuidRegex.test(search)) {
+        return await query.where('id', search).paginate(page, perPage)
       }
+
+      if (cpfRegex.test(search)) {
+        return await query.whereRaw(`BINARY cpf REGEXP '${search}'`).paginate(page, perPage)
+      }
+
+      return await query
+        .whereRaw(`name REGEXP '^[${search}]'`)
+        .orWhereRaw(`social_name REGEXP '^[${search}]'`)
+        .paginate(page, perPage)
     }
 
-    const assistedsPagination = await Assisted.query().paginate(page, perPage)
+    const assistedsPagination = await query.paginate(page, perPage)
     const assisteds = assistedsPagination.all()
 
     return PageResult.toResult(assisteds, {
@@ -75,14 +84,20 @@ export default class AssistedService {
    */
 
   async getAssisted(search: string) {
-    if (cpfRegex.test(search)) {
-      return await Assisted.query().whereRaw(`BINARY cpf REGEXP '${search}'`).firstOrFail()
-    } else {
-      return await Assisted.query()
-        .whereRaw(`name REGEXP '^[${search}]'`)
-        .orWhereRaw(`social_name REGEXP '^[${search}]'`)
-        .firstOrFail()
+    const query = Assisted.query().preload('schooling').preload('gender')
+
+    if (uuidRegex.test(search)) {
+      return await query.where('id', search).firstOrFail()
     }
+
+    if (cpfRegex.test(search)) {
+      return await query.whereRaw(`BINARY cpf REGEXP '${search}'`).firstOrFail()
+    }
+
+    return query
+      .whereRaw(`name REGEXP '^[${search}]'`)
+      .orWhereRaw(`social_name REGEXP '^[${search}]'`)
+      .firstOrFail()
   }
 
   /**
@@ -107,7 +122,11 @@ export default class AssistedService {
   }
 
   async getAssistedById(id: string): Promise<Assisted> {
-    return await Assisted.findByOrFail('id', id)
+    return await Assisted.query()
+      .where('id', id)
+      .preload('schooling')
+      .preload('gender')
+      .firstOrFail()
   }
 
   /**
@@ -117,6 +136,10 @@ export default class AssistedService {
    */
 
   async getAssistedByCpf(cpf: string): Promise<Assisted> {
-    return await Assisted.query().where('cpf', cpf).firstOrFail()
+    return await Assisted.query()
+      .where('cpf', cpf)
+      .preload('schooling')
+      .preload('gender')
+      .firstOrFail()
   }
 }

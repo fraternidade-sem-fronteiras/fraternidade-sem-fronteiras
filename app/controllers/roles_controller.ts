@@ -8,11 +8,8 @@ import { createRoleValidator } from '#validators/role'
 export default class RolesController {
   constructor(readonly roleService: RoleService) {}
 
-  async index({ request, response, auth }: HttpContext) {
+  async index({ response }: HttpContext) {
     const roles = await this.roleService.getRoles()
-
-    if (!roles.length) throw new EntityNotFoundException('No roles found')
-
     return response.json(roles)
   }
 
@@ -21,7 +18,8 @@ export default class RolesController {
 
     const role = await this.roleService.getRoleById(id)
 
-    if (!role) throw new EntityNotFoundException('Role not found')
+    if (!role)
+      throw new EntityNotFoundException('Roles', 'O cargo de ID ' + id + ' não foi encontrado!')
 
     return response.json(role)
   }

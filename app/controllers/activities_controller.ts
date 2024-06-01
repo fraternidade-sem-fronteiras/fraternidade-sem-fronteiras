@@ -1,111 +1,38 @@
 import ActivityService from '#services/activity_service'
-import { activityValidator } from '#validators/activity'
+import { createActivityValidator } from '#validators/activity'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 
 @inject()
 export default class ActivitiesController {
   constructor(readonly activityService: ActivityService) {}
-  /**
-   * Lista de exibição de todos as Activities
-   */
+
   async index({ response }: HttpContext) {
-    // busca todos os atividades
-    const objs = await this.activityService.getActivities()
-
-    // retorna os atividades em formato json
-    return response.json(objs)
+    const activities = await this.activityService.getActivities()
+    return response.json(activities)
   }
 
-  /**
-   * Oferece formulário para criar novo Activity
-   */
-  async new({}: HttpContext) {
-    /**
-     * Não retorna nada por enquanto
-     */
+  async store({ request, response }: HttpContext) {
+    const createAssistedDto = await createActivityValidator.validate(request.all())
+    const activity = await this.activityService.createActivity(createAssistedDto)
+    return response.status(201).json(activity)
   }
 
-  /**
-   * Criar novo Activity no servidor
-   */
-  async create({ request, response }: HttpContext) {
-    // valida as informações pelo Validator
-    const payload = await activityValidator.validate(request.all())
-
-    // cria um Activity pelo Service
-    const obj = await this.activityService.createActivity(payload.name)
-
-    // retorna o Activity
-    return response.status(201).json(obj)
-  }
-
-  /**
-   * Exibe os detalhes de um Activity específico
-   */
   async show({ response, params }: HttpContext) {
-    // desestrutura o id do Activity da requisição
     const { id } = params
 
-    // busca o Activity pelo Service
-    const obj = await this.activityService.getActivityById(id)
+    const activity = await this.activityService.getActivityById(id)
 
-    // retorna a mensagem de erro caso o Activity não exista
-    if (!obj) {
+    if (!activity) {
       return response.status(404).json({ message: 'Atividade não encontrada.' })
     }
 
-    // retorna o Activity caso ele exista
-    return response.json(obj)
+    return response.json(activity)
   }
 
-  /**
-   * Oferece formulário para editar Activity específico
-   */
-  async edit({ response, params }: HttpContext) {
-    // desestrutura o id do Activity da requisição
-    const { id } = params
-
-    // busca o Activity pelo Service
-    const obj = await this.activityService.getActivityById(id)
-
-    // retorna a mensagem de erro caso o Activity não exista
-    if (!obj) {
-      return response.status(404).json({ message: 'Atividade não encontrada.' })
-    }
-
-    // retorna o Activity caso ele exista
-    return response.json(obj)
-  }
-
-  /**
-   * Atualiza Activity específico no servidor
-   */
-  async update({ request, response, params }: HttpContext) {
-    // desestrutura o id do Activity da requisição
-    const { id } = params
-
-    // valida as informações pelo Validator
-    const payload = await activityValidator.validate(request.all())
-
-    // atualiza as informações pelo Service
-    const data = await this.activityService.updateActivity(id, payload.name)
-
-    // retorna as atualizações realizadas
-    return response.json({ ...data })
-  }
-
-  /**
-   * Exclui um Activity específico
-   */
   async destroy({ response, params }: HttpContext) {
-    // desestrutura o id do Activity da requisição
     const { id } = params
-
-    // deleta o Activity pelo Service
     await this.activityService.deleteActivity(id)
-
-    // retorna status de sucesso: deletado
     return response.status(204)
   }
 }

@@ -5,8 +5,10 @@
  * Talvez seja necessário que não permitir exclusão de um Gender, pois o idGender é usado em Assisted
  */
 
+import ConflictException from '#exceptions/conflict_exception'
 import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import Gender from '#models/gender'
+import { PageResult } from '../utils/pageable.js'
 
 export default class GenderService {
   /**
@@ -15,17 +17,31 @@ export default class GenderService {
    * @returns Gender
    */
   async createGender(name: string): Promise<Gender> {
-    let gender = await Gender.findBy('name', name)
+    const gender = await Gender.findBy('name', name)
 
-    if (gender) {
-      return gender
-    }
+    if (gender) throw new ConflictException('O gênero ' + name + ' já existe')
 
-    gender = new Gender()
-    gender.name = name
-    await gender.save()
+    return await Gender.create({ name })
+  }
 
-    return gender
+  async getAssistedsByGender(genderId: string, page: number, limit: number) {
+    const gender = await Gender.query().where('id', genderId).first()
+
+    if (!gender)
+      throw new EntityNotFoundException(
+        'Gender',
+        'O gênero de id ' + genderId + ' não foi encontrado!'
+      )
+
+    const assistedPagination = await gender.related('assisteds').query().paginate(page, limit)
+    const assisteds = assistedPagination.all()
+
+    return PageResult.toResult(assisteds, {
+      currentPage: page,
+      itemsPerPage: limit,
+      totalItems: assistedPagination.total,
+      totalPages: assistedPagination.lastPage,
+    })
   }
 
   /**
@@ -46,7 +62,7 @@ export default class GenderService {
    * @returns Gender[]
    */
   async getGenders(): Promise<Gender[]> {
-    const genders = await Gender.all()
+    const genders = await Gender.query().orderBy('createdAt', 'asc')
     return genders
   }
 
@@ -84,7 +100,7 @@ export default class GenderService {
     let gender = await Gender.findBy('id', id)
 
     if (!gender) {
-      throw new EntityNotFoundException('O gênero de id ' + id + ' não foi encontrado!')
+      throw new EntityNotFoundException('Gender', 'O gênero de id ' + id + ' não foi encontrado!')
     }
 
     await gender.delete()
