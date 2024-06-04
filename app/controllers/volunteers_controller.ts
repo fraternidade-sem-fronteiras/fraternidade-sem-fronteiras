@@ -2,7 +2,7 @@
 
 import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import VolunteerService from '#services/volunteer_service'
-import { filtersValidator, paginationValidator, sortValidator } from '#validators/filter'
+import { paginationValidator, sortValidator } from '#validators/filter'
 import { createVolunteerValidator, loginVolunteerValidator } from '#validators/volunteer'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
