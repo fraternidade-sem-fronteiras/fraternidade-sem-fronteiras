@@ -9,7 +9,6 @@ export default class extends BaseSchema {
 
       table
         .uuid('assisted_id')
-        .unsigned()
         .references('id')
         .inTable('assisteds')
         .onDelete('CASCADE')

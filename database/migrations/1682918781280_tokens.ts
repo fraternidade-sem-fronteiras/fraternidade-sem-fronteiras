@@ -1,3 +1,4 @@
+import env from '#start/env'
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
@@ -7,7 +8,8 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
       table.string('token', 128).notNullable().unique()
-      table.uuid('user_id').unsigned().references('id').inTable('volunteers').onDelete('CASCADE')
+      table.uuid('user_id').references('id').inTable('volunteers').onDelete('CASCADE')
+
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
