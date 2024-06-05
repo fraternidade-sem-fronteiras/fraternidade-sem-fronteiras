@@ -28,8 +28,8 @@ export default function DefaultNavBar() {
   const isVoluntarioPath = location.pathname.includes('/voluntario/');
   const isAssistidoPath = location.pathname.includes('/assistido/');
   const isCargoPath = location.pathname.includes('/cargo/');
-  const isRelatorioPath = location.pathname.includes('/relatorio');
-  const isFilaPath = location.pathname.includes('/fila');
+  const isRelatorioPath = location.pathname.includes('/relatorio/');
+  const isFilaPath = location.pathname.includes('/fila/');
 
   return (
     <div className="h-[100px] py-0 navbar bg-light-blue">
@@ -93,7 +93,7 @@ export default function DefaultNavBar() {
 
             <MenuList>
               <MenuItem>
-                <Link to="/dashboard/cargo">Listar cargos</Link>
+                <Link to="/dashboard/cargo/">Listar cargos</Link>
               </MenuItem>
 
               {hasPermission(['CREATE_ASSISTED']) && (
@@ -106,13 +106,13 @@ export default function DefaultNavBar() {
         )}
 
         {hasPermission('VIEW_REPORT') && (
-          <Link className={"h-full px-3 flex" + (isRelatorioPath ? " bg-pink" : "")} to="/dashboard/relatorio" >
+          <Link className={"h-full px-3 flex" + (isRelatorioPath ? " bg-pink" : "")} to="/dashboard/relatorio/" >
             <Text className="m-auto" color={'white'}>Relatório</Text>
           </Link>
         )}
 
         {hasPermission('MANAGE_ASSISTED') && (
-          <Link className={"h-full px-3 flex" + (isFilaPath ? " bg-pink" : "")} to="/dashboard/fila" >
+          <Link className={"h-full px-3 flex" + (isFilaPath ? " bg-pink" : "")} to="/dashboard/fila/" >
             <Text className="m-auto" color={'white'}>Fila</Text>
           </Link>
         )}

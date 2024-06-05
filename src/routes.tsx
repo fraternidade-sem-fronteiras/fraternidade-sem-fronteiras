@@ -8,7 +8,7 @@ import EditVolunteerPage from '@/pages/dashboard/volunteer/EditVolunteerPage'
 import ListRolePage from '@/pages/dashboard/roles/ListRolePage'
 import EditRolePage from '@/pages/dashboard/roles/EditRolePage'
 
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
 
 const PrivateRouteLayout = lazy(() => import('@/components/layouts/PrivateRouteLayout'))
@@ -23,7 +23,6 @@ const CreateRolePage = lazy(() => import('@/pages/dashboard/roles/CreateRolePage
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
 const NavigationPage = lazy(() => import('@/pages/NavigationPage'))
 
-import DefaultLayout from '@/components/layouts/DefaultLayout'
 import DashboardLayout from '@/components/layouts/DashboardLayout'
 
 import ErrorBoundary from '@/components/errors/ErrorBoundary'
@@ -80,7 +79,6 @@ const router = createBrowserRouter([
             children: [
               {
                 path: 'assistido',
-                element: <DefaultLayout />,
                 children: [
                   {
                     path: 'perfil',
@@ -106,7 +104,6 @@ const router = createBrowserRouter([
               },
               {
                 path: 'voluntario',
-                element: <DefaultLayout />,
                 children: [
                   {
                     path: ':id/perfil',
@@ -128,7 +125,6 @@ const router = createBrowserRouter([
               },
               {
                 path: 'cargo',
-                element: <DefaultLayout />,
                 children: [
                   {
                     path: 'cadastrar',
@@ -148,17 +144,29 @@ const router = createBrowserRouter([
                   },
                 ],
               },
+              {
+                path: '*',
+                element: <NotFoundError />,
+              },
             ],
           },
           {
             path: 'navegar',
             element: <NavigationPage />,
           },
+          {
+            path: '*',
+            element: <NotFoundError />,
+          },
         ],
       },
       {
         path: 'login',
         element: <LoginPage />,
+      },
+      {
+        path: '',
+        element: <Navigate to={'/dashboard'} />,
       },
       {
         path: '*',
