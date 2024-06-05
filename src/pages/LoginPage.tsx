@@ -19,6 +19,8 @@ import {
 } from '@chakra-ui/react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import useToast from '@/hooks/toast.hook'
+import EyeOff from '../assets/svg/eye-off.jsx'
+import Eye from '../assets/svg/eye.jsx'
 
 const loginUserFormSchema = vine.object({
   email: vine.string().minLength(3).maxLength(64).email(),
@@ -128,7 +130,7 @@ export default function LoginPage() {
                   {...register('password')}
                 />
                 <InputRightAddon onClick={handleShowPassword}>
-                  {isShowingPassword ? 'O' : 'o'}
+                  {isShowingPassword ? <Eye/> : <EyeOff/>}
                 </InputRightAddon>
               </InputGroup>
               <FormErrorMessage>{errors.password?.message}</FormErrorMessage>

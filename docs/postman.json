@@ -1,0 +1,1212 @@
+{
+	"info": {
+		"_postman_id": "04554b9c-92cd-4578-a163-1d3156f08b6f",
+		"name": "Fraternidade Sem Fronteira - Documentação",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31548465"
+	},
+	"item": [
+		{
+			"name": "Voluntários",
+			"item": [
+				{
+					"name": "Criar sessão (autenticar)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@fsf.com\",\r\n    \"password\": \"admin@fsf.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/volunteers/login"
+					},
+					"response": [
+						{
+							"name": "Criar sessão (exemplo)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"admin@fsf.com\",\r\n    \"password\": \"admin@fsf.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{url}}/volunteers/login"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "501"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 04:46:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU2ZTNiMzliLTlhZmQtNDVkNi05NDI0LWU0YWM3Y2U5ZGNjMCIsImV4cGlyZXNBdCI6MTcxNzgyMTk3ODExNSwiaWF0IjoxNzE3MjE3MTc4LCJleHAiOjIzMjIwMTcxNzh9.UhEfRK77w5ou2ydZJp_Ovhz8n0JMfVzQMmUQYZ93H9I\",\n    \"volunteer\": {\n        \"id\": \"56e3b39b-9afd-45d6-9424-e4ac7ce9dcc0\",\n        \"name\": \"Administrador\",\n        \"email\": \"admin@fsf.com\",\n        \"roles\": [\n            {\n                \"id\": \"4f1db48e-39ff-40f5-9ae8-95ac74909c56\",\n                \"name\": \"Administrador\",\n                \"permissions\": [\n                    \"ALL\"\n                ]\n            }\n        ],\n        \"registered\": true,\n        \"createdAt\": \"2024-06-01T04:46:09.220+00:00\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Perfil da sessão atual",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/volunteers/profile"
+					},
+					"response": [
+						{
+							"name": "Perfil da sessão atual (exemplo)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{url}}/volunteers/profile"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "255"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 04:46:40 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"56e3b39b-9afd-45d6-9424-e4ac7ce9dcc0\",\n    \"name\": \"Administrador\",\n    \"email\": \"admin@fsf.com\",\n    \"roles\": [\n        {\n            \"id\": \"4f1db48e-39ff-40f5-9ae8-95ac74909c56\",\n            \"name\": \"Administrador\",\n            \"permissions\": [\n                \"ALL\"\n            ]\n        }\n    ],\n    \"registered\": true,\n    \"createdAt\": \"2024-06-01T04:46:09.220+00:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Listar voluntários",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/volunteers/?page=1&limit=10",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"volunteers",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Listar voluntários (exemplo)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/volunteers/?page=1&limit=10",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"volunteers",
+										""
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "320"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 05:42:05 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": \"f51f0d52-d659-423d-8883-c6fc03e17df7\",\n            \"name\": \"Administrador\",\n            \"email\": \"admin@fsf.com\",\n            \"roles\": [\n                {\n                    \"id\": \"178f0dee-e0b8-4255-a4c3-71d7c9dbd6b1\",\n                    \"name\": \"Administrador\",\n                    \"permissions\": [\n                        \"ALL\"\n                    ]\n                }\n            ],\n            \"createdAt\": \"2024-06-01T04:54:22.830+00:00\"\n        }\n    ],\n    \"page\": {\n        \"currentPage\": 1,\n        \"itemsPerPage\": 5,\n        \"totalPages\": 1,\n        \"totalItems\": 1\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Informações do voluntário pelo Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/volunteers/58606b62-530a-4ce2-a265-e93e485f98f7"
+					},
+					"response": [
+						{
+							"name": "Caso voluntário não exista (exemplo)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{url}}/volunteers/92c7ee69-deb3-40c0-b7f5-fee556f8e178"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "197"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 05:53:00 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"messages\": [\n        \"O voluntário de id 92c7ee69-deb3-40c0-b7f5-fee556f8e178 não existe. (Volunteer)\"\n    ],\n    \"error\": \"EntityNotFoundException\",\n    \"path\": \"/api/v1/volunteers/92c7ee69-deb3-40c0-b7f5-fee556f8e178\"\n}"
+						},
+						{
+							"name": "Informações do voluntário (exemplo)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{url}}/volunteers/58606b62-530a-4ce2-a265-e93e485f98f7"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "168"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 05:54:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"58606b62-530a-4ce2-a265-e93e485f98f7\",\n    \"name\": \"Allan Marcelino\",\n    \"email\": \"allan@fsf.com\",\n    \"roles\": [],\n    \"registered\": false,\n    \"createdAt\": \"2024-06-01T05:54:05.101+00:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Criar voluntário",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Allan Marcelino\",\r\n    \"email\": \"allan@fsf.com\",\r\n    \"roles\": []\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/volunteers/"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar voluntário",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Allan Marcelino\",\r\n    \"email\": \"allan@fsf.com\",\r\n    \"roles\": []\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/volunteers/87458e95-c548-49a5-a434-41681fb09490"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar voluntário pelo Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Allan Marcelino\",\r\n    \"email\": \"allan@fsf.com\",\r\n    \"roles\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/volunteers/caf7366a-90a8-436c-9dc8-b5012cc779b7"
+					},
+					"response": [
+						{
+							"name": "Caso o voluntário não exista (exemplo)",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Allan Marcelino\",\r\n    \"email\": \"allan@fsf.com\",\r\n    \"roles\": []\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{url}}/volunteers/caf7366a-90a8-436c-9dc8-b5012cc779b7"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "162"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 05:54:26 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"messages\": [\n        \"Entity not found (Voluntário não encontrado)\"\n    ],\n    \"error\": \"EntityNotFoundException\",\n    \"path\": \"/api/v1/volunteers/caf7366a-90a8-436c-9dc8-b5012cc779b7\"\n}"
+						},
+						{
+							"name": "Deletar voluntário pelo Id (exemplo)",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Allan Marcelino\",\r\n    \"email\": \"allan@fsf.com\",\r\n    \"roles\": []\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{url}}/volunteers/58606b62-530a-4ce2-a265-e93e485f98f7"
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 05:54:44 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Assistido",
+			"item": [
+				{
+					"name": "Listar assistidos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/assisteds?page=2&limit=30",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"assisteds"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "30"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Listar assistidos (exemplo)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/assisteds?page=1&limit=10",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"assisteds"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "9977"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 05:51:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": \"c7b9e1c7-6ee9-48a2-b592-fb2461bbeabb\",\n            \"name\": \"João Victor\",\n            \"socialName\": \"João\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": \"123.123.123-12\",\n            \"rg\": \"123456789\",\n            \"emission\": null,\n            \"organ\": \"DETRAN\",\n            \"ctps\": \"123456789\",\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": true,\n            \"createdAt\": \"2024-06-01T04:54:22.749+00:00\",\n            \"updatedAt\": \"2024-06-01T04:54:22.749+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"07722dd4-a18d-4429-80de-abf3a8383ee4\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:27:20.167+00:00\",\n            \"updatedAt\": \"2024-06-01T05:27:20.167+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"e1ac5443-1229-4877-96f6-64539f3a5b68\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:02.014+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:02.014+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"49aba78f-cfa0-4fbc-a0f2-bc4061c03135\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:02.732+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:02.732+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"77e1b33d-7bdd-4d15-884c-21bf28102eca\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:03.388+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:03.388+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"0b49f563-93df-449b-8602-f3db229da2f6\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:03.946+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:03.946+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"5c958514-c92b-4529-bf96-c2921f416c60\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:04.456+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:04.457+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"e29bea15-4b85-4218-b1e4-5630e5d40c48\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:04.913+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:04.913+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"6395991a-ca76-4ab0-ab18-2ca0587a7211\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:05.433+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:05.433+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"55fcc010-1027-456e-a058-2cf2099c1d76\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:05.892+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:05.892+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        }\n    ],\n    \"page\": {\n        \"currentPage\": 1,\n        \"itemsPerPage\": 10,\n        \"totalPages\": 3,\n        \"totalItems\": 23\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Informações do assistido",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/assisteds/83f267cc-a9d5-4c00-a713-ec433755e962"
+					},
+					"response": [
+						{
+							"name": "Listar assistidos (exemplo)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/assisteds?page=1&limit=10",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"assisteds"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "9977"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 05:51:12 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": \"c7b9e1c7-6ee9-48a2-b592-fb2461bbeabb\",\n            \"name\": \"João Victor\",\n            \"socialName\": \"João\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": \"123.123.123-12\",\n            \"rg\": \"123456789\",\n            \"emission\": null,\n            \"organ\": \"DETRAN\",\n            \"ctps\": \"123456789\",\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": true,\n            \"createdAt\": \"2024-06-01T04:54:22.749+00:00\",\n            \"updatedAt\": \"2024-06-01T04:54:22.749+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"07722dd4-a18d-4429-80de-abf3a8383ee4\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:27:20.167+00:00\",\n            \"updatedAt\": \"2024-06-01T05:27:20.167+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"e1ac5443-1229-4877-96f6-64539f3a5b68\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:02.014+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:02.014+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"49aba78f-cfa0-4fbc-a0f2-bc4061c03135\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:02.732+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:02.732+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"77e1b33d-7bdd-4d15-884c-21bf28102eca\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:03.388+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:03.388+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"0b49f563-93df-449b-8602-f3db229da2f6\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:03.946+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:03.946+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"5c958514-c92b-4529-bf96-c2921f416c60\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:04.456+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:04.457+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"e29bea15-4b85-4218-b1e4-5630e5d40c48\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:04.913+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:04.913+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"6395991a-ca76-4ab0-ab18-2ca0587a7211\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:05.433+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:05.433+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        },\n        {\n            \"id\": \"55fcc010-1027-456e-a058-2cf2099c1d76\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:05.892+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:05.892+00:00\",\n            \"schooling\": {\n                \"id\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.583+00:00\"\n            },\n            \"gender\": {\n                \"id\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n                \"name\": \"Não informado\",\n                \"default\": true,\n                \"createdAt\": \"2024-06-01T04:54:22.467+00:00\"\n            }\n        }\n    ],\n    \"page\": {\n        \"currentPage\": 1,\n        \"itemsPerPage\": 10,\n        \"totalPages\": 3,\n        \"totalItems\": 23\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Criar assistido",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Allan Marcelino de Souza\",\r\n    \"socialName\": \"Máquina de Turing\",\r\n    \"dateBirth\": \"2003-09-21\",\r\n    \"ethnicy\": \"Preto\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/assisteds"
+					},
+					"response": [
+						{
+							"name": "Criar assistido (exemplo)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Allan Marcelino de Souza\",\r\n    \"socialName\": \"Máquina de Turing\",\r\n    \"dateBirth\": \"2003-09-21\",\r\n    \"ethnicy\": \"Preto\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{url}}/assisteds"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "366"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 05:50:41 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"Allan Marcelino de Souza\",\n    \"socialName\": \"Máquina de Turing\",\n    \"dateBirth\": \"2003-09-21T00:00:00.000+00:00\",\n    \"ethnicy\": \"Preto\",\n    \"id\": \"d968654a-7c11-4047-b529-fceff4b09183\",\n    \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n    \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n    \"createdAt\": \"2024-06-01T05:50:41.523+00:00\",\n    \"updatedAt\": \"2024-06-01T05:50:41.524+00:00\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Gênero",
+			"item": [
+				{
+					"name": "Listar genêros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/genders/"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar assistidos por gênero",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/genders/bb2f7378-018e-4846-a0da-8afe180be0fb/assisteds?page=1&limit=10",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"genders",
+								"bb2f7378-018e-4846-a0da-8afe180be0fb",
+								"assisteds"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Listar assistidos por gênero (exemplo)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/genders/bb2f7378-018e-4846-a0da-8afe180be0fb/assisteds?page=1&limit=10",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"genders",
+										"bb2f7378-018e-4846-a0da-8afe180be0fb",
+										"assisteds"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "24831"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 07:01:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": \"c7b9e1c7-6ee9-48a2-b592-fb2461bbeabb\",\n            \"name\": \"João Victor\",\n            \"socialName\": \"João\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": \"123.123.123-12\",\n            \"rg\": \"123456789\",\n            \"emission\": null,\n            \"organ\": \"DETRAN\",\n            \"ctps\": \"123456789\",\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": true,\n            \"createdAt\": \"2024-06-01T04:54:22.749+00:00\",\n            \"updatedAt\": \"2024-06-01T04:54:22.749+00:00\"\n        },\n        {\n            \"id\": \"07722dd4-a18d-4429-80de-abf3a8383ee4\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:27:20.167+00:00\",\n            \"updatedAt\": \"2024-06-01T05:27:20.167+00:00\"\n        },\n        {\n            \"id\": \"e1ac5443-1229-4877-96f6-64539f3a5b68\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:02.014+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:02.014+00:00\"\n        },\n        {\n            \"id\": \"49aba78f-cfa0-4fbc-a0f2-bc4061c03135\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:02.732+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:02.732+00:00\"\n        },\n        {\n            \"id\": \"77e1b33d-7bdd-4d15-884c-21bf28102eca\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:03.388+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:03.388+00:00\"\n        },\n        {\n            \"id\": \"0b49f563-93df-449b-8602-f3db229da2f6\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:03.946+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:03.946+00:00\"\n        },\n        {\n            \"id\": \"5c958514-c92b-4529-bf96-c2921f416c60\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:04.456+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:04.457+00:00\"\n        },\n        {\n            \"id\": \"e29bea15-4b85-4218-b1e4-5630e5d40c48\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:04.913+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:04.913+00:00\"\n        },\n        {\n            \"id\": \"6395991a-ca76-4ab0-ab18-2ca0587a7211\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:05.433+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:05.433+00:00\"\n        },\n        {\n            \"id\": \"55fcc010-1027-456e-a058-2cf2099c1d76\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:05.892+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:05.892+00:00\"\n        },\n        {\n            \"id\": \"9a39eebb-c908-4cd9-9ce4-25909a4a1506\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:06.317+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:06.317+00:00\"\n        },\n        {\n            \"id\": \"e2e82d91-d7e5-436b-b619-72c8bb6fc706\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:07.627+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:07.627+00:00\"\n        },\n        {\n            \"id\": \"44f59b5d-b700-4727-94f9-c1a7bb89180b\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:08.125+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:08.125+00:00\"\n        },\n        {\n            \"id\": \"68cd70af-a2a1-4ff0-938c-e72267ac6dce\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:08.571+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:08.571+00:00\"\n        },\n        {\n            \"id\": \"9bd932b5-16d3-46a4-bad4-756759d3e074\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:09.009+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:09.009+00:00\"\n        },\n        {\n            \"id\": \"d3eb88fa-c57a-4df3-93fc-974057a3d028\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:09.382+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:09.382+00:00\"\n        },\n        {\n            \"id\": \"9c4b58dc-709f-43f4-bc89-cae372424b6e\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:09.817+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:09.817+00:00\"\n        },\n        {\n            \"id\": \"212f6694-a4a8-40af-af82-e670e4130726\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:10.287+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:10.287+00:00\"\n        },\n        {\n            \"id\": \"6ccfb24b-d71b-4f7a-834a-a2fc29464d55\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:34:10.689+00:00\",\n            \"updatedAt\": \"2024-06-01T05:34:10.689+00:00\"\n        },\n        {\n            \"id\": \"e4d0146c-00dc-4ade-91ae-c3f863bccfb3\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:49:57.075+00:00\",\n            \"updatedAt\": \"2024-06-01T05:49:57.075+00:00\"\n        },\n        {\n            \"id\": \"c977184e-817d-446b-be62-83bb7379dfd9\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:50:40.284+00:00\",\n            \"updatedAt\": \"2024-06-01T05:50:40.284+00:00\"\n        },\n        {\n            \"id\": \"afd6ebbe-4064-4a9d-8367-7a0ffc3b299d\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:50:41.026+00:00\",\n            \"updatedAt\": \"2024-06-01T05:50:41.026+00:00\"\n        },\n        {\n            \"id\": \"d968654a-7c11-4047-b529-fceff4b09183\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:50:41.523+00:00\",\n            \"updatedAt\": \"2024-06-01T05:50:41.524+00:00\"\n        },\n        {\n            \"id\": \"f0cd9f57-ed57-4d27-ae19-d42845669190\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T05:56:37.205+00:00\",\n            \"updatedAt\": \"2024-06-01T05:56:37.205+00:00\"\n        },\n        {\n            \"id\": \"201c4681-0635-4447-a805-68900d8235eb\",\n            \"name\": \"sdsawe\",\n            \"socialName\": \"dasdawe\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": \"Brasil\",\n            \"state\": \"PE\",\n            \"city\": \"Araripina\",\n            \"maritalStatusId\": null,\n            \"cpf\": \"111.111.111-11\",\n            \"rg\": \"11.111.111-1\",\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:13:12.270+00:00\",\n            \"updatedAt\": \"2024-06-01T06:13:12.270+00:00\"\n        },\n        {\n            \"id\": \"616eac2d-e026-4896-9216-73533ee2b824\",\n            \"name\": \"sdsawe\",\n            \"socialName\": \"dasdawe\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": \"Brasil\",\n            \"state\": \"PE\",\n            \"city\": \"Araripina\",\n            \"maritalStatusId\": null,\n            \"cpf\": \"111.111.111-14\",\n            \"rg\": \"11.111.131-3\",\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:14:46.647+00:00\",\n            \"updatedAt\": \"2024-06-01T06:14:46.647+00:00\"\n        },\n        {\n            \"id\": \"9c9349dd-3c06-4108-924b-808a35c49a40\",\n            \"name\": \"sdsawe\",\n            \"socialName\": \"dasdawe\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": \"Brasil\",\n            \"state\": \"PE\",\n            \"city\": \"Araripina\",\n            \"maritalStatusId\": null,\n            \"cpf\": \"111.111.111-15\",\n            \"rg\": \"11.111.131-4\",\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:15:47.806+00:00\",\n            \"updatedAt\": \"2024-06-01T06:15:47.806+00:00\"\n        },\n        {\n            \"id\": \"128e3303-ad12-4b4a-b0c9-303ace1e7be3\",\n            \"name\": \"ghd\",\n            \"socialName\": \"37daw\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": \"Brasil\",\n            \"state\": \"AC\",\n            \"city\": \"Acrelândia\",\n            \"maritalStatusId\": null,\n            \"cpf\": \"123.123.123-13\",\n            \"rg\": \"12.312.312-3\",\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:17:53.102+00:00\",\n            \"updatedAt\": \"2024-06-01T06:17:53.102+00:00\"\n        },\n        {\n            \"id\": \"962317d9-6f05-4c3a-9608-2d56694cfcd9\",\n            \"name\": \"ghd\",\n            \"socialName\": \"37daw\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": \"Brasil\",\n            \"state\": \"AC\",\n            \"city\": \"Acrelândia\",\n            \"maritalStatusId\": null,\n            \"cpf\": \"123.123.123-19\",\n            \"rg\": \"12.312.312-5\",\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:21:46.635+00:00\",\n            \"updatedAt\": \"2024-06-01T06:21:46.635+00:00\"\n        },\n        {\n            \"id\": \"3f9afc86-686e-4f09-a98c-0f9881dd1013\",\n            \"name\": \"ghd\",\n            \"socialName\": \"37daw\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": \"Brasil\",\n            \"state\": \"AC\",\n            \"city\": \"Acrelândia\",\n            \"maritalStatusId\": null,\n            \"cpf\": \"123.123.123-15\",\n            \"rg\": \"12.312.323-3\",\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:22:26.290+00:00\",\n            \"updatedAt\": \"2024-06-01T06:22:26.290+00:00\"\n        },\n        {\n            \"id\": \"83f267cc-a9d5-4c00-a713-ec433755e962\",\n            \"name\": \"dasd\",\n            \"socialName\": \"adasdawe\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": \"Brasil\",\n            \"state\": \"AC\",\n            \"city\": \"Assis Brasil\",\n            \"maritalStatusId\": null,\n            \"cpf\": \"162.314.231-23\",\n            \"rg\": \"12.312.345-5\",\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:29:34.370+00:00\",\n            \"updatedAt\": \"2024-06-01T06:29:34.370+00:00\"\n        },\n        {\n            \"id\": \"5ce9dda7-2256-4d38-9150-66f566632550\",\n            \"name\": \"dasd\",\n            \"socialName\": \"adasdawe\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": \"Brasil\",\n            \"state\": \"AC\",\n            \"city\": \"Assis Brasil\",\n            \"maritalStatusId\": null,\n            \"cpf\": \"162.631.423-12\",\n            \"rg\": \"12.319.234-5\",\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:31:22.147+00:00\",\n            \"updatedAt\": \"2024-06-01T06:31:22.147+00:00\"\n        },\n        {\n            \"id\": \"aeb402d6-89e3-4e3d-ac70-8c1047d0617b\",\n            \"name\": \"dasd\",\n            \"socialName\": \"adasdawe\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": \"Brasil\",\n            \"state\": \"AC\",\n            \"city\": \"Assis Brasil\",\n            \"maritalStatusId\": null,\n            \"cpf\": \"162.631.742-31\",\n            \"rg\": \"12.319.233-4\",\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"923524d7-4966-41f6-8228-55005ede0e9f\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:32:20.232+00:00\",\n            \"updatedAt\": \"2024-06-01T06:32:20.232+00:00\"\n        },\n        {\n            \"id\": \"a5ebdb16-81bf-41dd-ab5e-4167e2c3ffc7\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:44:12.171+00:00\",\n            \"updatedAt\": \"2024-06-01T06:44:12.171+00:00\"\n        },\n        {\n            \"id\": \"0234fbf8-d85e-48b9-907f-38233c613053\",\n            \"name\": \"Allan Marcelino de Souza\",\n            \"socialName\": \"Máquina de Turing\",\n            \"dateBirth\": \"2003-09-21T00:00:00.000Z\",\n            \"ethnicy\": \"Preto\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": null,\n            \"state\": null,\n            \"city\": null,\n            \"maritalStatusId\": null,\n            \"cpf\": null,\n            \"rg\": null,\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"b26c2e4d-e00f-4dd7-b168-2b856a89fcf9\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:44:12.171+00:00\",\n            \"updatedAt\": \"2024-06-01T06:44:12.171+00:00\"\n        }\n    ],\n    \"page\": {\n        \"currentPage\": 1,\n        \"itemsPerPage\": 35,\n        \"totalItems\": 35,\n        \"totalPages\": 1\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Criar gênero",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/genders/"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar gênero",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/genders/82c6ddbd-64ed-4914-af6c-ec474d105656"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Escolaridade",
+			"item": [
+				{
+					"name": "Listar escolaridades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/schoolings/"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar assistidos por escolaridade",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/schoolings/923524d7-4966-41f6-8228-55005ede0e9f/assisteds?page=1&limit=10",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"schoolings",
+								"923524d7-4966-41f6-8228-55005ede0e9f",
+								"assisteds"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Listar assistidos por gênero (exemplo)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/schoolings/923524d7-4966-41f6-8228-55005ede0e9f/assisteds?page=1&limit=10",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"schoolings",
+										"923524d7-4966-41f6-8228-55005ede0e9f",
+										"assisteds"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoidzcyNzZ2aXI0cHdpYXJ3cjNoZGJlbGw2IiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.3Vhk8L4lIjN-nnUCnYhoF-MFhX7K9a3z56jaeUop3mM; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "780"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 01 Jun 2024 07:03:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": \"aeb402d6-89e3-4e3d-ac70-8c1047d0617b\",\n            \"name\": \"dasd\",\n            \"socialName\": \"adasdawe\",\n            \"dateBirth\": null,\n            \"ethnicy\": \"Branco\",\n            \"genderId\": \"bb2f7378-018e-4846-a0da-8afe180be0fb\",\n            \"father\": null,\n            \"mother\": null,\n            \"country\": \"Brasil\",\n            \"state\": \"AC\",\n            \"city\": \"Assis Brasil\",\n            \"maritalStatusId\": null,\n            \"cpf\": \"162.631.742-31\",\n            \"rg\": \"12.319.233-4\",\n            \"emission\": null,\n            \"organ\": null,\n            \"ctps\": null,\n            \"objectives\": null,\n            \"certification\": null,\n            \"dateStreet\": null,\n            \"reasons\": null,\n            \"place\": null,\n            \"schoolingId\": \"923524d7-4966-41f6-8228-55005ede0e9f\",\n            \"income\": null,\n            \"specialNeeds\": null,\n            \"disciplinaryAlert\": null,\n            \"missedAlert\": null,\n            \"remarks\": null,\n            \"registered\": false,\n            \"createdAt\": \"2024-06-01T06:32:20.232+00:00\",\n            \"updatedAt\": \"2024-06-01T06:32:20.232+00:00\"\n        }\n    ],\n    \"page\": {\n        \"currentPage\": 1,\n        \"itemsPerPage\": 10,\n        \"totalItems\": 1,\n        \"totalPages\": 1\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Criar gênero",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/genders/"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar gênero",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/genders/82c6ddbd-64ed-4914-af6c-ec474d105656"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Drogas",
+			"item": [
+				{
+					"name": "Listar drogas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/drugs/"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar droga",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/drugs/"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar droga",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/drugs/82c6ddbd-64ed-4914-af6c-ec474d105656"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cargos",
+			"item": [
+				{
+					"name": "Listar cargos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/roles/"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar cargo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Moderador\",\r\n    \"permissions\": []\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/roles/"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar droga",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pangênero\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/roles/f94c5f0a-8a04-425e-9d00-6dce847cf0fc"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Activity",
+			"item": [
+				{
+					"name": "Criar atividade",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Almoço\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/activities/"
+					},
+					"response": [
+						{
+							"name": "Criar atividade (exemplo)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Almoço\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{url}}/activities/"
+							},
+							"status": "Unprocessable Entity",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoiYTNrZmViYXowejlxeHl5M29xa2RxdzdoIiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.ZOozyDOzadwFU9oMhz6IKMsU0jlMvBpDDX4FX8jshGg; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "116"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 31 May 2024 22:09:04 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errors\": [\n        {\n            \"message\": \"The name field must contain only letters and numbers\",\n            \"rule\": \"alphaNumeric\",\n            \"field\": \"name\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Listar atividades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/activities"
+					},
+					"response": [
+						{
+							"name": "Listar atividades (exemplo)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{url}}/activities"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "adonis-session=s%3AeyJtZXNzYWdlIjoiYTNrZmViYXowejlxeHl5M29xa2RxdzdoIiwicHVycG9zZSI6ImFkb25pcy1zZXNzaW9uIn0.ZOozyDOzadwFU9oMhz6IKMsU0jlMvBpDDX4FX8jshGg; Max-Age=7200; Path=/; HttpOnly; SameSite=Lax"
+								},
+								{
+									"key": "content-length",
+									"value": "457"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 31 May 2024 22:09:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"fcd132c9-3049-4ba5-aa88-51efca960ce6\",\n        \"name\": \"Almoço\",\n        \"createdAt\": \"2024-05-31T05:47:56.576+00:00\",\n        \"updatedAt\": \"2024-05-31T05:47:56.576+00:00\"\n    },\n    {\n        \"id\": \"6a097f71-c1c9-4087-bf9d-9ff8efdd0962\",\n        \"name\": \"Banho\",\n        \"createdAt\": \"2024-05-31T05:47:56.582+00:00\",\n        \"updatedAt\": \"2024-05-31T05:47:56.582+00:00\"\n    },\n    {\n        \"id\": \"3c7e4a82-f300-4f8b-897d-c19e1bac0e2f\",\n        \"name\": \"Pegar roupas\",\n        \"createdAt\": \"2024-05-31T05:47:56.584+00:00\",\n        \"updatedAt\": \"2024-05-31T05:47:56.584+00:00\"\n    }\n]"
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": {
+			"token": "{{token}}"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3000/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY1MWYwZDUyLWQ2NTktNDIzZC04ODgzLWM2ZmMwM2UxN2RmNyIsImV4cGlyZXNBdCI6MTcxNzgyMjQ2NzgwMywiaWF0IjoxNzE3MjE3NjY3LCJleHAiOjIzMjIwMTc2Njd9.y4uaHSbrnOzZ7bJnPZJMCzXvDiD-U5c6Epf5nChhwEk",
+			"type": "string"
+		}
+	]
+}

@@ -12,7 +12,7 @@ export default class VisitService {
    */
   async createVisit(
     dateVisit: Date | null | undefined,
-    assistedId: number,
+    assistedId: string,
     attended: boolean | null | undefined,
     description: string | null | undefined
   ): Promise<Visit> {

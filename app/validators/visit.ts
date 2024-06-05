@@ -2,7 +2,7 @@ import vine from '@vinejs/vine'
 
 export const createVisitValidator = vine.compile(
   vine.object({
-    assistedId: vine.number(),
+    assistedId: vine.string(),
     dateVisit: vine
       .date({ formats: ['yyyy-MM-dd HH:mm:ss'] })
       .nullable()

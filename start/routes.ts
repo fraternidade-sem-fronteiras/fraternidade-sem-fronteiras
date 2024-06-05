@@ -14,6 +14,7 @@ const IllnessAssistedsController = () => import('#controllers/illness_assisteds_
 const IllnessesController = () => import('#controllers/illnesses_controller')
 const PermissionController = () => import('#controllers/permissions_controller')
 const RoleController = () => import('#controllers/roles_controller')
+const SchoolingsController = () => import('#controllers/schoolings_controller')
 const MaritalStatusesController = () => import('#controllers/marital_statuses_controller')
 const MedicinesController = () => import('#controllers/medicines_controller')
 const VisitActivitiesController = () => import('#controllers/visit_activities_controller')
@@ -27,7 +28,7 @@ router
   .group(() => {
     router
       .resource('activities', ActivitiesController)
-      .only(['index', 'store', 'show', 'update', 'destroy'])
+      .only(['index', 'store', 'show', 'destroy'])
       .use('*', middleware.auth())
 
     router
@@ -62,8 +63,10 @@ router
 
     router
       .resource('genders', GendersController)
-      .only(['index', 'store', 'show', 'update', 'destroy'])
+      .only(['index', 'store', 'show', 'destroy'])
       .use('*', middleware.auth())
+
+    router.get('genders/:id/assisteds', [GendersController, 'getAssisteds']).use(middleware.auth())
 
     router
       .resource('assisted/illness', IllnessAssistedsController)
@@ -84,6 +87,12 @@ router
       .resource('roles', RoleController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
       .use('*', middleware.auth())
+
+    router.resource('schoolings', SchoolingsController).only(['index']).use('*', middleware.auth())
+
+    router
+      .get('schoolings/:id/assisteds', [SchoolingsController, 'getAssisteds'])
+      .use(middleware.auth())
 
     router
       .resource('marital-status', MaritalStatusesController)
@@ -117,6 +126,12 @@ router
       .resource('volunteers', VolunteersController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
       .use('*', middleware.auth())
+
+    router.any('*', (ctx) => {
+      return ctx.response
+        .status(404)
+        .json({ messages: ['Not Found'], error: 'NotFoundException', path: ctx.request.url() })
+    })
   })
   .prefix('/api/v1')
 

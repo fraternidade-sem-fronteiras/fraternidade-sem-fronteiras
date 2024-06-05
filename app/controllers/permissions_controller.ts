@@ -1,4 +1,3 @@
-import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import PermissionService from '#services/permission_service'
 import { createPermissionValidator } from '#validators/permission'
 import { inject } from '@adonisjs/core'
@@ -10,9 +9,6 @@ export default class PermissionsController {
 
   async index({ response }: HttpContext) {
     const permissions = await this.permissionService.getPermissions()
-
-    if (!permissions.length) throw new EntityNotFoundException('No permissions found')
-
     return response.json(permissions)
   }
 

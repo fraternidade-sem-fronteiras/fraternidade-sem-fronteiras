@@ -5,6 +5,10 @@ export default class extends BaseSeeder {
   async run() {
     await Gender.createMany([
       {
+        name: 'Não informado',
+        default: true,
+      },
+      {
         name: 'Homem',
       },
       {

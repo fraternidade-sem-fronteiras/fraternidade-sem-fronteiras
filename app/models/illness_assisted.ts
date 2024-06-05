@@ -9,7 +9,7 @@ export default class IllnessAssisted extends BaseModel {
   declare id: number
 
   @column()
-  declare assistedId: number
+  declare assistedId: string
 
   @column()
   declare illnessId: number

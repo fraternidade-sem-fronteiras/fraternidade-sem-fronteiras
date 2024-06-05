@@ -1,9 +1,10 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { randomUUID } from 'crypto'
 
 export default class Drug extends BaseModel {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
 
   @column()
   declare name: string
@@ -11,4 +12,8 @@ export default class Drug extends BaseModel {
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
+  @beforeCreate()
+  public static async createUniqueId(drug: Drug) {
+    drug.id = randomUUID()
+  }
 }

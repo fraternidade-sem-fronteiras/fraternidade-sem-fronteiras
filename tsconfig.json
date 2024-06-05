@@ -5,6 +5,7 @@
     "outDir": "./build",
     "lib": ["DOM"],
     "esModuleInterop": true,
+    "strictPropertyInitialization": false,
 
     "jsx": "preserve",
 

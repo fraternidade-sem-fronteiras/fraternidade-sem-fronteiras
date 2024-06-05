@@ -12,8 +12,6 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
 
 const PrivateRouteLayout = lazy(() => import('@/components/layouts/PrivateRouteLayout'))
-const DashboardLayout = lazy(() => import('@/components/layouts/DashboardLayout'))
-const DefaultLayout = lazy(() => import('@/components/layouts/DefaultLayout'))
 
 const CreateAssistedPage = lazy(() => import('@/pages/dashboard/assisted/CreateAssistedPage'))
 
@@ -22,12 +20,14 @@ const ListVolunteerPage = lazy(() => import('@/pages/dashboard/volunteer/ListVol
 
 const CreateRolePage = lazy(() => import('@/pages/dashboard/roles/CreateRolePage'))
 
-const ErrorBoundary = lazy(() => import('@/components/errors/ErrorBoundary'))
-
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
 const NavigationPage = lazy(() => import('@/pages/NavigationPage'))
 
-const NotFound = lazy(() => import('@/components/errors/NotFoundError'))
+import DefaultLayout from '@/components/layouts/DefaultLayout'
+import DashboardLayout from '@/components/layouts/DashboardLayout'
+
+import ErrorBoundary from '@/components/errors/ErrorBoundary'
+import NotFoundError from '@/components/errors/NotFoundError'
 
 const permissions = [
   {
@@ -87,7 +87,7 @@ const router = createBrowserRouter([
                     element: <ProfileAssistedPage />,
                   },
                   {
-                    path: ':userName/perfil',
+                    path: ':id/perfil',
                     element: <ProfileAssistedPage />,
                   },
                   {
@@ -135,11 +135,11 @@ const router = createBrowserRouter([
                     element: <CreateRolePage />,
                   },
                   {
-                    path: ':roleName/editar',
+                    path: ':roleId/editar',
                     element: <EditRolePage />,
                   },
                   {
-                    path: ':roleName/listar-usuarios',
+                    path: ':roleId/listar-usuarios',
                     element: <EditRolePage />,
                   },
                   {
@@ -162,7 +162,7 @@ const router = createBrowserRouter([
       },
       {
         path: '*',
-        element: <NotFound />,
+        element: <NotFoundError />,
       },
     ],
   },
