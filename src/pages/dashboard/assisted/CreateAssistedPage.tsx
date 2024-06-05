@@ -357,7 +357,11 @@ export default function CreateAssistedPage() {
           </AbsoluteCenter>
         </Box>
 
-        <Grid templateColumns="repeat(3, 250px) 1fr 250px" gap={'1rem'} marginTop={'1rem'}>
+        <Grid
+          templateColumns={watch('cpf') ? 'repeat(5, 1fr)' : 'repeat(5, 1fr)'}
+          gap={'1rem'}
+          marginTop={'1rem'}
+        >
           <GridItem>
             <FormControl isInvalid={isInvalid('cpf')}>
               <FormLabel>CPF</FormLabel>
@@ -372,6 +376,26 @@ export default function CreateAssistedPage() {
             </FormControl>
           </GridItem>
 
+          {watch('cpf') && (
+            <>
+              <GridItem>
+                <FormControl isInvalid={isInvalid('emission')}>
+                  <FormLabel>Data de emissão</FormLabel>
+                  <Input type="date" {...register('emission')} />
+                  <FormErrorMessage>{errors.emission?.message}</FormErrorMessage>
+                </FormControl>
+              </GridItem>
+
+              <GridItem>
+                <FormControl isInvalid={isInvalid('organ')}>
+                  <FormLabel>Orgão emissor</FormLabel>
+                  <Input placeholder="Diga qual foi o orgão emissor do RG" {...register('organ')} />
+                  <FormErrorMessage>{errors.organ?.message}</FormErrorMessage>
+                </FormControl>
+              </GridItem>
+            </>
+          )}
+
           <GridItem>
             <FormControl isInvalid={isInvalid('rg')}>
               <FormLabel>RG</FormLabel>
@@ -383,22 +407,6 @@ export default function CreateAssistedPage() {
                 })}
               />
               <FormErrorMessage>{errors.rg?.message}</FormErrorMessage>
-            </FormControl>
-          </GridItem>
-
-          <GridItem>
-            <FormControl isInvalid={isInvalid('emission')}>
-              <FormLabel>Data de emissão</FormLabel>
-              <Input type="date" {...register('emission')} />
-              <FormErrorMessage>{errors.emission?.message}</FormErrorMessage>
-            </FormControl>
-          </GridItem>
-
-          <GridItem>
-            <FormControl isInvalid={isInvalid('organ')}>
-              <FormLabel>Orgão emissor</FormLabel>
-              <Input placeholder="Diga qual foi o orgão emissor do RG" {...register('organ')} />
-              <FormErrorMessage>{errors.organ?.message}</FormErrorMessage>
             </FormControl>
           </GridItem>
 
@@ -520,7 +528,7 @@ export default function CreateAssistedPage() {
 
           <GridItem>
             <FormLabel>Necessidade especiais</FormLabel>
-            <Textarea placeholder="Diga o motivo por estar em situação de rua" />
+            <Textarea placeholder="Diga se há alguma necessidade especial" />
           </GridItem>
 
           <GridItem>

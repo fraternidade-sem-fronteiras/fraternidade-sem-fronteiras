@@ -25,7 +25,7 @@ import { Infer } from '@vinejs/vine/types'
 const formSchema = vine.object({
   name: vine.string().minLength(3).maxLength(64),
   email: vine.string().minLength(3).maxLength(64).email(),
-  roles: vine.array(vine.string().trim().escape().minLength(3).maxLength(32)),
+  roles: vine.array(vine.string().uuid()),
 })
 
 type FormProps = Infer<typeof formSchema>
@@ -115,7 +115,7 @@ export default function CreateVolunteerPage() {
               <CheckboxGroup onChange={(value: string[]) => setValue('roles', value)}>
                 <Stack spacing={[1, 3]} direction={['column', 'row']}>
                   {roles.map((role) => (
-                    <Checkbox key={role.name} value={role.name}>
+                    <Checkbox key={role.id} value={role.id}>
                       {role.name}
                     </Checkbox>
                   ))}
