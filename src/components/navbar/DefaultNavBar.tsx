@@ -1,5 +1,6 @@
 import LogoutModal from '../LogoutModal.jsx'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+
 import {
   Avatar,
   Button,
@@ -18,27 +19,35 @@ import { useUser } from '@/hooks/user.hook'
 export default function DefaultNavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const location = useLocation();
+
   const { hasPermission, hasAtLeastOnePermission, volunteer, toggleColorMode, theme } = useUser()
 
   const avatarUrl = volunteer?.avatarUrl || 'https://bit.ly/dan-abramov'
 
+  const isVoluntarioPath = location.pathname.includes('/voluntario/');
+  const isAssistidoPath = location.pathname.includes('/assistido/');
+  const isCargoPath = location.pathname.includes('/cargo/');
+  const isRelatorioPath = location.pathname.includes('/relatorio');
+  const isFilaPath = location.pathname.includes('/fila');
+
   return (
-    <div className="navbar bg-light-blue">
+    <div className="h-[100px] py-0 navbar bg-light-blue">
       <div className="navbar-start">
         <Link to="/dashboard/navegar">
           <picture>
             <img
-              style={{ width: '5rem', height: '5rem' }}
+              className="h-20 w-20 m-2"
               src="https://www.fraternidadesemfronteiras.org.br/wp-content/uploads/2021/07/LOGO.png"
             />
           </picture>
         </Link>
       </div>
 
-      <Flex justifyContent={'space-between'} alignItems={'center'} gap={'40px'}>
+      <Flex justifyContent={'space-between'} alignItems={'center'} className='h-full'>
         {hasAtLeastOnePermission(['CREATE_VOLUNTEER', 'DELETE_VOLUNTEER']) && (
           <Menu>
-            <MenuButton>
+            <MenuButton className={"h-full px-3" + (isVoluntarioPath ? " bg-pink" : "")}>
               <Text color={'white'}>Voluntários</Text>
             </MenuButton>
 
@@ -58,7 +67,7 @@ export default function DefaultNavBar() {
 
         {hasAtLeastOnePermission(['CREATE_ASSISTED', 'DELETE_ASSISTED']) && (
           <Menu>
-            <MenuButton>
+            <MenuButton className={"h-full px-3" + (isAssistidoPath ? " bg-pink" : "")}>
               <Text color={'white'}>Assistidos</Text>
             </MenuButton>
 
@@ -78,7 +87,7 @@ export default function DefaultNavBar() {
 
         {hasAtLeastOnePermission(['CREATE_ROLE', 'EDIT_ROLE', 'DELETE_ROLE']) && (
           <Menu>
-            <MenuButton>
+            <MenuButton className={"h-full px-3" + (isCargoPath ? " bg-pink" : "")}>
               <Text color={'white'}>Cargos</Text>
             </MenuButton>
 
@@ -97,14 +106,14 @@ export default function DefaultNavBar() {
         )}
 
         {hasPermission('VIEW_REPORT') && (
-          <Link to="/dashboard/relatorio">
-            <Text color={'white'}>Relatório</Text>
+          <Link className={"h-full px-3 flex" + (isRelatorioPath ? " bg-pink" : "")} to="/dashboard/relatorio" >
+            <Text className="m-auto" color={'white'}>Relatório</Text>
           </Link>
         )}
 
         {hasPermission('MANAGE_ASSISTED') && (
-          <Link to="/dashboard/fila">
-            <Text color={'white'}>Fila</Text>
+          <Link className={"h-full px-3 flex" + (isFilaPath ? " bg-pink" : "")} to="/dashboard/fila" >
+            <Text className="m-auto" color={'white'}>Fila</Text>
           </Link>
         )}
       </Flex>
