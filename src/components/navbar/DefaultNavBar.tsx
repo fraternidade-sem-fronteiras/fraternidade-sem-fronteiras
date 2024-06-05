@@ -23,7 +23,7 @@ export default function DefaultNavBar() {
   const avatarUrl = volunteer?.avatarUrl || 'https://bit.ly/dan-abramov'
 
   return (
-    <div className="navbar bg-base-100" style={{ backgroundColor: '#4a7494' }}>
+    <div className="navbar bg-light-blue">
       <div className="navbar-start">
         <Link to="/dashboard/navegar">
           <picture>
