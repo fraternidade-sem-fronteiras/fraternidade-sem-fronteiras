@@ -6,6 +6,7 @@ export default {
     extend: {
       colors: {
         'light-blue': '#4a7494',
+        'pink': '#E61653',
       },
     },
   },
