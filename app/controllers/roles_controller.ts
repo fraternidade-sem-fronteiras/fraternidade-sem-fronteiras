@@ -3,6 +3,7 @@ import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import type { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
 import { createRoleValidator } from '#validators/role'
+import { paginationValidator } from '#validators/filter'
 
 @inject()
 export default class RolesController {
@@ -30,6 +31,20 @@ export default class RolesController {
     const role = await this.roleService.createRole(name, permissions, request.all().user!)
 
     return response.json(role)
+  }
+
+  async getVolunteersByRole({ request, response }: HttpContext) {
+    const id = decodeURI(request.param('id'))
+
+    const pagination = await paginationValidator.validate({
+      page: request.input('page', 1),
+      limit: request.input('limit', 10),
+    })
+
+    const { page, limit } = pagination
+
+    const volunteers = await this.roleService.getVolunteersByRole(id, page, limit)
+    return response.json(volunteers)
   }
 
   async destroy({ request, response }: HttpContext) {

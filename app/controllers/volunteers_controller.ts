@@ -1,11 +1,12 @@
-// import type { HttpContext } from '@adonisjs/core/http'
-
 import EntityNotFoundException from '#exceptions/entity_not_found_exception'
+import ForbiddenException from '#exceptions/forbidden_exception'
+import { VolunteerDto } from '#models/volunteer'
 import VolunteerService from '#services/volunteer_service'
 import { paginationValidator, sortValidator } from '#validators/filter'
 import { createVolunteerValidator, loginVolunteerValidator } from '#validators/volunteer'
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
+import { hasPermission } from '../utils/permission.check.js'
 
 @inject()
 export default class VolunteersController {
@@ -53,6 +54,8 @@ export default class VolunteersController {
   }
 
   async store({ request, response }: HttpContext) {
+    if (!hasPermission(request, 'CREATE_VOLUNTEER')) return
+
     const payload = await createVolunteerValidator.validate(request.all())
 
     const volunteer = await this.volunteersService.createVolunteer(

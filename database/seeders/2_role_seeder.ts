@@ -22,12 +22,11 @@ export default class extends BaseSeeder {
       },
       {
         name: 'Administrador',
-        permissions: [permissions.find((permission) => permission.name === 'ALL')!.id],
+        permissions: [permissions.find((permission) => permission.id === 'ALL')!.id],
       },
     ]
 
     const realRoles = await Role.createMany(roles.map((role) => ({ name: role.name })))
-    
 
     await RolePermission.createMany(
       roles

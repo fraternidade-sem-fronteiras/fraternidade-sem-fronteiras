@@ -5,6 +5,7 @@ import { RoleDto } from './role.js'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import { randomUUID } from 'crypto'
 import RoleVolunteer from './role_volunteer.js'
+import { PermissionDto } from './permission.js'
 
 export default class Volunteer extends BaseModel {
   @column({ isPrimary: true })
@@ -56,17 +57,42 @@ export class VolunteerDto {
   registered?: boolean
   createdAt: DateTime
 
-  constructor(volunteer: Partial<VolunteerDto>) {
+  constructor(volunteer: Partial<VolunteerDto> | Volunteer) {
+    if (volunteer instanceof Volunteer) {
+      const realVolunteer = {
+        ...volunteer.$attributes,
+        roles: volunteer.roles?.map((role) => RoleDto.fromPartial(role.role)),
+        createdAt: volunteer.createdAt,
+        updatedAt: volunteer.updatedAt,
+        password: undefined,
+      }
+
+      Object.assign(this, realVolunteer)
+      return
+    }
+
     Object.assign(this, volunteer)
   }
 
-  hasPermission(permission: string): boolean {
-    return this.roles.some((role) =>
-      role.permissions.map((str) => str.toLowerCase()).includes(permission.toLowerCase())
-    )
+  private isStringArray(permissions: string[] | PermissionDto[]): permissions is string[] {
+    return typeof permissions[0] === 'string'
   }
 
-  static fromPartial(volunteer: Partial<VolunteerDto>): VolunteerDto {
+  private isPermissionInList(permission: string, permissions: string[] | PermissionDto[]) {
+    if (permissions.length === 0) return false
+
+    if (this.isStringArray(permissions)) {
+      return permissions.map((str) => str.toLowerCase()).includes(permission.toLowerCase())
+    }
+
+    return permissions.some((perm) => perm.id === permission)
+  }
+
+  hasPermission(permission: string): boolean {
+    return this.roles.some((role) => this.isPermissionInList(permission, role.permissions))
+  }
+
+  static fromPartial(volunteer: Partial<VolunteerDto> | Volunteer): VolunteerDto {
     return new VolunteerDto(volunteer)
   }
 }
