@@ -1,0 +1,26 @@
+name: Build Project
+
+on:
+  pull_request:
+    branches: ["development", "main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+
+      - name: Install Dependencies
+        run: |
+            npm install
+
+      - name: Build Project
+        run: |
+          npm run build
