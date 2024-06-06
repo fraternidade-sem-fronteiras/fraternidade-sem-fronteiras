@@ -166,18 +166,16 @@ export default function ListVolunteerPage() {
         to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`}
         state={volunteer}
       >
-        <Flex justify="center" align="center">
-          {hasPermission('EDIT_VOLUNTEER') ? <Edit /> : <SearchIcon />}
-        </Flex>
+        <div className="ml-3">{hasPermission('EDIT_VOLUNTEER') ? <Edit /> : <SearchIcon />}</div>
       </Link>,
       <DeleteVolunteerModal
         key={volunteer.id}
         volunteer={volunteer}
         handleDeleteVolunteer={handleDeleteVolunteer}
       >
-        <Flex justify="center" align="center">
+        <div className="ml-3 cursor-pointer">
           <DeleteIcon width={6} height={6} />
-        </Flex>
+        </div>
       </DeleteVolunteerModal>,
     ]
   }
