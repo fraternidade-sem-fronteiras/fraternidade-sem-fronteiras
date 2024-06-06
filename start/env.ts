@@ -14,6 +14,7 @@ import { Env } from '@adonisjs/core/env'
 export default await Env.create(new URL('../', import.meta.url), {
   NODE_ENV: Env.schema.enum(['development', 'production', 'test'] as const),
   TOKEN_SECRET: Env.schema.string(),
+  TOKEN_EXPIRES: Env.schema.number(),
   PORT: Env.schema.number(),
   APP_KEY: Env.schema.string(),
   LOG_LEVEL: Env.schema.string(),
@@ -36,5 +37,5 @@ export default await Env.create(new URL('../', import.meta.url), {
   DB_USER: Env.schema.string(),
   DB_PASSWORD: Env.schema.string.optional(),
   DB_DATABASE: Env.schema.string(),
-  DB_SSL: Env.schema.boolean.optional()
+  DB_SSL: Env.schema.boolean.optional(),
 })

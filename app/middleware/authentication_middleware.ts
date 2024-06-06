@@ -1,5 +1,5 @@
-import InvalidTokenException from '#exceptions/invalid_token_exception'
-import TokenNotProvidedException from '#exceptions/token_not_provided_exception'
+import InvalidTokenException from '#exceptions/token/invalid_token_exception'
+import TokenNotProvidedException from '#exceptions/token/token_not_provided_exception'
 import TokenService from '#services/token_service'
 import Session from '#validators/session'
 import { VolunteerDto } from '#models/volunteer'
