@@ -19,52 +19,24 @@ export default class MaritalStatusesController {
     return response.json(maritalStatuses)
   }
 
-  /**
-   * Offers form to create new marital status
-   */
-  async new({}: HttpContext) {
-    /**
-     * Não retorna nada por enquanto
-     */
-  }
-
-  /**
-   * Create new marital status on server
-   */
   async create({ request, response }: HttpContext) {
-    try {
-      let payload = await createMaritalStatusValidator.validate(request.all())
-
-      let marital_status = await this.maritalStatusService.createMaritalStatus(payload.name)
-
-      return response.status(201).json(marital_status)
-    } catch (error) {
-      if (error instanceof Error) {
-        return response.status(409).json({ message: error.message })
-      }
-
-      throw error
-    }
+    const payload = await createMaritalStatusValidator.validate(request.all())
+    const maritalStatus = await this.maritalStatusService.createMaritalStatus(payload.name)
+    return response.status(201).json(maritalStatus)
   }
 
-  /**
-   * Displays one specific marital status's details
-   */
   async show({ response, params }: HttpContext) {
     const { id } = params
 
-    const marital_status = await this.maritalStatusService.getMaritalStatusById(id)
+    const maritalStatus = await this.maritalStatusService.getMaritalStatusById(id)
 
-    if (!marital_status) {
+    if (!maritalStatus) {
       return response.status(404).json({ message: 'Estado Civil não encontrado.' })
     }
 
-    return response.json(marital_status)
+    return response.json(maritalStatus)
   }
 
-  /**
-   * Offers form to edit specific marital status
-   */
   async edit({ response, params }: HttpContext) {
     const { id } = params
 
@@ -77,43 +49,18 @@ export default class MaritalStatusesController {
     return response.json(maritalStatus)
   }
 
-  /**
-   * Updates specific marital status on server
-   */
   async update({ request, response, params }: HttpContext) {
     const { id } = params
-
-    try {
-      let payload = await updateMaritalStatusValidator.validate(request.all())
-
-      let data = await this.maritalStatusService.updateMaritalStatus(id, payload.name)
-
-      return response.json({ ...data })
-    } catch (error) {
-      if (error instanceof Error) {
-        return response.status(400).json({ message: error.message })
-      }
-
-      throw error
-    }
+    const payload = await updateMaritalStatusValidator.validate(request.all())
+    const data = await this.maritalStatusService.updateMaritalStatus(id, payload.name)
+    return response.json({ ...data })
   }
 
-  /**
-   * Deletes specific marital status
-   */
   async destroy({ response, params }: HttpContext) {
     const { id } = params
 
-    try {
-      await this.maritalStatusService.deleteMaritalStatus(id)
+    await this.maritalStatusService.deleteMaritalStatus(id)
 
-      return response.status(204)
-    } catch (error) {
-      if (error instanceof Error) {
-        return response.status(400).json({ message: error.message })
-      }
-
-      throw error
-    }
+    return response.status(204)
   }
 }

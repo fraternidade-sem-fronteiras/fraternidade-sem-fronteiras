@@ -1,16 +1,27 @@
+import { BaseModel, beforeCreate, column, hasMany } from '@adonisjs/lucid/orm'
+import { randomUUID } from 'crypto'
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
+import Assisted from './assisted.js'
 
 export default class Gender extends BaseModel {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
 
   @column()
   declare name: string
 
+  @column()
+  declare default: boolean
+
+  @hasMany(() => Assisted)
+  declare assisteds: HasMany<typeof Assisted>
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+  @beforeCreate()
+  public static async createUniqueId(gender: Gender) {
+    gender.id = randomUUID()
+  }
 }

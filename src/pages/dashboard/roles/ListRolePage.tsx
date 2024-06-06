@@ -30,7 +30,7 @@ export default function ListRolePage() {
 
   const deleteRole = (role: Role) => {
     axios
-      .delete(`/roles/${role.name}`)
+      .delete(`/roles/${role.id}`)
       .then(() => {
         setRoles(roles.filter((r) => r.name !== role.name))
         handleToast('Sucesso!', 'O cargo ' + role.name + ' foi excluído com sucesso!')
@@ -41,7 +41,6 @@ export default function ListRolePage() {
   }
 
   return (
-    
     <Center flexDirection={'column'} >
        <Flex  padding={'2rem'} width={'100%'}></Flex>
        <TextoSublinhado>Lista de cargos</TextoSublinhado >

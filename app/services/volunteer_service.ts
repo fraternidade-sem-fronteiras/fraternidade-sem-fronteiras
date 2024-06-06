@@ -5,6 +5,8 @@ import hash from '@adonisjs/core/services/hash'
 import TokenService from '#services/token_service'
 import EntityNotFoundException from '#exceptions/entity_not_found_exception'
 import ConflictException from '#exceptions/conflict_exception'
+import Role from '#models/role'
+import { PageResult } from '../utils/pageable.js'
 
 @inject()
 export default class VolunteerService {
@@ -28,46 +30,58 @@ export default class VolunteerService {
 
     if (volunteer) throw new ConflictException('O voluntário com email ' + email + ' já existe')
 
-    volunteer = new Volunteer()
+    volunteer = await Volunteer.create({
+      name,
+      email,
+      password: email,
+    })
 
-    volunteer.name = name
-    volunteer.email = email
-    volunteer.password = email
+    const rolesExist = await Role.query().whereIn('id', roles)
 
-    volunteer = await volunteer.save()
+    if (rolesExist.length !== roles.length) {
+      const diff = roles.filter((role) => !rolesExist.map((r) => r.id).includes(role))
+      throw new EntityNotFoundException(
+        'Role',
+        'Os cargos ' + diff.join(', ') + ' não foram encontrados.'
+      )
+    }
 
     volunteer
       .related('roles')
-      .createMany(roles.map((role) => ({ roleName: role, volunteerId: volunteer!.id })))
+      .createMany(rolesExist.map((role) => ({ roleId: role.id, volunteerId: volunteer!.id })))
 
     return volunteer
   }
 
-  async createSession(
-    email: string,
-    password: string
-  ): Promise<{ token: string; volunteer: VolunteerDto }> {
+  async createSession(email: string, password: string) {
     const volunteer = await Volunteer.query()
       .select(['id', 'name', 'email', 'password', 'createdAt', 'registered'])
       .preload('roles', (rolesQuery) =>
-        rolesQuery.preload('role', (roleQuery) => roleQuery.preload('permissions'))
+        rolesQuery.preload('role', (roleQuery) =>
+          roleQuery.preload('permissions', (permissionQuery) =>
+            permissionQuery.preload('permission')
+          )
+        )
       )
       .where({ email })
       .first()
 
-    if (!volunteer) throw new EntityNotFoundException('Voluntário não encontrado')
+    if (!volunteer) throw new WrongPasswordException()
 
-    const realVolunteer: VolunteerDto = {
+    const realVolunteer: VolunteerDto = VolunteerDto.fromPartial({
       id: volunteer.id,
       name: volunteer.name,
       email: volunteer.email,
-      roles: volunteer.roles.map((role) => ({
-        name: role.roleName,
-        permissions: role.role.permissions.map((perm) => perm.permissionName),
-      })),
+      roles: volunteer.roles?.map((role) => {
+        return {
+          id: role.roleId,
+          name: role.role.name,
+          permissions: role.role.permissions.map((perm) => perm.permission.name),
+        }
+      }),
       registered: volunteer.registered,
-      createdAt: volunteer.createdAt.toISO()!,
-    }
+      createdAt: volunteer.createdAt,
+    })
 
     if (volunteer.registered) {
       const match = await hash.verify(volunteer.password, password)
@@ -98,32 +112,41 @@ export default class VolunteerService {
    *
    */
 
-  async getVolunteers(
-    page: number,
-    limit: number,
-    orderBy: string,
-    order: 'asc' | 'desc'
-  ): Promise<VolunteerDto[]> {
+  async getVolunteers(page: number, limit: number, orderBy: string, order: 'asc' | 'desc') {
     const volunteersPagination = await Volunteer.query()
       .select(['id', 'name', 'email', 'createdAt'])
       .preload('roles', (rolesQuery) =>
-        rolesQuery.preload('role', (roleQuery) => roleQuery.preload('permissions'))
+        rolesQuery.preload('role', (roleQuery) =>
+          roleQuery.preload('permissions', (permissionQuery) =>
+            permissionQuery.preload('permission')
+          )
+        )
       )
       .orderBy(orderBy, order)
       .paginate(page, limit)
 
     const volunteers = volunteersPagination.all()
 
-    return volunteers.map((volunteer) => ({
-      id: volunteer.id,
-      name: volunteer.name,
-      email: volunteer.email,
-      roles: volunteer.roles.map((role) => ({
-        name: role.roleName,
-        permissions: role.role.permissions.map((perm) => perm.permissionName),
+    return PageResult.toResult(
+      volunteers.map((volunteer) => ({
+        id: volunteer.id,
+        name: volunteer.name,
+        email: volunteer.email,
+        roles: volunteer.roles.map((role) => ({
+          id: role.roleId,
+          name: role.role.name,
+          permissions: role.role.permissions.map((perm) => perm.permission.name),
+        })),
+        registered: volunteer.registered,
+        createdAt: volunteer.createdAt.toISO()!,
       })),
-      createdAt: volunteer.createdAt.toISO()!,
-    }))
+      {
+        currentPage: page,
+        itemsPerPage: limit,
+        totalPages: volunteersPagination.lastPage,
+        totalItems: volunteersPagination.total,
+      }
+    )
   }
 
   /**
@@ -134,28 +157,33 @@ export default class VolunteerService {
    *
    */
 
-  async getVolunteer(query: { id?: number; email?: string }): Promise<VolunteerDto | null> {
+  async getVolunteer(query: { id?: string; email?: string }): Promise<VolunteerDto | null> {
     const volunteer = await Volunteer.query()
       .select(['id', 'name', 'email', 'createdAt', 'registered'])
       .preload('roles', (rolesQuery) =>
-        rolesQuery.preload('role', (roleQuery) => roleQuery.preload('permissions'))
+        rolesQuery.preload('role', (roleQuery) =>
+          roleQuery.preload('permissions', (permissionQuery) =>
+            permissionQuery.preload('permission')
+          )
+        )
       )
       .where(query)
       .first()
 
     if (!volunteer) return null
 
-    return {
+    return VolunteerDto.fromPartial({
       id: volunteer.id,
       name: volunteer.name,
       email: volunteer.email,
       roles: volunteer.roles.map((role) => ({
-        name: role.roleName,
-        permissions: role.role.permissions.map((perm) => perm.permissionName),
+        id: role.roleId,
+        name: role.role.name,
+        permissions: role.role.permissions.map((perm) => perm.permission.name),
       })),
       registered: volunteer.registered,
-      createdAt: volunteer.createdAt.toISO()!,
-    }
+      createdAt: volunteer.createdAt,
+    })
   }
 
   /**
@@ -201,7 +229,7 @@ export default class VolunteerService {
         },
       ],
     }
-  }*/
+  }
 
   /**
    *
@@ -225,7 +253,7 @@ export default class VolunteerService {
     let volunteer = await Volunteer.findBy('id', id)
 
     if (!volunteer) {
-      throw new Error('Voluntário não encontrado')
+      throw new EntityNotFoundException('Voluntário não encontrado')
     }
 
     await volunteer.delete()

@@ -20,6 +20,9 @@ import { Link } from 'react-router-dom'
 import Role from '@/entities/role.entity'
 import useToast from '@/hooks/toast.hook'
 import DeleteVolunteerModal from './components/DeleteVolunteerModal.jsx'
+import Edit from '../../../assets/svg/edit.jsx'
+import { DeleteIcon, SearchIcon } from '@chakra-ui/icons'
+import { useUser } from '@/hooks/user.hook'
 
 const SortingOptions = {
   id: 'Identificador',
@@ -30,6 +33,7 @@ const SortingOptions = {
 
 export default function ListVolunteerPage() {
   const { handleErrorToast } = useToast()
+  const { hasPermission } = useUser()
   const [isLoading, setIsLoading] = useState(true)
 
   const [roles, setRoles] = useState<Role[]>([])
@@ -68,15 +72,15 @@ export default function ListVolunteerPage() {
           },
         })
         .then(({ data }) => {
-          if (data.length == 0) {
+          if (data.data.length == 0) {
             return
           }
 
           const newArray = volunteers.filter(
-            (volunteer) => !data.some((v: any) => v.id == volunteer.id)
+            (volunteer) => !data.data.some((v: any) => v.id == volunteer.id)
           )
 
-          newArray.push(...data)
+          newArray.push(...data.data)
           setVolunteers(newArray)
         })
         .catch((error) => handleErrorToast('Erro ao buscar voluntários', error.message))
@@ -162,18 +166,16 @@ export default function ListVolunteerPage() {
         to={`/dashboard/voluntario/${volunteer.id}/editar-perfil`}
         state={volunteer}
       >
-        <Button colorScheme="blue" width={'90%'}>
-          Editar
-        </Button>
+        <div className="ml-3">{hasPermission('EDIT_VOLUNTEER') ? <Edit /> : <SearchIcon />}</div>
       </Link>,
       <DeleteVolunteerModal
         key={volunteer.id}
         volunteer={volunteer}
         handleDeleteVolunteer={handleDeleteVolunteer}
       >
-        <Button key={volunteer.id} colorScheme="red" width={'90%'}>
-          Excluir
-        </Button>
+        <div className="ml-3 cursor-pointer">
+          <DeleteIcon width={6} height={6} />
+        </div>
       </DeleteVolunteerModal>,
     ]
   }
@@ -236,10 +238,10 @@ export default function ListVolunteerPage() {
         headers={[
           { name: 'Nome', width: '20%' },
           { name: 'Email', width: '20%' },
-          { name: 'Nível de Permissão', width: '20%' },
+          { name: 'Nível de Permissão', width: '24%' },
           { name: 'Criado em', width: '20%' },
-          { name: 'Editar', width: '10%' },
-          { name: 'Excluir', width: '10%' },
+          { name: hasPermission('EDIT_VOLUNTEER') ? 'EDITAR' : 'VISUALIZAR', width: '8%' },
+          { name: 'Excluir', width: '8%' },
         ]}
         items={filteredVolunteers}
         content={content}

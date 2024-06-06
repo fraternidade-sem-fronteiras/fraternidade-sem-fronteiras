@@ -1,13 +1,14 @@
 import hash from '@adonisjs/core/services/hash'
-import RoleVolunteer from './role_volunteer.js'
 import { DateTime } from 'luxon'
-import { BaseModel, beforeSave, column, hasMany } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, beforeSave, column, hasMany } from '@adonisjs/lucid/orm'
 import { RoleDto } from './role.js'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { randomUUID } from 'crypto'
+import RoleVolunteer from './role_volunteer.js'
 
 export default class Volunteer extends BaseModel {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
 
   @column()
   declare name: string
@@ -40,13 +41,32 @@ export default class Volunteer extends BaseModel {
       volunteer.password = newPassword
     }
   }
+
+  @beforeCreate()
+  public static async createUniqueId(volunteer: Volunteer) {
+    volunteer.id = randomUUID()
+  }
 }
 
-export interface VolunteerDto {
-  id: number
+export class VolunteerDto {
+  id: string
   name: string
   email: string
   roles: RoleDto[]
   registered?: boolean
-  createdAt: string
+  createdAt: DateTime
+
+  constructor(volunteer: Partial<VolunteerDto>) {
+    Object.assign(this, volunteer)
+  }
+
+  hasPermission(permission: string): boolean {
+    return this.roles.some((role) =>
+      role.permissions.map((str) => str.toLowerCase()).includes(permission.toLowerCase())
+    )
+  }
+
+  static fromPartial(volunteer: Partial<VolunteerDto>): VolunteerDto {
+    return new VolunteerDto(volunteer)
+  }
 }

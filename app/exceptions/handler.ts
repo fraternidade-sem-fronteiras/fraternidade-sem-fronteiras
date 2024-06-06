@@ -13,14 +13,26 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * The method is used for handling errors and returning
    * response to the client
    */
-  async handle(error: unknown, ctx: HttpContext) {
+  async handle(error: any, ctx: HttpContext) {
     if (error instanceof CustomErrorException) {
       return ctx.response.status(error.status).send({
-        message: error.message,
-        error: error.name.replace('Exception', ''),
+        messages: [error.message],
+        error: error.name,
+        path: ctx.request.url(),
       })
     }
-    return super.handle(error, ctx)
+
+    const status = error?.status || 500
+    const message = error?.messages
+      ? error?.messages
+      : [error?.message] || ['Internal server error']
+    const code = error?.code || 'E_RUNTIME_EXCEPTION'
+
+    return ctx.response.status(status).send({
+      messages: message,
+      error: code,
+      path: ctx.request.url(),
+    })
   }
 
   /**
@@ -29,7 +41,7 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    *
    * @note You should not attempt to send a response from this method.
    */
-  async report(error: unknown, ctx: HttpContext) {
+  async report(error: any, ctx: HttpContext) {
     if (error instanceof CustomErrorException) {
       return
     }

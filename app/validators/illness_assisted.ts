@@ -2,7 +2,7 @@ import vine from '@vinejs/vine'
 
 export const createIllnessAssistedValidator = vine.compile(
   vine.object({
-    assistedId: vine.number(),
+    assistedId: vine.string(),
     illnessId: vine.number(),
     placeMedicalCare: vine.string().nullable(),
     remarks: vine.string().nullable(),

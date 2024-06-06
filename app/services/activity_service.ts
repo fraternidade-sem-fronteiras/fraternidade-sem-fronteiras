@@ -1,12 +1,6 @@
-/**
- * Service para Atividade
- * Apenas administradores podem modificar essas informações
- *
- * Talvez seja necessário que não permitir exclusão de um Activity, pois ele é utilizado em outras
- * coisas. Caso se exclua uma Activity de uma Visit, por exemplo, a informação da atividade será perdida.
- */
-
+import ConflictException from '#exceptions/conflict_exception'
 import Activity from '#models/activity'
+import { CreateActivityDto } from '#validators/activity'
 
 export default class ActivityService {
   /**
@@ -14,18 +8,12 @@ export default class ActivityService {
    * @param name
    * @returns Activity
    */
-  async createActivity(name: string): Promise<Activity> {
-    let obj = await Activity.findBy('name', name)
+  async createActivity(createActivityDto: CreateActivityDto): Promise<Activity> {
+    const activity = await Activity.findBy('name', name)
 
-    if (obj) {
-      return obj
-    }
+    if (activity) throw new ConflictException('A atividade ' + name + ' já existe')
 
-    obj = new Activity()
-    obj.name = name
-    await obj.save()
-
-    return obj
+    return await Activity.create(createActivityDto)
   }
 
   /**
@@ -34,7 +22,7 @@ export default class ActivityService {
    * @param id
    * @returns Activity | null
    */
-  async getActivityById(id: number): Promise<Activity | null> {
+  async getActivityById(id: string): Promise<Activity | null> {
     const obj = await Activity.findBy('id', id)
 
     return obj
@@ -57,7 +45,7 @@ export default class ActivityService {
    * @param name
    * @returns
    */
-  async updateActivity(id: number, name: string): Promise<any> {
+  async updateActivity(id: string, name: string): Promise<any> {
     let obj = await Activity.findByOrFail('id', id)
 
     let oldValueName = obj.name
@@ -82,7 +70,7 @@ export default class ActivityService {
    * coisas. Caso se exclua uma Activity de uma Visit, por exemplo, a informação da atividade será perdida.
    * @param id
    */
-  async deleteActivity(id: number) {
+  async deleteActivity(id: string) {
     let obj = await Activity.findBy('id', id)
 
     if (!obj) {

@@ -12,7 +12,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('visits')
         .onDelete('CASCADE')
-      table.integer('activity_id').notNullable().unsigned().references('id').inTable('activities')
+      table.uuid('activity_id').notNullable().references('id').inTable('activities')
 
       table.primary(['visit_id', 'activity_id'])
       /**

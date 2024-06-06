@@ -7,18 +7,11 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
 
-      // assisted_id (foreign key) -> na tabela assisteds, o campo id é chave primária
-      // será deletado em cascata (se deletar um assisted, deleta todas as illness_assisteds que o referenciam)
-
       table
-        .integer('assisted_id')
-        .unsigned()
+        .uuid('assisted_id')
         .references('id')
         .inTable('assisteds')
         .onDelete('CASCADE')
-
-      // illness_id (foreign key) -> na tabela illnesses, o campo id é chave primária
-      // será deletado em cascata (se deletar uma illness, deleta todas as illness_assisteds que o referenciam)
 
       table
         .integer('illness_id')

@@ -1,11 +1,16 @@
-export default function FiltroSvg() {
+interface FilterProps {
+  width?: string
+  height?: string
+}
+
+export default function Filter({ width = '45.58px', height = '46.184px' }: FilterProps) {
   return (
     <svg
       id="Group_35"
       data-name="Group 35"
       xmlns="http://www.w3.org/2000/svg"
-      width="45.58"
-      height="46.184"
+      width={width}
+      height={height}
       viewBox="0 0 66.58 57.184"
     >
       <path

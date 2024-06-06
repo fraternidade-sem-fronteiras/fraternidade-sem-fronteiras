@@ -18,9 +18,7 @@ export default class BenefitService {
       return benefit
     }
 
-    benefit = new Benefit()
-    benefit.name = name
-    await benefit.save()
+    benefit = await Benefit.create({ name })
 
     return benefit
   }

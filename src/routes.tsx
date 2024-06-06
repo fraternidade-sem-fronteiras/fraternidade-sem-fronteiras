@@ -8,12 +8,10 @@ import EditVolunteerPage from '@/pages/dashboard/volunteer/EditVolunteerPage'
 import ListRolePage from '@/pages/dashboard/roles/ListRolePage'
 import EditRolePage from '@/pages/dashboard/roles/EditRolePage'
 
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { lazy } from 'react'
 
 const PrivateRouteLayout = lazy(() => import('@/components/layouts/PrivateRouteLayout'))
-const DashboardLayout = lazy(() => import('@/components/layouts/DashboardLayout'))
-const DefaultLayout = lazy(() => import('@/components/layouts/DefaultLayout'))
 
 const CreateAssistedPage = lazy(() => import('@/pages/dashboard/assisted/CreateAssistedPage'))
 
@@ -22,12 +20,13 @@ const ListVolunteerPage = lazy(() => import('@/pages/dashboard/volunteer/ListVol
 
 const CreateRolePage = lazy(() => import('@/pages/dashboard/roles/CreateRolePage'))
 
-const ErrorBoundary = lazy(() => import('@/components/errors/ErrorBoundary'))
-
 const LoginPage = lazy(() => import('@/pages/LoginPage'))
 const NavigationPage = lazy(() => import('@/pages/NavigationPage'))
 
-const NotFound = lazy(() => import('@/components/errors/NotFoundError'))
+import DashboardLayout from '@/components/layouts/DashboardLayout'
+
+import ErrorBoundary from '@/components/errors/ErrorBoundary'
+import NotFoundError from '@/components/errors/NotFoundError'
 
 const permissions = [
   {
@@ -80,14 +79,13 @@ const router = createBrowserRouter([
             children: [
               {
                 path: 'assistido',
-                element: <DefaultLayout />,
                 children: [
                   {
                     path: 'perfil',
                     element: <ProfileAssistedPage />,
                   },
                   {
-                    path: ':userName/perfil',
+                    path: ':id/perfil',
                     element: <ProfileAssistedPage />,
                   },
                   {
@@ -106,7 +104,6 @@ const router = createBrowserRouter([
               },
               {
                 path: 'voluntario',
-                element: <DefaultLayout />,
                 children: [
                   {
                     path: ':id/perfil',
@@ -128,18 +125,17 @@ const router = createBrowserRouter([
               },
               {
                 path: 'cargo',
-                element: <DefaultLayout />,
                 children: [
                   {
                     path: 'cadastrar',
                     element: <CreateRolePage />,
                   },
                   {
-                    path: ':roleName/editar',
+                    path: ':roleId/editar',
                     element: <EditRolePage />,
                   },
                   {
-                    path: ':roleName/listar-usuarios',
+                    path: ':roleId/listar-usuarios',
                     element: <EditRolePage />,
                   },
                   {
@@ -148,11 +144,19 @@ const router = createBrowserRouter([
                   },
                 ],
               },
+              {
+                path: '*',
+                element: <NotFoundError />,
+              },
             ],
           },
           {
             path: 'navegar',
             element: <NavigationPage />,
+          },
+          {
+            path: '*',
+            element: <NotFoundError />,
           },
         ],
       },
@@ -161,8 +165,12 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
+        path: '',
+        element: <Navigate to={'/login'} />,
+      },
+      {
         path: '*',
-        element: <NotFound />,
+        element: <NotFoundError />,
       },
     ],
   },

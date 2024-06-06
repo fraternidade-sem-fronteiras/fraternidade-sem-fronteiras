@@ -5,10 +5,10 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export default class RolePermission extends BaseModel {
   @column({ isPrimary: true })
-  declare roleName: string
+  declare roleId: string
 
   @column({ isPrimary: true })
-  declare permissionName: string
+  declare permissionId: string
 
   @belongsTo(() => Role)
   declare role: BelongsTo<typeof Role>

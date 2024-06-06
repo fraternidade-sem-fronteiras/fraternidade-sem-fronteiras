@@ -3,7 +3,12 @@ export default {
   content: ['./resources/**/*.edge', './src/**/*.{js,jsx,ts,tsx,edge}'],
   darkMode: 'media', // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'light-blue': '#4a7494',
+        'pink': '#E61653',
+      },
+    },
   },
   plugins: [require('daisyui')],
   daisyui: {
