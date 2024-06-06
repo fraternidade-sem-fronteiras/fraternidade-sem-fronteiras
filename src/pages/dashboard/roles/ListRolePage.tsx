@@ -6,6 +6,7 @@ import DeleteRoleModal from './components/DeleteRoleModal.jsx'
 import useToast from '@/hooks/toast.hook'
 import Role from '@/entities/role.entity'
 import { TextoSublinhado } from '@/components/TextoSublinhado'
+import EditRolePermissions from './components/EditRolePermissions.jsx'
 
 import {
   Flex,
@@ -62,9 +63,9 @@ export default function ListRolePage() {
                 <Td>{role.name}</Td>
                 <Td>{role.permissions}</Td>
                 <Td>
-                  <Link to={role.name + '/editar'}>
+                  <EditRolePermissions role={role}  /*to={role.name + '/editar'}*/>
                     <Button backgroundColor="#5CC0CD" _hover={{ backgroundColor: "#48a7b2" }}>Editar permissões</Button>
-                  </Link>
+                  </EditRolePermissions>
                 </Td>
                 <Td>
                   <Link to={role.name + '/listar-usuarios'}>
