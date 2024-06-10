@@ -19,6 +19,7 @@ export default interface Volunteer {
 
 export interface StoreableVolunteer extends Volunteer {
   token: string
+  expiresAt: number
 }
 
 export function hasPermission(

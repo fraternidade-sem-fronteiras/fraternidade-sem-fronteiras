@@ -95,9 +95,9 @@ export default class VolunteerService {
         .save()
     }
 
-    const token = await this.tokenService.generate(volunteer)
+    const { token, expiresAt } = await this.tokenService.generate(volunteer)
 
-    return { token, volunteer: { ...realVolunteer, registered: true } }
+    return { token, expiresAt, volunteer: { ...realVolunteer, registered: true } }
   }
 
   /**

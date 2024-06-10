@@ -12,10 +12,12 @@ export default class TokenService {
     return env.get('TOKEN_EXPIRES') * 1000
   }
 
-  async generate(volunteer: Volunteer): Promise<string> {
+  async generate(volunteer: Volunteer): Promise<{ token: string; expiresAt: number }> {
+    const expiresAt = Date.now() + this.getTokenExpiresTime()
+
     const payload: Session = {
       id: volunteer.id,
-      expiresAt: Date.now() + this.getTokenExpiresTime(),
+      expiresAt: expiresAt,
     }
 
     return new Promise((resolve, reject) => {
@@ -29,10 +31,10 @@ export default class TokenService {
           await Token.create({
             token,
             volunteerId: volunteer.id,
-            expiresAt: DateTime.fromMillis(payload.expiresAt),
+            expiresAt: DateTime.fromMillis(expiresAt),
           })
 
-          return resolve(token)
+          return resolve({ token, expiresAt })
         }
       )
     })

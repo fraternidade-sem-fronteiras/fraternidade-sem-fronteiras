@@ -14,19 +14,70 @@ interface UserProviderProps {
   children?: ReactNode
 }
 
+const useUserToast = () => {
+  const { handleErrorToast } = useToast()
+
+  return {
+    handleSessionExpiredError: () => {
+      handleErrorToast(
+        'Sua sessão expirou',
+        'Sua sessão expirou, faça login novamente para continuar.',
+        3000
+      )
+    },
+    handleGenericError: () => {
+      handleErrorToast(
+        'Sessão com problemas.',
+        'Não foi possível recuperar os dados da sua sessão, alguns recursos podem não funcionar.'
+      )
+    },
+    handleInvalidTokenError: () => {
+      handleErrorToast(
+        'Não autorizado',
+        'Sua sessão expirou ou seu token de acesso não é válido, faça login novamente para continuar.'
+      )
+    },
+    handleUnregisteredTokenError: () => {
+      handleErrorToast(
+        'Não autorizado',
+        'Sua conta não está registrada ou foi desativada, entre em contato com o administrador do sistema.'
+      )
+    },
+  }
+}
+
 const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderProps) => {
   const { get } = useEnv()
+  const {
+    handleSessionExpiredError,
+    handleGenericError,
+    handleInvalidTokenError,
+    handleUnregisteredTokenError,
+  } = useUserToast()
+
+  const [logoutTimeout, setLogoutTimeout] = useState<NodeJS.Timeout | null>(null)
   const [theme, setTheme] = useState<'light' | 'dark'>(
     () => (localStorage.getItem('theme') as 'light' | 'dark' | null) ?? 'light'
   )
   const [volunteer, setVolunteer] = useState<StoreableVolunteer | null>(() => {
     const item = localStorage.getItem('volunteer')
-    return item ? JSON.parse(item) : null
+
+    if (!item) return null
+
+    const user = JSON.parse(item)
+    const expiresAt = user.expiresAt
+
+    setLogoutTimeout(
+      setTimeout(() => {
+        handleSessionExpiredError()
+        forceFinishSession()
+      }, expiresAt - Date.now())
+    )
+
+    return user
   })
 
   const isLoggedIn = !!volunteer
-
-  const { handleErrorToast } = useToast()
 
   useLayoutEffect(() => {
     axios.defaults.baseURL = get('API_URL')
@@ -44,27 +95,17 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
         })
         .catch(({ response }) => {
           if (!response) {
-            handleErrorToast(
-              'Sessão com problemas.',
-              'Não foi possível recuperar os dados da sua sessão, alguns recursos podem não funcionar.'
-            )
+            handleGenericError()
             return
           }
 
           const statusCode = response.status
 
           if (statusCode === 401) {
-            handleErrorToast(
-              'Não autorizado',
-              'Sua sessão expirou ou seu token de acesso não é válido, faça login novamente para continuar.'
-            )
-
+            handleInvalidTokenError()
             forceFinishSession()
           } else if (statusCode === 403) {
-            handleErrorToast(
-              'Não autorizado',
-              'Sua conta não está registrada ou foi desativada, entre em contato com o administrador do sistema.'
-            )
+            handleUnregisteredTokenError()
           }
         })
     }
@@ -97,10 +138,20 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
         axios
           .post('volunteers/login', { email, password })
           .then(({ data }) => {
+            const expiresAt = data.expiresAt
+
             const storeableVolunteer: StoreableVolunteer = {
               ...data.volunteer,
               token: data.token,
+              expiresAt: expiresAt,
             }
+
+            setLogoutTimeout(
+              setTimeout(() => {
+                handleSessionExpiredError()
+                forceFinishSession()
+              }, expiresAt - Date.now())
+            )
 
             localStorage.setItem('volunteer', JSON.stringify(storeableVolunteer))
             setVolunteer(storeableVolunteer)
@@ -115,7 +166,9 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }: UserProviderPro
   const forceFinishSession = useCallback(() => {
     localStorage.removeItem('volunteer')
     setVolunteer(null)
-  }, [])
+
+    if (logoutTimeout) clearTimeout(logoutTimeout)
+  }, [logoutTimeout])
 
   const finishSession = useCallback(() => {
     return new Promise<void>((resolve) => {
