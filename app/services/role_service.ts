@@ -12,11 +12,13 @@ export default class RoleService {
       levelsPermissionQuery.preload('permission')
     })
 
-    return roles.map((role) => ({
-      id: role.id,
-      name: role.name,
-      permissions: role.permissions.map((perm) => perm.permission.id),
-    }))
+    return roles.map((role) =>
+      RoleDto.fromPartial({
+        id: role.id,
+        name: role.name,
+        permissions: role.permissions.map((perm) => perm.permission.id),
+      })
+    )
   }
 
   async getRoleById(roleId: string): Promise<RoleDto> {
@@ -30,11 +32,11 @@ export default class RoleService {
     if (!role)
       throw new EntityNotFoundException('Role', 'O cargo de id ' + roleId + ' não foi encontrado.')
 
-    return {
+    return RoleDto.fromPartial({
       id: role.id,
       name: role.name,
       permissions: role.permissions.map((perm) => perm.permission.id),
-    }
+    })
   }
 
   async createRole(name: string, permissions: string[], volunteer: VolunteerDto): Promise<RoleDto> {
@@ -66,11 +68,11 @@ export default class RoleService {
       }))
     )
 
-    return {
+    return RoleDto.fromPartial({
       id: role.id,
       name: role.name,
       permissions,
-    }
+    })
   }
 
   async deleteRoleById(roleId: string): Promise<void> {
