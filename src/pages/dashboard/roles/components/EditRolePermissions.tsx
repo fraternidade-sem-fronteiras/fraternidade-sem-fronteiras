@@ -1,10 +1,12 @@
-import Role from '@/entities/role.entity'
+import Role, { hasSinglePermission } from '@/entities/role.entity'
+import Permission from '@/entities/permission.entity'
 import {
   Box,
   Button,
   Card,
   CardBody,
   CardHeader,
+  Divider,
   Heading,
   Modal,
   ModalBody,
@@ -25,22 +27,16 @@ import { ReactElement, cloneElement } from 'react'
 
 interface EditRolePermissionsProps {
   role: Role
+  permissions: Permission[]
   children: ReactElement
 }
 
 export default function EditRolePermissions({
   role,
+  permissions,
   children,
 }: Readonly<EditRolePermissionsProps>) {
   const { onOpen, isOpen, onClose } = useDisclosure()
-
-  const array = [
-    {
-      id: '123',
-      name: 'Criar voluntario',
-      description: ' Permite que os membros adicionem novos voluntários.',
-    },
-  ]
 
   return (
     <>
@@ -52,29 +48,36 @@ export default function EditRolePermissions({
         <ModalContent>
           <ModalHeader>Editar cargo {role.name}</ModalHeader>
           <ModalBody className="my-4">
-            <Card maxHeight="400px" overflowY="auto" p="4">
+            <Card maxHeight="400px" overflowY="auto" p="1">
               <CardHeader>
                 <Heading size="md">Permissões</Heading>
               </CardHeader>
-
-              <CardBody>
-                {array.map((role) => (
-                  <Stack id={role.id} divider={<StackDivider />} spacing="3">
-                    <Box>
-                      <Box display="flex" justifyContent="space-between">
-                        <Heading size="xs" textTransform="uppercase" marginInlineEnd="1rem">
-                          {role.name}
-                        </Heading>
-                        <Stack>
-                          <Switch size="md" color="#5CC0CD" />
-                        </Stack>
+              <CardBody padding="0rem">
+                {permissions.map((data) => {
+                  //console.log('O cargo ' + role.name + ' tem a permissão ' + data.id + '? ' + hasSinglePermission(role, data.id))
+                  return (
+                    <Stack key={data.id} id={data.id} divider={<StackDivider />} spacing="1">
+                      <Box padding="1rem">
+                        <Box display="flex" justifyContent="space-between">
+                          <Heading size="xs" textTransform="uppercase" marginInlineEnd="1rem">
+                            {data.name}
+                          </Heading>
+                          <Stack>
+                            <Switch
+                              size="md"
+                              color="#5CC0CD"
+                              defaultChecked={hasSinglePermission(role, data.id)}
+                            />
+                          </Stack>
+                        </Box>
+                        <Text pt="2" fontSize="sm">
+                          {data.description}
+                        </Text>
                       </Box>
-                      <Text pt="2" fontSize="sm">
-                        {role.description}
-                      </Text>
-                    </Box>
-                  </Stack>
-                ))}
+                      <Divider />
+                    </Stack>
+                  )
+                })}
               </CardBody>
             </Card>
           </ModalBody>
