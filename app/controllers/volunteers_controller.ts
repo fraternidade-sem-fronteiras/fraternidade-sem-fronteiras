@@ -1,6 +1,4 @@
 import EntityNotFoundException from '#exceptions/entity_not_found_exception'
-import ForbiddenException from '#exceptions/forbidden_exception'
-import { VolunteerDto } from '#models/volunteer'
 import VolunteerService from '#services/volunteer_service'
 import { paginationValidator, sortValidator } from '#validators/filter'
 import { createVolunteerValidator, loginVolunteerValidator } from '#validators/volunteer'

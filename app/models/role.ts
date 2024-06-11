@@ -34,9 +34,16 @@ export class RoleDto {
     if (role.name) this.name = role.name
 
     if (role instanceof Role || role.permissions) {
-      this.permissions = PermissionDto.isPermissionDtoArray(role.permissions)
-        ? role.permissions.map((perm) => PermissionDto.fromPartial(perm.permission))
-        : role.permissions.map((perm) => perm?.permission?.id || perm)
+      if (PermissionDto.isPermissionDtoArray(role.permissions)) {
+        this.permissions = role.permissions.map((perm) => PermissionDto.fromPartial(perm))
+      } else if (PermissionDto.isPermissionDto(role.permissions)) {
+        this.permissions = [PermissionDto.fromPartial(role.permissions)]
+      } else {
+        this.permissions =
+          role.permissions?.map((perm) =>
+            typeof perm === 'string' ? perm : perm?.permission?.id
+          ) || []
+      }
     }
   }
 
