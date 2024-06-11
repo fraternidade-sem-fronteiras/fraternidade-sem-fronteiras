@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('role_id').notNullable().references('id').inTable('roles').onDelete('CASCADE')
       table
-        .uuid('permission_id')
+        .string('permission_id')
         .notNullable()
         .references('id')
         .inTable('permissions')

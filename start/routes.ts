@@ -82,11 +82,17 @@ router
       .resource('permissions', PermissionController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
       .use('*', middleware.auth())
+    router
+      .get('permissions/:id/roles', [PermissionController, 'getRolesByPermission'])
+      .use(middleware.auth())
 
     router
       .resource('roles', RoleController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
       .use('*', middleware.auth())
+    router
+      .get('roles/:id/volunteers', [RoleController, 'getVolunteersByRole'])
+      .use(middleware.auth())
 
     router.resource('schoolings', SchoolingsController).only(['index']).use('*', middleware.auth())
 

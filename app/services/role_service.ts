@@ -4,6 +4,7 @@ import InsufficientePermissionException from '#exceptions/insufficiente_permissi
 import Permission from '#models/permission'
 import Role, { RoleDto } from '#models/role'
 import { VolunteerDto } from '#models/volunteer'
+import { PageResult } from '../utils/pageable.js'
 
 export default class RoleService {
   async getRoles(): Promise<RoleDto[]> {
@@ -11,11 +12,13 @@ export default class RoleService {
       levelsPermissionQuery.preload('permission')
     })
 
-    return roles.map((role) => ({
-      id: role.id,
-      name: role.name,
-      permissions: role.permissions.map((perm) => perm.permission.name),
-    }))
+    return roles.map((role) =>
+      RoleDto.fromPartial({
+        id: role.id,
+        name: role.name,
+        permissions: role.permissions.map((perm) => perm.permission.id),
+      })
+    )
   }
 
   async getRoleById(roleId: string): Promise<RoleDto> {
@@ -29,11 +32,11 @@ export default class RoleService {
     if (!role)
       throw new EntityNotFoundException('Role', 'O cargo de id ' + roleId + ' não foi encontrado.')
 
-    return {
+    return RoleDto.fromPartial({
       id: role.id,
       name: role.name,
-      permissions: role.permissions.map((perm) => perm.permission.name),
-    }
+      permissions: role.permissions.map((perm) => perm.permission.id),
+    })
   }
 
   async createRole(name: string, permissions: string[], volunteer: VolunteerDto): Promise<RoleDto> {
@@ -65,11 +68,11 @@ export default class RoleService {
       }))
     )
 
-    return {
+    return RoleDto.fromPartial({
       id: role.id,
       name: role.name,
       permissions,
-    }
+    })
   }
 
   async deleteRoleById(roleId: string): Promise<void> {
@@ -88,5 +91,29 @@ export default class RoleService {
       throw new EntityNotFoundException('Role', 'O cargo de nome ' + name + ' não foi encontrado.')
 
     await role.delete()
+  }
+
+  async getVolunteersByRole(roleId: string, page: number, limit: number) {
+    const role = await Role.query().where('id', roleId).first()
+
+    if (!role)
+      throw new EntityNotFoundException('Role', 'O cargo de id ' + roleId + ' não foi encontrado.')
+
+    const volunteerPagination = await role
+      .related('volunteers')
+      .query()
+      .preload('volunteer')
+      .paginate(page, limit)
+    const volunteers = volunteerPagination.all()
+
+    return PageResult.toResult(
+      volunteers.map((volunteer) => volunteer.volunteer),
+      {
+        currentPage: page,
+        itemsPerPage: limit,
+        totalItems: volunteerPagination.total,
+        totalPages: volunteerPagination.lastPage,
+      }
+    )
   }
 }

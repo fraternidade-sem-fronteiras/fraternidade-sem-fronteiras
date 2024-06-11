@@ -19,4 +19,11 @@ export default class PermissionsController {
 
     return response.json(permission)
   }
+
+  async getRolesByPermission({ request, response }: HttpContext) {
+    const id = decodeURI(request.param('id'))
+
+    const roles = await this.permissionService.getRolesByPermission(id)
+    return response.json(roles)
+  }
 }

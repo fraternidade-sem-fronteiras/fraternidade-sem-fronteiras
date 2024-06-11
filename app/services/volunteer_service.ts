@@ -68,20 +68,7 @@ export default class VolunteerService {
 
     if (!volunteer) throw new WrongPasswordException()
 
-    const realVolunteer: VolunteerDto = VolunteerDto.fromPartial({
-      id: volunteer.id,
-      name: volunteer.name,
-      email: volunteer.email,
-      roles: volunteer.roles?.map((role) => {
-        return {
-          id: role.roleId,
-          name: role.role.name,
-          permissions: role.role.permissions.map((perm) => perm.permission.name),
-        }
-      }),
-      registered: volunteer.registered,
-      createdAt: volunteer.createdAt,
-    })
+    const realVolunteer: VolunteerDto = VolunteerDto.fromPartial(volunteer)
 
     if (volunteer.registered) {
       const match = await hash.verify(volunteer.password, password)
@@ -114,7 +101,6 @@ export default class VolunteerService {
 
   async getVolunteers(page: number, limit: number, orderBy: string, order: 'asc' | 'desc') {
     const volunteersPagination = await Volunteer.query()
-      .select(['id', 'name', 'email', 'createdAt'])
       .preload('roles', (rolesQuery) =>
         rolesQuery.preload('role', (roleQuery) =>
           roleQuery.preload('permissions', (permissionQuery) =>
@@ -127,26 +113,12 @@ export default class VolunteerService {
 
     const volunteers = volunteersPagination.all()
 
-    return PageResult.toResult(
-      volunteers.map((volunteer) => ({
-        id: volunteer.id,
-        name: volunteer.name,
-        email: volunteer.email,
-        roles: volunteer.roles.map((role) => ({
-          id: role.roleId,
-          name: role.role.name,
-          permissions: role.role.permissions.map((perm) => perm.permission.name),
-        })),
-        registered: volunteer.registered,
-        createdAt: volunteer.createdAt.toISO()!,
-      })),
-      {
-        currentPage: page,
-        itemsPerPage: limit,
-        totalPages: volunteersPagination.lastPage,
-        totalItems: volunteersPagination.total,
-      }
-    )
+    return PageResult.toResult(volunteers.map(VolunteerDto.fromPartial), {
+      currentPage: page,
+      itemsPerPage: limit,
+      totalPages: volunteersPagination.lastPage,
+      totalItems: volunteersPagination.total,
+    })
   }
 
   /**
@@ -159,7 +131,6 @@ export default class VolunteerService {
 
   async getVolunteer(query: { id?: string; email?: string }): Promise<VolunteerDto | null> {
     const volunteer = await Volunteer.query()
-      .select(['id', 'name', 'email', 'createdAt', 'registered'])
       .preload('roles', (rolesQuery) =>
         rolesQuery.preload('role', (roleQuery) =>
           roleQuery.preload('permissions', (permissionQuery) =>
@@ -172,18 +143,7 @@ export default class VolunteerService {
 
     if (!volunteer) return null
 
-    return VolunteerDto.fromPartial({
-      id: volunteer.id,
-      name: volunteer.name,
-      email: volunteer.email,
-      roles: volunteer.roles.map((role) => ({
-        id: role.roleId,
-        name: role.role.name,
-        permissions: role.role.permissions.map((perm) => perm.permission.name),
-      })),
-      registered: volunteer.registered,
-      createdAt: volunteer.createdAt,
-    })
+    return VolunteerDto.fromPartial(volunteer)
   }
 
   /**
