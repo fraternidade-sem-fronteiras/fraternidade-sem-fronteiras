@@ -7,6 +7,7 @@ const AssistedsController = () => import('#controllers/assisteds_controller')
 const BenefitsController = () => import('#controllers/benefits_controller')
 const ChildrenController = () => import('#controllers/children_controller')
 const ContactsController = () => import('#controllers/contacts_controller')
+const CountriesController = () => import('#controllers/countries_controller')
 const DrugAssistedsController = () => import('#controllers/drug_assisteds_controller')
 const DrugsController = () => import('#controllers/drugs_controller')
 const GendersController = () => import('#controllers/genders_controller')
@@ -15,6 +16,7 @@ const IllnessesController = () => import('#controllers/illnesses_controller')
 const PermissionController = () => import('#controllers/permissions_controller')
 const RoleController = () => import('#controllers/roles_controller')
 const SchoolingsController = () => import('#controllers/schoolings_controller')
+const StatesController = () => import('#controllers/states_controller')
 const MaritalStatusesController = () => import('#controllers/marital_statuses_controller')
 const MedicinesController = () => import('#controllers/medicines_controller')
 const VisitActivitiesController = () => import('#controllers/visit_activities_controller')
@@ -50,6 +52,12 @@ router
       .resource('contacts', ContactsController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
       .use('*', middleware.auth())
+
+      router
+      .resource('countries', CountriesController)
+      .only(['index', 'store', 'show', 'destroy'])
+      .use('*', middleware.auth())
+
 
     router
       .resource('assisted/drugs', DrugAssistedsController)
@@ -100,6 +108,11 @@ router
       .get('schoolings/:id/assisteds', [SchoolingsController, 'getAssisteds'])
       .use(middleware.auth())
 
+      router
+      .resource('states', StatesController)
+      .only(['index', 'store', 'show', 'destroy'])
+      .use('*', middleware.auth())  
+    
     router
       .resource('marital-status', MaritalStatusesController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
