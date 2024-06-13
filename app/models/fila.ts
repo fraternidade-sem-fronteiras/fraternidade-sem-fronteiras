@@ -17,16 +17,22 @@ export default class Fila extends BaseModel {
   * ID do usuário que está na fila vinculado ao seu cadastro
   */
   @column({}) // Deve fazer a ligação com a tabela de assistidos
-  declare assistedId: number
+  declare assistedId: number | null
 
   @belongsTo(() => Assisted)
-  declare assitedID: BelongsTo<typeof Assisted>
+  declare assistedID: BelongsTo<typeof Assisted>
 
   /**
   * Nome social
   */
   @column()
   declare socialName: string | null
+
+  @column()
+  declare registered: boolean
+  
+  @column()
+  declare served: boolean
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
