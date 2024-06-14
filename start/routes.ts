@@ -21,6 +21,7 @@ const MaritalStatusesController = () => import('#controllers/marital_statuses_co
 const MedicinesController = () => import('#controllers/medicines_controller')
 const VisitActivitiesController = () => import('#controllers/visit_activities_controller')
 const VisitsController = () => import('#controllers/visits_controller')
+const FilasController = () => import('#controllers/filas_controller')
 
 router.named({
   auth: () => import('#middleware/authentication_middleware'),
@@ -94,6 +95,11 @@ router
       .get('permissions/:id/roles', [PermissionController, 'getRolesByPermission'])
       .use(middleware.auth())
 
+    router
+      .resource('Filas', FilasController)
+      .only(['index', 'store', 'show', 'update', 'destroy'])
+      .use('*', middleware.auth())
+    
     router
       .resource('roles', RoleController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
