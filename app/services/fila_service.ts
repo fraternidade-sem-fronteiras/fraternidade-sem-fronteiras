@@ -1,5 +1,6 @@
 import ConflictException from '#exceptions/conflict_exception'
 import Fila from '#models/fila'
+import Assisted from '#models/assisted'
 import { CreateFila } from '#validators/fila'
 import { PageResult } from '../utils/pageable.js'
 
@@ -62,7 +63,33 @@ export default class FilaService {
       .firstOrFail()
   }
 
-  
+  async updateBenefit(id: number, validation: boolean): Promise<any> {
+    let fila = await Fila.findByOrFail('id', id)
+    let assisted = await Assisted.findBy('id', fila.assistedID)
+
+    let oldValueStatusServed = fila.served
+    fila.served = validation
+    await fila.save()
+
+    if(validation && assisted != null ){
+      let oldValueQtdServed = assisted.servedNum
+      assisted.servedNum = oldValueQtdServed + 1
+      await assisted.save()
+      
+    }
+
+    return {
+      id: fila.id,
+      updated: [
+        {
+          fieldStatusServed: 'Served',
+          oldValue: oldValueStatusServed,
+          newValue: fila.served,
+        },
+      ],
+    }
+  }
+
   /**
    * Para registrar um novo assistido na fila criada
    *

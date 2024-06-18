@@ -35,6 +35,13 @@ export default class FilasController {
         return response.json(assisted_fila)
       }
     
+    public async updateStatus({response, request, params}: HttpContext){
+      const { id } = params
+      const payload = await createFilaValidator.validate(request.all())
+      const benefit = await this.FilaService.updateStatus(id, payload.served)
+      return response.json(benefit)
+    }
+    
 
     public async store({request, response}: HttpContext){
         const data = await createFilaValidator.validate(request.body())

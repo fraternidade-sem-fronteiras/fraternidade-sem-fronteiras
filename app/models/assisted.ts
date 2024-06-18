@@ -119,6 +119,12 @@ export default class Assisted extends BaseModel {
   declare certification: string | null
 
   /**
+   * Quantidade de vezes que ele foi atendido
+   */
+  @column()
+  declare servedNum: number | null
+
+  /**
    * Data em que entrou em situação de rua
    */
   @column() // conferir se cria com data e hora (o que não queremos)

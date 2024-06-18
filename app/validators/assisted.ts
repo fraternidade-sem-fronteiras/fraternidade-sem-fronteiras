@@ -37,6 +37,7 @@ export const createAssistedValidator = vine.compile(
       .maxLength(100)
       .optional()
       .requiredWhen('country', '=', 'Brasil'),
+    servedNum: vine.number().optional(),
     city: vine
       .string()
       .trim()

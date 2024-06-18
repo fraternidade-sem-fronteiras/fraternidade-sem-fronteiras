@@ -24,6 +24,7 @@ export default class extends BaseSchema {
       table.string('ctps')
       table.string('objectives')
       table.string('certification')
+      table.integer('servedNum')
       table.date('date_street')
       table.string('reasons')
       table.string('place')
