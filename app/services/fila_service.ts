@@ -72,10 +72,11 @@ export default class FilaService {
     await fila.save()
 
     if(validation && assisted != null ){
-      let oldValueQtdServed = assisted.servedNum
-      assisted.servedNum = oldValueQtdServed + 1
-      await assisted.save()
-      
+      if (assisted.servedNum != null) {
+        let oldValueQtdServed = assisted.servedNum
+        assisted.servedNum = oldValueQtdServed + 1
+        await assisted.save()
+      }
     }
 
     return {
@@ -99,6 +100,5 @@ export default class FilaService {
   async createFila(createFilaTo: CreateFila): Promise<Fila> {
     return await Fila.create(createFilaTo)
   }
-
  
 }
