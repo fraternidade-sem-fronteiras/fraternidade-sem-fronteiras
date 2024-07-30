@@ -16,10 +16,12 @@ export default class FilaManagerService {
    * @param search O nome, id
    * @returns
    */
-
-    async getAssistedsFila(page: number, perPage: number, search: string | null) {
+    async getAssistedsFila(page: number, perPage: number, search: string | null, filaId: string) {
       const query = Fila.query().preload('assistedID')
-  
+	  
+	  if (filaId){
+		query.where('fila_id', filaId)
+	  }
       if (search) {
         console.log(search)
         if (uuidRegex.test(search)) {
@@ -50,8 +52,12 @@ export default class FilaManagerService {
    * @returns
    */
 
-  async getAssistedFila(search: string) {
+  async getAssistedFila(search: string, filaId: string) {
     const query = Fila.query().preload('assistedID')
+	
+	if (filaId){
+		query.where('fila_id', filaId)
+	  }
 
     if (uuidRegex.test(search)) {
       return await query.where('id', search).firstOrFail()
@@ -63,34 +69,43 @@ export default class FilaManagerService {
       .firstOrFail()
   }
 
-  async updateBenefit(id: number, validation: boolean): Promise<any> {
-    let fila = await Fila.findByOrFail('id', id)
-    let assisted = await Assisted.findBy('id', fila.assistedID)
-
-    let oldValueStatusServed = fila.served
-    fila.served = validation
-    await fila.save()
-
-    if(validation && assisted != null ){
-      if (assisted.servedNum != null) {
-        let oldValueQtdServed = assisted.servedNum
-        assisted.servedNum = oldValueQtdServed + 1
-        await assisted.save()
+  async updateStatusAssisted(id: number, filaId: string, validation: boolean): Promise<any> {
+    const query = Fila.query().preload('assistedID')
+	
+    if (filaId){
+      query.where('fila_id', filaId)
+      }
+      
+      let fila = await Fila.findByOrFail('id', id)
+      let assisted = await Assisted.findBy('id', fila.assistedID)
+  
+      let oldValueStatusServed = fila.served
+      fila.served = validation
+      await fila.save()
+  
+      if(validation && assisted != null ){ // se a pessoa foi atendida, e ela tem cadastro na tabela assistido
+        if (assisted.servedNum != null) { // se o assistido já foi atendido alguma vez, incremente em 1
+          let oldValueQtdServed = assisted.servedNum
+          assisted.servedNum = oldValueQtdServed + 1
+          await assisted.save()
+        }
+      else{ // se ele nunca foi atendido, ponha como 1
+      assisted.servedNum = 1
+      await assisted.save()
       }
     }
-
-    return {
-      id: fila.id,
-      updated: [
-        {
-          fieldStatusServed: 'Served',
-          oldValue: oldValueStatusServed,
-          newValue: fila.served,
-        },
-      ],
+  
+      return {
+        id: fila.id,
+        updated: [
+          {
+            fieldStatusServed: 'Served',
+            oldValue: oldValueStatusServed,
+            newValue: fila.served,
+          },
+        ],
+      }
     }
-  }
-
   /**
    * Para registrar um novo assistido na fila criada
    *
