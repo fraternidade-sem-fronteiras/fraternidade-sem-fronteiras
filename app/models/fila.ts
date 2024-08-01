@@ -10,30 +10,13 @@ export default class Fila extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
+  //Campo que indica a quantidade de pessoas que a fila pode ter
   @column()
-  declare name: string
+  declare capacity: number
 
-  /** 
-  * ID do usuário que está na fila vinculado ao seu cadastro
-  */
-  @column({}) // Deve fazer a ligação com a tabela de assistidos
-  declare assistedId: number | null
-
-  @belongsTo(() => Assisted)
-  declare assistedID: BelongsTo<typeof Assisted>
-
-
-  /**
-  * Nome social
-  */
+  //Campo que indica se a fila está fechada ou não
   @column()
-  declare socialName: string | null
-
-  @column()
-  declare registered: boolean
-  
-  @column()
-  declare served: boolean
+  declare active: boolean
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

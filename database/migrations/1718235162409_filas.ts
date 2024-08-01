@@ -6,12 +6,8 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('id').primary()
-      table.string('name').notNullable()
-      table.uuid("assisted_id").references("id").inTable("assisteds").onDelete("CASCADE")
-
-      table.string('social_name')
-      table.boolean('registered')
-      table.boolean('served')
+      table.integer('capacity').notNullable()
+      table.boolean('active').defaultTo(true)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

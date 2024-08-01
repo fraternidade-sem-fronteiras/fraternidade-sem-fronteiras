@@ -1,6 +1,5 @@
 import ConflictException from '#exceptions/conflict_exception'
 import Fila from '#models/fila'
-import Assisted from '#models/assisted'
 import { CreateFila } from '#validators/fila'
 import { PageResult } from '../utils/pageable.js'
 
@@ -17,19 +16,16 @@ export default class FilaService {
    * @returns
    */
 
-    async getAssistedsFila(page: number, perPage: number, search: string | null) {
-      const query = Fila.query().preload('assistedID')
-  
+    async getPageFila(page: number, perPage: number, search: string | null) {
+      const query = Fila.query().preload("capacity")
+      
       if (search) {
         console.log(search)
         if (uuidRegex.test(search)) {
           return await query.where('id', search).paginate(page, perPage)
         }
   
-        return await query
-          .whereRaw(`name REGEXP '^[${search}]'`)
-          .orWhereRaw(`social_name REGEXP '^[${search}]'`)
-          .paginate(page, perPage)
+       
       }
   
       const assistedsPagination = await query.paginate(page, perPage)
@@ -51,53 +47,37 @@ export default class FilaService {
    */
 
   async getAssistedFila(search: string) {
-    const query = Fila.query().preload('assistedID')
-
     if (uuidRegex.test(search)) {
-      return await query.where('id', search).firstOrFail()
+      return await Fila.query().where('id', search).firstOrFail()
     }
-
-    return query
-      .whereRaw(`name REGEXP '^[${search}]'`)
-      .orWhereRaw(`social_name REGEXP '^[${search}]'`)
-      .firstOrFail()
   }
+  async updateCloseFila(id: number, validation: boolean): Promise<any> {
+    
+      let fila = await Fila.findByOrFail('id', id)
+      fila.active = validation
+      await fila.save()
 
-  async updateBenefit(id: number, validation: boolean): Promise<any> {
-    let fila = await Fila.findByOrFail('id', id)
-    let assisted = await Assisted.findBy('id', fila.assistedID)
-
-    let oldValueStatusServed = fila.served
-    fila.served = validation
-    await fila.save()
-
-    if(validation && assisted != null ){
-      if (assisted.servedNum != null) {
-        let oldValueQtdServed = assisted.servedNum
-        assisted.servedNum = oldValueQtdServed + 1
-        await assisted.save()
+      return {
+        id: fila.id,
+        updated: [
+          {
+            fieldStatusServed: 'fechado',
+            newValue: fila.active,
+          },
+        ],
       }
     }
-
-    return {
-      id: fila.id,
-      updated: [
-        {
-          fieldStatusServed: 'Served',
-          oldValue: oldValueStatusServed,
-          newValue: fila.served,
-        },
-      ],
-    }
-  }
-
   /**
    * Para registrar um novo assistido na fila criada
    *
-   * @param name Nome da nova droga
-   * @returns
+   * 
    */
-  async createFila(createFilaTo: CreateFila): Promise<Fila> {
+  async createFila(createFilaTo: CreateFila) {
+
+    const busca = await Fila.findBy('active', true)
+    if(busca != null){
+      busca.capacity = -1
+    }
     return await Fila.create(createFilaTo)
   }
  

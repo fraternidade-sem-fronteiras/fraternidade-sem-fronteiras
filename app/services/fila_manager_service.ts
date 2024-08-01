@@ -1,8 +1,11 @@
 import ConflictException from '#exceptions/conflict_exception'
-import Fila from '#models/fila_manager'
+import Fila_manager from '#models/fila_manager'
+import Fila from '#models/fila'
+
 import Assisted from '#models/assisted'
 import { CreateFilaManager } from '#validators/fila_manager'
 import { PageResult } from '../utils/pageable.js'
+import { error } from 'console'
 
 const uuidRegex = /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/
 
@@ -16,8 +19,8 @@ export default class FilaManagerService {
    * @param search O nome, id
    * @returns
    */
-    async getAssistedsFila(page: number, perPage: number, search: string | null, filaId: string) {
-      const query = Fila.query().preload('assistedID')
+    async getPagesAssistedsFila(page: number, perPage: number, search: string | null, filaId: string) {
+      const query = Fila_manager.query().preload('assistedID')
 	  
 	  if (filaId){
 		query.where('fila_id', filaId)
@@ -53,7 +56,7 @@ export default class FilaManagerService {
    */
 
   async getAssistedFila(search: string, filaId: string) {
-    const query = Fila.query().preload('assistedID')
+    const query = Fila_manager.query().preload('assistedID')
 	
 	if (filaId){
 		query.where('fila_id', filaId)
@@ -69,14 +72,14 @@ export default class FilaManagerService {
       .firstOrFail()
   }
 
-  async updateStatusAssisted(id: number, filaId: string, validation: boolean): Promise<any> {
-    const query = Fila.query().preload('assistedID')
+  async updateStatusAssisted(id: number, filaId: number, validation: boolean): Promise<any> {
+    const query = Fila_manager.query().preload('assistedID')
 	
     if (filaId){
       query.where('fila_id', filaId)
       }
       
-      let fila = await Fila.findByOrFail('id', id)
+      let fila = await Fila_manager.findByOrFail('id', id)
       let assisted = await Assisted.findBy('id', fila.assistedID)
   
       let oldValueStatusServed = fila.served
@@ -109,12 +112,43 @@ export default class FilaManagerService {
   /**
    * Para registrar um novo assistido na fila criada
    *
-   * @param name Nome da nova droga
+   * @param filaId fila que o assistido identificado pelo  @param AssistedId fez parte
    * @returns
    */
-  async createFAssistedInFila(createFilaTo: CreateFilaManager): Promise<Fila> {
-    return await Fila.create(createFilaTo)
-  }
+
+  async createAssistedInFila(createFilaTo: CreateFilaManager): Promise<any> {
+    const query = Fila_manager.query().preload('assistedID')
+    // Extraindo os campos do objeto validated data
+    const { filaId, name, assistedId, socialName, registered, served } = createFilaTo;
+
+    if (filaId && assistedId) {
+      const searchAssisted = await Fila_manager.query().where("fila_id", filaId).andWhere("assisted_id", assistedId).first()
+		
+      if(searchAssisted != null){
+        return{
+            message: "pessoa já cadastrada nessa fila",
+          }
+        
+    }
+    }
+    let fila = await Fila.findByOrFail("id", filaId)  
+	  const count = await Fila_manager.query().where("fila_id", filaId).count('assisted_id as total');
+    const total = count[0].total
+    if(total >= fila.capacity){
+      return{
+        message: "Fila cheia. não há mais vagas",
+      }
+    }
+    // Criando a nova instância na tabela 'Fila'
+    return await Fila_manager.create({
+      filaId: filaId,      // Certifique-se de usar o campo correto que corresponde ao nome na tabela do banco de dados
+      name: name,
+      assistedId: assistedId, // Novamente, use o nome do campo correto
+      socialName: socialName,
+      registered: registered,
+      served: false,
+    });
+}
  
   /**async registerAssistedFila(filaId: string, assistedId: string, name: string, ethnicy: string) {
     const assistedInFila = await this.getAssistedById(i)
