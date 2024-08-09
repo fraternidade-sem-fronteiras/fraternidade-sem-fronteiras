@@ -35,6 +35,7 @@ export default class extends BaseSchema {
       table.boolean('missed_alert')
       table.string('remarks')
       table.boolean('registered').defaultTo(false)
+      table.integer('count_assisted').defaultTo(0)
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL

@@ -207,4 +207,6 @@ export default class Assisted extends BaseModel {
       assisted.genderId = defaultGender!.id
     }
   }
+  @column()
+  declare countAssisted: number
 }

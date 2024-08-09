@@ -56,6 +56,7 @@ export const createAssistedValidator = vine.compile(
       .string()
       .regex(/(^\d{1,2}).?(\d{3}).?(\d{3})-?(\d|X|x$)/)
       .optional(),
+    countAssisted: vine.number(),
   })
 )
 

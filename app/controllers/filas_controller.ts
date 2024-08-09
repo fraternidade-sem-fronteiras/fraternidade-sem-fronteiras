@@ -20,7 +20,7 @@ export default class FilasController {
     
         const { page, limit } = pagination
     
-        const assisteds_fila = await this.FilaService.getAssistedsFila(page, limit, search)
+        const assisteds_fila = await this.FilaService.getAssistedFila(page, limit, search)
         return response.json(assisteds_fila)
       }
       
