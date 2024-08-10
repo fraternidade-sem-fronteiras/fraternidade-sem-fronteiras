@@ -9,7 +9,6 @@ export default class extends BaseSchema {
       table.uuid("fila_id").references("id").inTable("filas").onDelete("CASCADE").notNullable()
       table.string('name').notNullable()
       table.uuid("assisted_id").references("id").inTable("assisteds").onDelete("CASCADE")
-      table.string('social_name')
       table.boolean('registered')
       table.boolean('served')
       table.timestamp('created_at')

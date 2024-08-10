@@ -7,7 +7,6 @@ export const createFilaManagerValidator = vine.compile(
     name: vine.string().trim().escape().minLength(3).maxLength(256),
     filaId: vine.number(),
     assistedId: vine.number().optional(),
-    socialName: vine.string().trim().escape().minLength(2).maxLength(64).optional(),
     registered: vine.boolean().optional(),
     served: vine.boolean(),
     

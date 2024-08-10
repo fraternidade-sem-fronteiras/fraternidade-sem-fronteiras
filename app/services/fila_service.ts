@@ -17,7 +17,7 @@ export default class FilaService {
    */
 
     async getPageFila(page: number, perPage: number, search: string | null) {
-      const query = Fila.query().preload("capacity")
+      const query =  Fila.query()
       
       if (search) {
         console.log(search)
@@ -77,6 +77,7 @@ export default class FilaService {
     const busca = await Fila.findBy('active', true)
     if(busca != null){
       busca.capacity = -1
+      return busca
     }
     return await Fila.create(createFilaTo)
   }

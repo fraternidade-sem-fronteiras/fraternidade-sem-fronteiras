@@ -20,7 +20,7 @@ export default class FilasController {
     
         const { page, limit } = pagination
     
-        const assisteds_fila = await this.FilaService.getAssistedFila(page, limit, search)
+        const assisteds_fila = await this.FilaService.getPageFila(page, limit, search)
         return response.json(assisteds_fila)
       }
       
@@ -39,7 +39,7 @@ export default class FilasController {
     public async updateStatus({response, request, params}: HttpContext){
       const { id } = params
       const payload = await createFilaValidator.validate(request.all())
-      const benefit = await this.FilaService.updateStatus(id, payload.served)
+      const benefit = await this.FilaService.updateCloseFila(id, payload.active)
       return response.json(benefit)
     }
     

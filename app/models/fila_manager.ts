@@ -29,13 +29,7 @@ export default class FilaManager extends BaseModel {
 
   @belongsTo(() => Assisted)
   declare assistedID: BelongsTo<typeof Assisted>
-
-  /**
-  * Nome social
-  */
-  @column()
-  declare socialName: string | null
-
+  
   @column()
   declare registered: boolean
   
