@@ -1,5 +1,6 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import FilaManagerService from '#services/fila_manager_service'
 
 const ActivitiesController = () => import('#controllers/activities_controller')
 const VolunteersController = () => import('#controllers/volunteers_controller')
@@ -22,6 +23,7 @@ const MedicinesController = () => import('#controllers/medicines_controller')
 const VisitActivitiesController = () => import('#controllers/visit_activities_controller')
 const VisitsController = () => import('#controllers/visits_controller')
 const FilasController = () => import('#controllers/filas_controller')
+const FilaManagersController = () => import('#controllers/fila_managers_controller')
 
 router.named({
   auth: () => import('#middleware/authentication_middleware'),
@@ -96,10 +98,18 @@ router
       .use(middleware.auth())
 
     router
-      .resource('Filas', FilasController)
+      .resource('filas', FilasController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
       .use('*', middleware.auth())
     
+    router
+      .resource('filas-manager', FilaManagersController)
+      .only(['index', 'store', 'show', 'update', 'destroy'])
+      .use('*', middleware.auth())
+    
+      router
+      .put('filas-manager/:filaId/assisted/:id', [FilaManagersController, 'updateAssistedInFila']).use(middleware.auth())
+
     router
       .resource('roles', RoleController)
       .only(['index', 'store', 'show', 'update', 'destroy'])

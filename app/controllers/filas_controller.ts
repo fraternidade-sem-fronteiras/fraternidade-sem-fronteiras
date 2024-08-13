@@ -55,4 +55,23 @@ export default class FilasController {
             fila
         }
     }
+    async destroy({ response, params }: HttpContext) {
+      // desestrutura o id do Contact da requisição
+      const { id } = params
+  
+      try {
+        // deleta o Contact pelo Service
+        await this.FilaService.deleteFila(id)
+  
+        // retorna status de sucesso: deletado
+        return response.status(204)
+      } catch (error) {
+        // retorna erro, caso alguma instrução do try dê problema
+        if (error instanceof Error) {
+          return response.status(400).json({ message: error.message })
+        }
+  
+        throw error
+      }
+    }
 }

@@ -81,5 +81,15 @@ export default class FilaService {
     }
     return await Fila.create(createFilaTo)
   }
- 
+
+
+  async deleteFila(id: number) {
+    let fila = await Fila.findBy('id', id)
+
+    if (!fila) {
+      throw new Error('Contato não encontrado')
+    }
+
+    await fila.delete()
+  }
 }

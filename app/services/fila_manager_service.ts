@@ -117,9 +117,8 @@ export default class FilaManagerService {
    */
 
   async createAssistedInFila(createFilaTo: CreateFilaManager): Promise<any> {
-    const query = Fila_manager.query().preload('assistedID')
     // Extraindo os campos do objeto validated data
-    const { filaId, name, assistedId, socialName, registered, served } = createFilaTo;
+    const { filaId, name, assistedId, registered, served } = createFilaTo;
 
     if (filaId && assistedId) {
       const searchAssisted = await Fila_manager.query().where("fila_id", filaId).andWhere("assisted_id", assistedId).first()
@@ -132,9 +131,9 @@ export default class FilaManagerService {
     }
     }
     let fila = await Fila.findByOrFail("id", filaId)  
-	  const count = await Fila_manager.query().where("fila_id", filaId).count('assisted_id as total');
+	  const count = await Fila_manager.query().where("fila_id", filaId).count('* as total');
     const total = count[0].total
-    if(total >= fila.capacity){
+      if(total >= fila.capacity){
       return{
         message: "Fila cheia. não há mais vagas",
       }
@@ -144,7 +143,6 @@ export default class FilaManagerService {
       filaId: filaId,      // Certifique-se de usar o campo correto que corresponde ao nome na tabela do banco de dados
       name: name,
       assistedId: assistedId, // Novamente, use o nome do campo correto
-      socialName: socialName,
       registered: registered,
       served: false,
     });
