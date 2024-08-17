@@ -6,6 +6,7 @@ import Fila from './fila.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export default class FilaManager extends BaseModel {
+  [x: string]: any
   /**
   * Esse ID é primário à lista  
   */
@@ -35,6 +36,13 @@ export default class FilaManager extends BaseModel {
   
   @column()
   declare served: boolean
+
+  /* 
+  Teste de correção de erro
+  
+  @column()
+  declare total: number
+  */
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

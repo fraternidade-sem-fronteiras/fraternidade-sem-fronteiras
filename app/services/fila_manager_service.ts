@@ -117,27 +117,33 @@ export default class FilaManagerService {
    */
 
   async createAssistedInFila(createFilaTo: CreateFilaManager): Promise<any> {
+
+    interface CountResultado {
+      total: number;
+    }
+
     // Extraindo os campos do objeto validated data
     const { filaId, name, assistedId, registered, served } = createFilaTo;
 
     if (filaId && assistedId) {
-      const searchAssisted = await Fila_manager.query().where("fila_id", filaId).andWhere("assisted_id", assistedId).first()
+      const searchAssisted = await Fila_manager.query().where("fila_id", filaId).andWhere("assisted_id", assistedId).first();
 		
       if(searchAssisted != null){
         return{
             message: "pessoa já cadastrada nessa fila",
           }
         
-    }
-    }
-    let fila = await Fila.findByOrFail("id", filaId)  
-	  const count = await Fila_manager.query().where("fila_id", filaId).count('* as total');
-    const total = count[0].total
-      if(total >= fila.capacity){
-      return{
-        message: "Fila cheia. não há mais vagas",
       }
     }
+    let fila = await Fila.findByOrFail("id", filaId)  
+	  //const count = await Fila_manager.query().where("fila_id", filaId).count('* as total');
+    const count = await Fila_manager.query().where("fila_id", filaId).count('* as total') as unknown as CountResultado[];
+    const total = count[0].total
+
+    if(total >= fila.capacity){
+      return{ message: "Fila cheia. não há mais vagas", }
+    }
+    
     // Criando a nova instância na tabela 'Fila'
     return await Fila_manager.create({
       filaId: filaId,      // Certifique-se de usar o campo correto que corresponde ao nome na tabela do banco de dados
