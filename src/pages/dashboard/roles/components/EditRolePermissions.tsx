@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import Role, { hasSinglePermission } from '@/entities/role.entity'
 import Permission from '@/entities/permission.entity'
 import {
@@ -21,14 +22,11 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { ReactElement, cloneElement } from 'react'
-
-// children as button
 
 interface EditRolePermissionsProps {
   role: Role
   permissions: Permission[]
-  children: ReactElement
+  children: React.ReactElement
 }
 
 export default function EditRolePermissions({
@@ -38,9 +36,40 @@ export default function EditRolePermissions({
 }: Readonly<EditRolePermissionsProps>) {
   const { onOpen, isOpen, onClose } = useDisclosure()
 
+  // Estado para armazenar as permissões e se estão ativadas ou não
+  const [permissionStates, setPermissionStates] = useState(
+    permissions.reduce((acc, perm) => {
+      acc[perm.id] = hasSinglePermission(role, perm.id)
+      return acc
+    }, {} as Record<string, boolean>)
+  )
+
+  const [allPermissionsEnabled, setAllPermissionsEnabled] = useState(false)
+
+  // Função para atualizar o estado de uma permissão
+  const handlePermissionChange = (permissionId: string, value: boolean) => {
+    if (permissionId === 'grantAll') {
+      // Se a última permissão foi clicada, ativar/desativar todas as permissões e desabilitar os switches
+      const updatedStates = Object.keys(permissionStates).reduce((acc, id) => {
+        acc[id] = value
+        return acc
+      }, {} as Record<string, boolean>)
+      setPermissionStates(updatedStates)
+      setAllPermissionsEnabled(value) // Se ativado, desabilita os switches
+    } else {
+      // Atualizar o estado de uma permissão individual, se não estiver no modo "todas ativadas"
+      if (!allPermissionsEnabled) {
+        setPermissionStates({
+          ...permissionStates,
+          [permissionId]: value,
+        })
+      }
+    }
+  }
+
   return (
     <>
-      {cloneElement(children, {
+      {React.cloneElement(children, {
         onClick: onOpen,
       })}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -53,8 +82,8 @@ export default function EditRolePermissions({
                 <Heading size="md">Permissões</Heading>
               </CardHeader>
               <CardBody padding="0rem">
-                {permissions.map((data) => {
-                  //console.log('O cargo ' + role.name + ' tem a permissão ' + data.id + '? ' + hasSinglePermission(role, data.id))
+                {permissions.map((data, index) => {
+                  const isLastPermission = index === permissions.length - 1 // Verificar se é a última permissão
                   return (
                     <Stack key={data.id} id={data.id} divider={<StackDivider />} spacing="1">
                       <Box padding="1rem">
@@ -66,7 +95,14 @@ export default function EditRolePermissions({
                             <Switch
                               size="md"
                               color="#5CC0CD"
-                              defaultChecked={hasSinglePermission(role, data.id)}
+                              isChecked={permissionStates[data.id]}
+                              isDisabled={allPermissionsEnabled && !isLastPermission} // Desabilitar switches exceto o último
+                              onChange={(e) =>
+                                handlePermissionChange(
+                                  isLastPermission ? 'grantAll' : data.id,
+                                  e.target.checked
+                                )
+                              }
                             />
                           </Stack>
                         </Box>
