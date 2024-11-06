@@ -8,7 +8,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 const Fila = ("app/models/fila");
 
 export default class FilasController {
-    constructor(readonly FilaService: FilaService) {}
+    constructor(readonly filaService: FilaService) {}
 
     public async index({ request, response }: HttpContext) {
         const search = decodeURI(request.input('search', ''))
@@ -20,14 +20,14 @@ export default class FilasController {
     
         const { page, limit } = pagination
     
-        const assisteds_fila = await this.FilaService.getPageFila(page, limit, search)
+        const assisteds_fila = await this.filaService.getPageFila(page, limit, search)
         return response.json(assisteds_fila)
       }
       
 
       public async show({ response, request }: HttpContext) {
         const search = request.param('id', '')
-        const assisted_fila = await this.FilaService.getAssistedFila(search)
+        const assisted_fila = await this.filaService.getAssistedFila(search)
     
     
         if (!assisted_fila)
@@ -39,20 +39,22 @@ export default class FilasController {
     public async updateStatus({response, request, params}: HttpContext){
       const { id } = params
       const payload = await createFilaValidator.validate(request.all())
-      const benefit = await this.FilaService.updateCloseFila(id, payload.active)
+      const benefit = await this.filaService.updateCloseFila(id, payload.active)
       return response.json(benefit)
     }
     
 
     public async store({request, response}: HttpContext){
-        const data = await createFilaValidator.validate(request.body())
-        const fila = await this.FilaService.createFila(data)
+      console.log('entrei')
+      const data = await request.all()
+        /*const data = await createFilaValidator.validate(request.body())
+        const fila = await this.filaService.createFila(data)
         if(fila.capacity == -1){
           throw new ConflictException('ainda existe uma fila aberta')
-        }
+        }*/
         return {
             msg:'inserção concluida',
-            fila
+
         }
     }
     async destroy({ response, params }: HttpContext) {
@@ -61,7 +63,7 @@ export default class FilasController {
   
       try {
         // deleta o Contact pelo Service
-        await this.FilaService.deleteFila(id)
+        await this.filaService.deleteFila(id)
   
         // retorna status de sucesso: deletado
         return response.status(204)

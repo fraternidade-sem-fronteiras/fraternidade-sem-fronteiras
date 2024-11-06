@@ -1,6 +1,5 @@
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import FilaManagerService from '#services/fila_manager_service'
 
 const ActivitiesController = () => import('#controllers/activities_controller')
 const VolunteersController = () => import('#controllers/volunteers_controller')
@@ -28,6 +27,8 @@ const FilaManagersController = () => import('#controllers/fila_managers_controll
 router.named({
   auth: () => import('#middleware/authentication_middleware'),
 })
+
+router.post('/filas', [FilasController, 'store'])
 
 router
   .group(() => {
@@ -97,10 +98,7 @@ router
       .get('permissions/:id/roles', [PermissionController, 'getRolesByPermission'])
       .use(middleware.auth())
 
-    router
-      .resource('filas', FilasController)
-      .only(['index', 'store', 'show', 'update', 'destroy'])
-      .use('*', middleware.auth())
+    
     
     router
       .resource('filas-manager', FilaManagersController)
@@ -166,6 +164,10 @@ router
       return ctx.response
         .status(404)
         .json({ messages: ['Not Found'], error: 'NotFoundException', path: ctx.request.url() })
+    })
+    router.get('teste/', async({request})=>{
+      console.log('funfou')
+      return{message: 'funfou'}
     })
   })
   .prefix('/api/v1')

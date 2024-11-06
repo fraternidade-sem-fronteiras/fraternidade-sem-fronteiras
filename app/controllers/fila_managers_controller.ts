@@ -11,6 +11,7 @@ export default class FilaManagersController {
 constructor(readonly FilaManagerService: FilaManagerService) {}
 
     public async index({ request, response }: HttpContext) {
+      //mostra todos os rows, paginaados
         const search = decodeURI(request.input('search', ''))
         const flagFila = request.param('id_fila', '')
     
@@ -26,7 +27,8 @@ constructor(readonly FilaManagerService: FilaManagerService) {}
       }
       
 
-      public async show({ response, request }: HttpContext) {
+    public async show({ response, request }: HttpContext) {
+      //mostra um row de um cliente numa fila
         const search = request.param('id', '')
         const flagFila = request.param('fila_id', '')
         const assisted_fila = await this.FilaManagerService.getAssistedFila(search, flagFila)
@@ -39,6 +41,8 @@ constructor(readonly FilaManagerService: FilaManagerService) {}
       }
     
     public async updateAssistedInFila({response, request, params}: HttpContext){
+      //verifica se a fila existe e se o atendido está nela, aponta que ele foi atendido
+
       const { id } = params
       const payload = await createFilaManagerValidator.validate(request.all())
       const benefit = await this.FilaManagerService.updateStatusAssisted(id, payload.filaId, payload.served)
@@ -47,6 +51,7 @@ constructor(readonly FilaManagerService: FilaManagerService) {}
     
 
     public async store({request, response}: HttpContext){
+      //cria um row na tabela com o id da fila e do cliente
         const data = await createFilaManagerValidator.validate(request.body())
         const fila = await this.FilaManagerService.createAssistedInFila(data)
         return {
