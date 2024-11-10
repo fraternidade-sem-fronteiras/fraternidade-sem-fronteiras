@@ -98,12 +98,14 @@ router
       .get('permissions/:id/roles', [PermissionController, 'getRolesByPermission'])
       .use(middleware.auth())
 
-    
+    router
+      .resource('filas', FilasController)
+      .only(['index', 'store', 'show', 'update', 'destroy'])
     
     router
       .resource('filas-manager', FilaManagersController)
       .only(['index', 'store', 'show', 'update', 'destroy'])
-      .use('*', middleware.auth())
+      
     
       router
       .put('filas-manager/:filaId/assisted/:id', [FilaManagersController, 'updateAssistedInFila']).use(middleware.auth())
@@ -165,7 +167,7 @@ router
         .status(404)
         .json({ messages: ['Not Found'], error: 'NotFoundException', path: ctx.request.url() })
     })
-    router.get('teste/', async({request})=>{
+    router.get('/teste', async()=>{
       console.log('funfou')
       return{message: 'funfou'}
     })

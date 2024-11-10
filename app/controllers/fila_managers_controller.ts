@@ -56,7 +56,7 @@ constructor(readonly FilaManagerService: FilaManagerService) {}
         const fila = await this.FilaManagerService.createAssistedInFila(data)
         return {
             msg:'inserção concluida',
-            fila
+           
         }
     }
 

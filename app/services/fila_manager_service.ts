@@ -73,6 +73,7 @@ export default class FilaManagerService {
   }
 
   async updateStatusAssisted(id: number, filaId: number, validation: boolean): Promise<any> {
+    //procura cliente em uma fila, e atualiza se ele foi atendido ou não
     const query = Fila_manager.query().preload('assistedID')
 	
     if (filaId){
