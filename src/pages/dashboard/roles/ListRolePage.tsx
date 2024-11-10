@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Center, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { Button, Center, Table, TableContainer, Tbody, Td, Th, Thead, Tooltip, Tr } from '@chakra-ui/react'
 import axios from '@/utils/axios.instance'
 import DeleteRoleModal from './components/DeleteRoleModal.jsx'
 import useToast from '@/hooks/toast.hook'
@@ -69,8 +69,18 @@ export default function ListRolePage() {
               const strPermissions = 'STR' // role.permissions
               return (
                 <Tr key={role.name}>
-                  <Td>{role.name}</Td>
-                  <Td>{strPermissions}</Td>
+                  <Td>{role.name}</Td> 
+                  <Td>
+                  <Tooltip
+                    label={strPermissions}
+                    openDelay={50}
+                    closeDelay={100}
+                  > 
+                    <Button variant="outline" size="sm">
+                      Permissões do cargo
+                    </Button>
+                  </Tooltip>
+                  </Td>
                   <Td>
                     <EditRolePermissions
                       role={role}
