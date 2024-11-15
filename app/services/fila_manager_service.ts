@@ -1,5 +1,5 @@
 import ConflictException from '#exceptions/conflict_exception'
-import Fila_manager from '#models/fila_manager'
+import FilaManager from '#models/fila_manager'
 import Fila from '#models/fila'
 
 import Assisted from '#models/assisted'
@@ -20,7 +20,7 @@ export default class FilaManagerService {
    * @returns
    */
     async getPagesAssistedsFila(page: number, perPage: number, search: string | null, filaId: string) {
-      const query = Fila_manager.query().preload('assistedID')
+      const query = FilaManager.query().preload('assistedID')
 	  
 	  if (filaId){
 		query.where('fila_id', filaId)
@@ -56,7 +56,7 @@ export default class FilaManagerService {
    */
 
   async getAssistedFila(search: string, filaId: string) {
-    const query = Fila_manager.query().preload('assistedID')
+    const query = FilaManager.query().preload('assistedID')
 	
 	if (filaId){
 		query.where('fila_id', filaId)
@@ -74,13 +74,13 @@ export default class FilaManagerService {
 
   async updateStatusAssisted(id: number, filaId: number, validation: boolean): Promise<any> {
     //procura cliente em uma fila, e atualiza se ele foi atendido ou não
-    const query = Fila_manager.query().preload('assistedID')
+    const query = FilaManager.query().preload('assistedID')
 	
     if (filaId){
       query.where('fila_id', filaId)
       }
       
-      let fila = await Fila_manager.findByOrFail('id', id)
+      let fila = await FilaManager.findByOrFail('id', id)
       let assisted = await Assisted.findBy('id', fila.assistedID)
   
       let oldValueStatusServed = fila.served
@@ -118,16 +118,13 @@ export default class FilaManagerService {
    */
 
   async createAssistedInFila(createFilaTo: CreateFilaManager): Promise<any> {
-
-    interface CountResultado {
-      total: number;
-    }
-
+    const query = FilaManager.query()
+   
     // Extraindo os campos do objeto validated data
     const { filaId, name, assistedId, registered, served } = createFilaTo;
 
     if (filaId && assistedId) {
-      const searchAssisted = await Fila_manager.query().where("fila_id", filaId).andWhere("assisted_id", assistedId).first();
+      const searchAssisted = await FilaManager.query().where("fila_id", filaId).andWhere("assisted_id", assistedId).first();
 		
       if(searchAssisted != null){
         return{
@@ -137,16 +134,18 @@ export default class FilaManagerService {
       }
     }
     let fila = await Fila.findByOrFail("id", filaId)  
+    console.log('fila', fila)
 	  //const count = await Fila_manager.query().where("fila_id", filaId).count('* as total');
-    const count = await Fila_manager.query().where("fila_id", filaId).count('* as total') as unknown as CountResultado[];
-    const total = count[0].total
+    const count = await query.where("fila_id", filaId).count('* as total') 
+    const total = count[0].$extras.total
+    console.log(total,"E", fila.capacity)
 
-    if(total >= fila.capacity){
+    if(total > fila.capacity){
       return{ message: "Fila cheia. não há mais vagas", }
     }
     
     // Criando a nova instância na tabela 'Fila'
-    return await Fila_manager.create({
+    return await FilaManager.create({
       filaId: filaId,      // Certifique-se de usar o campo correto que corresponde ao nome na tabela do banco de dados
       name: name,
       assistedId: assistedId, // Novamente, use o nome do campo correto

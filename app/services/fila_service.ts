@@ -27,7 +27,6 @@ export default class FilaService {
   
        
       }
-  
       const assistedsPagination = await query.paginate(page, perPage)
       const assisteds = assistedsPagination.all()
   

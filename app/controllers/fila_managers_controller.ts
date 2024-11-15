@@ -6,7 +6,7 @@ import { paginationValidator } from '#validators/filter'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 const Fila = ("app/models/fila");
-
+@inject()
 export default class FilaManagersController {
 constructor(readonly FilaManagerService: FilaManagerService) {}
 
@@ -53,6 +53,7 @@ constructor(readonly FilaManagerService: FilaManagerService) {}
     public async store({request, response}: HttpContext){
       //cria um row na tabela com o id da fila e do cliente
         const data = await createFilaManagerValidator.validate(request.body())
+        console.log(data)
         const fila = await this.FilaManagerService.createAssistedInFila(data)
         return {
             msg:'inserção concluida',
