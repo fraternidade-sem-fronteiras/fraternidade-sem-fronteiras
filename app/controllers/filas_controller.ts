@@ -51,8 +51,8 @@ export default class FilasController {
     public async update({response, request, params}: HttpContext){
       //fechar a fila ativa
       const { id } = params
-      const payload = await createFilaValidator.validate(request.all())
-      const benefit = await this.filaService.updateCloseFila(id, payload.active)
+      //const payload = await createFilaValidator.validate(request.all())
+      const benefit = await this.filaService.updateCloseFila(id)
    
       return response.json(benefit)
     }

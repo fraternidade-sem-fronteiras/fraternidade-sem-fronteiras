@@ -2,7 +2,7 @@ import ConflictException from '#exceptions/conflict_exception'
 import Fila from '#models/fila'
 import { CreateFila } from '#validators/fila'
 import { PageResult } from '../utils/pageable.js'
-
+import { DateTime } from 'luxon'
 const uuidRegex = /[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/
 
 export default class FilaService {
@@ -50,10 +50,10 @@ export default class FilaService {
       return await Fila.query().where('id', search).firstOrFail()
     }
   }
-  async updateCloseFila(id: number, validation: boolean): Promise<any> {
+  async updateCloseFila(id: number): Promise<any> {
     
       let fila = await Fila.findByOrFail('id', id)
-      fila.active = validation
+      fila.active = false
       await fila.save()
 
       return {
@@ -73,11 +73,21 @@ export default class FilaService {
    */
   async createFila(createFilaTo: CreateFila) {
 
-    const busca = await Fila.findBy('active', true)
-    if(busca != null){
-      busca.capacity = -1
-      return busca
+    const filaAtiva = await Fila.findBy('active', true)
+    const ultimaFila = await Fila.query().orderBy('created_at', 'desc').first()
+    if(filaAtiva != null){
+      filaAtiva.capacity = -1
+      return filaAtiva
     }
+    console.log('last_row',ultimaFila)
+    if (ultimaFila) {
+      console.log('loop')
+      const diferFilas = DateTime.now().diff(DateTime.fromJSDate(ultimaFila.updatedAt.toJSDate()), 'hours').hours
+      if (diferFilas < 4) {
+        throw new Error('A última fila foi fechada há menos de 4 horas')
+      }
+    }
+
     return await Fila.create(createFilaTo)
   }
 
